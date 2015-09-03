@@ -2,7 +2,7 @@
 
 module.exports = (function() {
 
-    var numRows = 10;
+    var numRows = 10000;
 
     var firstNames = ['Olivia', 'Sophia', 'Ava', 'Isabella', 'Boy', 'Liam', 'Noah', 'Ethan', 'Mason', 'Logan', 'Moe', 'Larry', 'Curly', 'Shemp', 'Groucho', 'Harpo', 'Chico', 'Zeppo', 'Stanley', 'Hardy'];
     var lastNames = ['Wirts', 'Oneil', 'Smith', 'Barbarosa', 'Soprano', 'Gotti', 'Columbo', 'Luciano', 'Doerre', 'DePena'];
@@ -42,7 +42,9 @@ module.exports = (function() {
 
     var data = [];
     for (var i = 0; i < numRows; i++) {
-        data.push(randomPerson());
+        var person = randomPerson();
+        person.order = i;
+        data.push(person);
     }
 
     return data;

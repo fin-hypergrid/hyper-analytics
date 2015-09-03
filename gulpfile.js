@@ -55,13 +55,13 @@ function browserifydef() {
     gulp.src('src/js/main.js')
         .pipe(browserify({
           insertGlobals : true,
-          debug : !gulp.env.production
+          debug : true
         }))
         .pipe(gulp.dest('./build'))
 }
 
 gulp.task('browserSync', function() {
- browserSync({
+ browserSync.init({
    server: {
      // Serve up our build folder
      baseDir: ['./build']
@@ -79,10 +79,11 @@ gulp.task('doc', doc);
 //gulp.task('depTest', ['lint'], test);
 gulp.task('depTest', test);
 gulp.task('depDoc', ['depTest'], doc);
+gulp.task('reload', browserSync.reload);
 
-gulp.task('watch',['browserify', 'browserSync'], function() {
-    gulp.watch(js.path, ['depDoc']);
+gulp.task('watch', function() {
+    gulp.watch(js.path, ['depDoc', 'browserify', 'reload']);
 });
 
+gulp.task('default', ['depDoc', 'browserSync', 'watch']);
 
-gulp.task('default', ['depDoc', 'watch']);

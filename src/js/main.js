@@ -18,7 +18,7 @@ window.s1 = new analytics.DataSorter(window.d);
 window.s2 = new analytics.DataSorter(window.s1);
 
 var now = Date.now();
-window.s1.sortOn(1);
+//window.s1.sortOn(1);
 window.s2.sortOn(0);
 console.log(Date.now() - now);
 var count = s2.getRowCount();

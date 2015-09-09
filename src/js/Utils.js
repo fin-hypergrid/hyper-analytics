@@ -1,6 +1,8 @@
 'use strict';
 
-var timsort = require('./timsort.js');
+var timSort = require('./timsort.js');
+var quickSort = require('./quicksort.js');
+var stableQuickSort = require('./stableQuickSort.js');
 
 module.exports = (function() {
 
@@ -214,7 +216,9 @@ module.exports = (function() {
     return {
         flashSort: flashSort,
         dualPivotQuickSort: dualPivotQuickSort,
-        timsort: timsort
+        timSort: timSort,
+        quickSort: quickSort,
+        stableQuickSort: stableQuickSort
     };
 
 })();

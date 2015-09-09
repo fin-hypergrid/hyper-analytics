@@ -39,7 +39,7 @@ module.exports = (function() {
     DataSorter.prototype.sortOn = function(columnIndex) {
         this.initializeIndexVector();
         var self = this;
-        Utils.timsort(this.indexes, function(index) {
+        Utils.stableQuickSort(this.indexes, function(index) {
             return self.data.getValue(columnIndex, index);
         });
     };

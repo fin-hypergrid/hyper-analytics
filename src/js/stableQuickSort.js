@@ -9,6 +9,7 @@ var SortTypes = {
 var compare = function(indexVector, dataSource, first, last, type) {
     //return;
     var x = dataSource(indexVector[first]), y = dataSource(indexVector[last]);
+
     if (typeof(x) === "number") {
 
         // Numbers are compared by subtraction
@@ -57,7 +58,7 @@ module.exports = (function() {
             }
             return;
         }
-        quicksort(indexVector, dataSource, 0, indexVector.length - 1, type);
+        quicksort(indexVector, dataSource, 1, indexVector.length - 1, type);
     }
 
     function swap(indexVector, x, y) {

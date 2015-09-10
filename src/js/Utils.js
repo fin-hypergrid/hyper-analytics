@@ -3,6 +3,8 @@
 var timSort = require('./timsort.js');
 var quickSort = require('./quicksort.js');
 var stableQuickSort = require('./stableQuickSort.js');
+var mergeSort = require('./mergesort.js');
+var stableSort = require('./stableSort.js');
 
 module.exports = (function() {
 
@@ -218,7 +220,9 @@ module.exports = (function() {
         dualPivotQuickSort: dualPivotQuickSort,
         timSort: timSort,
         quickSort: quickSort,
-        stableQuickSort: stableQuickSort
+        stableQuickSort: stableQuickSort,
+        mergeSort: mergeSort,
+        stableSort: stableSort
     };
 
 })();

@@ -1,12 +1,12 @@
 'use strict';
 
-var stabilize  = function(comparator) {
+var stabilize  = function(comparator, descending) {
     return function(arr1, arr2) {
         var x = arr1[0];
         var y = arr2[0];
         if (x === y) {
-            x = arr1[1];
-            y = arr2[1];
+            x = descending? arr2[1] : arr1[1];
+            y = descending? arr1[1] : arr2[1];
         } else {
             if (y === null) {return -1;}
             if (x === null) {return 1;}
@@ -34,16 +34,16 @@ var descendingAllOthers = function(x, y) {
 
 var ascending = function(typeOfData) {
     if (typeOfData === "number") {
-        return stabilize(ascendingNumbers);
+        return stabilize(ascendingNumbers, false);
     }
-    return stabilize(ascendingAllOthers);
+    return stabilize(ascendingAllOthers, false);
 };
 
 var descending = function(typeOfData) {
     if (typeOfData === "number") {
-        return stabilize(descendingNumbers);
+        return stabilize(descendingNumbers, true);
     }
-    return stabilize(descendingAllOthers);
+    return stabilize(descendingAllOthers, true);
 };
 
 module.exports = (function() {
@@ -52,23 +52,21 @@ module.exports = (function() {
 
         var compare;
 
-        sortType = sortType || 1;
-
         if (indexVector.length === 0) {
             return; //nothing to do;
         }
 
-        //check if we need to reset the indexes for a no sort
+        if (sortType === undefined) {
+            sortType = 1;
+        }
+
         if (sortType === 0) {
-            for (var i = 0; i < 0; i++) {
-                indexVector[i] = i;
-            }
-            return;
+            return; // nothing to sort here;
         }
 
         var typeOfData = typeof dataSource(0);
 
-        compare = (sortType === -1) ? ascending(typeOfData) : descending(typeOfData);
+        compare = (sortType === 1) ? ascending(typeOfData) : descending(typeOfData);
 
         //start the actually sorting.....
         var tmp = new Array(indexVector.length);

@@ -8,10 +8,10 @@ module.exports = (function() {
         this.data = data;
         this.indexes = [];
         this.initializeIndexVector();
+        this.descendingSort = false;
     }
 
     DataSorter.prototype.getValue = function(x, y) {
-
         var value = this.data.getValue(x, this.indexes[y]);
         return value;
     };
@@ -36,12 +36,12 @@ module.exports = (function() {
         return this.data.getRowCount();
     };
 
-    DataSorter.prototype.sortOn = function(columnIndex) {
+    DataSorter.prototype.sortOn = function(columnIndex, sortType) {
         this.initializeIndexVector();
         var self = this;
         Utils.stableSort(this.indexes, function(index) {
             return self.data.getValue(columnIndex, index);
-        });
+        }, sortType);
     };
 
     DataSorter.prototype.initializeIndexVector = function() {

@@ -2,13 +2,13 @@
 
 module.exports = (function() {
 
-    var numRows = 100000;
+    var numRows = 500;
 
     var firstNames = ['Olivia', 'Sophia', 'Ava', 'Isabella', 'Boy', 'Liam', 'Noah', 'Ethan', 'Mason', 'Logan', 'Moe', 'Larry', 'Curly', 'Shemp', 'Groucho', 'Harpo', 'Chico', 'Zeppo', 'Stanley', 'Hardy'];
     var lastNames = ['Wirts', 'Oneil', 'Smith', 'Barbarosa', 'Soprano', 'Gotti', 'Columbo', 'Luciano', 'Doerre', 'DePena'];
     var months = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12'];
     var days = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '24', '25', '26', '27', '28', '29', '30'];
-    var states = ['Alabama', 'Alaska', 'Arizona', 'Arkansas', 'California', 'Colorado', 'Connecticut', 'Delaware', 'Florida', 'Georgia', 'Hawaii', 'Idaho', 'Illinois', 'Indiana', 'Iowa', 'Kansas', 'Kentucky', 'Louisiana', 'Maine', 'Maryland', 'Massachusetts', 'Michigan', 'Minnesota', 'Mississippi', 'Missouri', 'Montana', 'Nebraska', 'Nevada', 'New Hampshire', 'New Jersey', 'New Mexico', 'New York', 'North Carolina', 'North Dakota', 'Ohio', 'Oklahoma', 'Oregon', 'Pennsylvania', 'Rhode Island', 'South Carolina', 'South Dakota', 'Tennessee', 'Texas', 'Utah', 'Vermont', 'Virginia', 'Washington', 'West Virginia', 'Wisconsin', 'Wyoming'];
+    var states = ['Alabama', 'California', 'Delaware', 'Florida', 'Georgia', 'Hawaii', 'Idaho', 'Kansas', 'Louisiana', 'Maine', 'Nebraska', 'Ohio', 'Pennsylvania', 'Rhode Island', 'South Carolina', 'Tennessee', 'Utah', 'Vermont', 'Washington'];
 
     var randomFunc = Math.random;
     //var randomFunc = rnd;
@@ -21,8 +21,8 @@ module.exports = (function() {
         var birthyear = 1900 + Math.round(randomFunc() * 114);
         var birthmonth = Math.round(randomFunc() * 11);
         var birthday = Math.round(randomFunc() * 29);
-        var birthstate = Math.round(randomFunc() * 49);
-        var residencestate = Math.round(randomFunc() * 49);
+        var birthstate = Math.round(randomFunc() * (states.length - 1));
+        var residencestate = Math.round(randomFunc() * (states.length - 1));
         var travel = randomFunc() * 1000;
         var income = randomFunc() * 100000;
         var employed = Math.round(randomFunc());

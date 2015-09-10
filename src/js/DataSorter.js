@@ -7,23 +7,29 @@ module.exports = (function() {
     function DataSorter(data) {
         this.data = data;
         this.indexes = [];
-        this.initializeIndexVector();
         this.descendingSort = false;
     }
 
+    DataSorter.prototype.transposeY = function(y) {
+        if (this.indexes) {
+            return this.indexes[y];
+        }
+        return y;
+    }
+
     DataSorter.prototype.getValue = function(x, y) {
-        var value = this.data.getValue(x, this.indexes[y]);
+        var value = this.data.getValue(x, this.transposeY(y));
         return value;
     };
 
     DataSorter.prototype.getRow = function(y) {
 
-        return this.data[this.indexes[y]];
+        return this.data[this.transposeY(y)];
     };
 
     DataSorter.prototype.setValue = function(x, y, value) {
 
-        this.data.setValue(x, this.indexes[y], value);
+        this.data.setValue(x, this.transposeY(y), value);
     };
 
     DataSorter.prototype.getColumnCount = function() {
@@ -37,6 +43,9 @@ module.exports = (function() {
     };
 
     DataSorter.prototype.sortOn = function(columnIndex, sortType) {
+        if (sortType === 0) {
+            this.indexes = undefined;
+        }
         this.initializeIndexVector();
         var self = this;
         Utils.stableSort(this.indexes, function(index) {

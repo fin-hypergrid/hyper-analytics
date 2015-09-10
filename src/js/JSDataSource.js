@@ -17,7 +17,9 @@ module.exports = (function() {
     }
 
     JSDataSource.prototype.getValue = function(x, y) {
-
+        if (x === -1) {
+            return y;
+        }
         var value = this.data[y][this.fields[x]];
         return value;
     };

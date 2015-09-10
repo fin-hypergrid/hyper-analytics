@@ -11,11 +11,11 @@ module.exports = (function() {
     }
 
     DataSorter.prototype.transposeY = function(y) {
-        if (this.indexes) {
+        if (this.indexes.length !== 0) {
             return this.indexes[y];
         }
         return y;
-    }
+    };
 
     DataSorter.prototype.getValue = function(x, y) {
         var value = this.data.getValue(x, this.transposeY(y));
@@ -24,7 +24,7 @@ module.exports = (function() {
 
     DataSorter.prototype.getRow = function(y) {
 
-        return this.data[this.transposeY(y)];
+        return this.data.getRow(this.transposeY(y));
     };
 
     DataSorter.prototype.setValue = function(x, y, value) {
@@ -44,7 +44,8 @@ module.exports = (function() {
 
     DataSorter.prototype.sortOn = function(columnIndex, sortType) {
         if (sortType === 0) {
-            this.indexes = undefined;
+            this.indexes.length = 0;
+            return;
         }
         this.initializeIndexVector();
         var self = this;

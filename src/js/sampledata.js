@@ -2,7 +2,7 @@
 
 module.exports = (function() {
 
-    var numRows = 100000;
+    var numRows = 100;
 
     var firstNames = ['Olivia', 'Sophia', 'Ava', 'Isabella', 'Boy', 'Liam', 'Noah', 'Ethan', 'Mason', 'Logan', 'Moe', 'Larry', 'Curly', 'Shemp', 'Groucho', 'Harpo', 'Chico', 'Zeppo', 'Stanley', 'Hardy'];
     var lastNames = ['Wirts', 'Oneil', 'Smith', 'Barbarosa', 'Soprano', 'Gotti', 'Columbo', 'Luciano', 'Doerre', 'DePena'];
@@ -15,7 +15,6 @@ module.exports = (function() {
 
     var randomPerson = function() {
         var firstName = Math.round((firstNames.length - 1) * randomFunc());
-        //var lastName = 'a' + randomFunc() + 'b';
         var lastName = Math.round((lastNames.length - 1) * randomFunc());
         var pets = Math.round(10 * randomFunc());
         var birthyear = 1900 + Math.round(randomFunc() * 114);

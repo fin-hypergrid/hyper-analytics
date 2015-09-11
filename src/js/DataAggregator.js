@@ -1,6 +1,9 @@
 'use strict';
 
 var DataSorter = require('./DataSorter');
+var DataTree = require('./DataTree');
+var DataGroup = require('./DataGroup');
+var DataLeaf = require('./DataLeaf');
 var Map = require('./map');
 
 module.exports = (function() {
@@ -30,28 +33,19 @@ module.exports = (function() {
     };
     DataAggregator.prototype.buildGroupTree = function() {
         var createBranch = function(key, map) {
-            var value = {
-                label: key,
-                children: new Map(),
-                hasChildren: true
-            };
+            var value = new DataGroup(key);
             map.set(key, value);
             return value;
         };
         var createLeaf = function(key, map) {
-            var value = {
-                label: key,
-                hasChildren: false
-            };
+            var value = new DataLeaf(key);
             map.set(key, value);
             return value;
         };
         var groupBys = this.groupBys;
         var source = this.dataSource;
         var rowCount = source.getRowCount();
-        var tree = {
-            children: new Map(),
-        };
+        var tree = new DataTree();
         var path = tree;
         var leafDepth = groupBys.length - 1;
         var g,value,createFunc;
@@ -67,6 +61,7 @@ module.exports = (function() {
             path.rowIndex = r;
             path = tree;
         }
+        tree.prune();
         this.tree = tree;
     };
 

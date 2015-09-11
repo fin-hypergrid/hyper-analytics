@@ -2,6 +2,9 @@
 
 module.exports = (function() {
 
+    var oidPrefix = '.~.#%_'; //this should be something we never will see at the begining of a string
+    var counter = 0;
+
     var hash = function(key) {
         var typeOf = typeof key;
         switch(typeOf) {
@@ -55,18 +58,17 @@ module.exports = (function() {
         return i;
     };
 
-    var oidPrefix = '.~.#%_'; //this should be something we never will see at the begining of a string
-    var counter = 0;
-
     function Map() {
         this.keys = [];
         this.data = {};
+        this.values = [];
     }
 
     Map.prototype.set = function(key, value) {
         var hashCode = hash(key);
         if (this.data[hashCode] === undefined) {
             this.keys.push(key);
+            this.values.push(value);
         }
         this.data[hashCode] = value;
     };
@@ -100,6 +102,7 @@ module.exports = (function() {
         }
         var index = betterIndexOf(this.keys, key);
         this.keys.splice(index, 1);
+        this.values.splice(index, 1);
         delete this.data[hashCode];
     };
 

@@ -33,6 +33,7 @@ var cols = {
 window.a.addGroupBy(cols.pets);
 window.a.addGroupBy(cols.birthState);
 window.a.addGroupBy(cols.last_name);
+window.a.addGroupBy(cols.residenceState);
 
 var start = Date.now();
 window.a.build();

@@ -3,11 +3,14 @@
 
 var analytics = require('./analytics.js');
 var sampleData = require('./sampledata.js');
+var Utils = require('./Utils.js');
 
 if (!window.fin) {
     window.fin = {};
 }
 
+
+window.Utils = Utils;
 window.fin.analytics = analytics;
 window.fin.sampleData = sampleData;
 
@@ -40,8 +43,8 @@ window.s = function(a,b,c) {
     window.s1.sortOn(third, a); // last name
     window.s2.sortOn(second, b); // state
     window.s3.sortOn(first, c); // pets
-    console.log(Date.now() - now);
-    window.dump();
+    //console.log(Date.now() - now);
+    //window.dump();
 };
 
 var f1 = function(a,b,c) {
@@ -64,6 +67,56 @@ window.dump = function() {
 }
 
 window.s(1,1,1);
-f.addFilter(f1);
+//f.addFilter(f1);
 
-dump();
+var m = new Utils.Map();
+// var a = {foo:'a'};
+// var b = {foo:'b'};
+// var date = new Date();
+// var arr = [1,2,3];
+
+// m.put(a, 0);
+// m.put(b, 1);
+// m.put(1, 2);
+// m.put('1', 3);
+// m.put(true, 4);
+// m.put('true', 5);
+// m.put(date, 6);
+// m.put(date + '', 7);
+// m.put(arr, 8);
+
+// arr.push(4);
+// a.bar = 'abar';
+// b.bar = 'bbar';
+
+// console.log(m.get(a) === 0);
+// console.log(m.get(b) === 1);
+// console.log(m.get(1) === 2);
+// console.log(m.get('1') === 3);
+// console.log(m.get(true) === 4);
+// console.log(m.get('true') === 5);
+// console.log(m.get(date) === 6);
+// console.log(m.get(date + '') === 7);
+// console.log(m.get(arr) === 8);
+
+// window.a = a;
+// window.b = b;
+// window.b = date;
+// window.arr = arr;
+window.m = m;
+//dump();
+
+var count = f.getRowCount();
+for (var i = 0; i < count; i++) {
+    window.m.set(f.getValue(cols.birthState, i), i);
+}
+
+
+
+
+
+
+
+
+
+

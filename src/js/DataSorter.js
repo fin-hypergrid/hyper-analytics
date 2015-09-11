@@ -4,8 +4,8 @@ var Utils = require('./Utils.js');
 
 module.exports = (function() {
 
-    function DataSorter(data) {
-        this.data = data;
+    function DataSorter(dataSource) {
+        this.dataSource = dataSource;
         this.indexes = [];
         this.descendingSort = false;
     }
@@ -18,28 +18,28 @@ module.exports = (function() {
     };
 
     DataSorter.prototype.getValue = function(x, y) {
-        var value = this.data.getValue(x, this.transposeY(y));
+        var value = this.dataSource.getValue(x, this.transposeY(y));
         return value;
     };
 
     DataSorter.prototype.getRow = function(y) {
 
-        return this.data.getRow(this.transposeY(y));
+        return this.dataSource.getRow(this.transposeY(y));
     };
 
     DataSorter.prototype.setValue = function(x, y, value) {
 
-        this.data.setValue(x, this.transposeY(y), value);
+        this.dataSource.setValue(x, this.transposeY(y), value);
     };
 
     DataSorter.prototype.getColumnCount = function() {
 
-        return this.data.getColumnCount();
+        return this.dataSource.getColumnCount();
     };
 
     DataSorter.prototype.getRowCount = function() {
 
-        return this.data.getRowCount();
+        return this.dataSource.getRowCount();
     };
 
     DataSorter.prototype.sortOn = function(columnIndex, sortType) {
@@ -50,7 +50,7 @@ module.exports = (function() {
         this.initializeIndexVector();
         var self = this;
         Utils.stableSort(this.indexes, function(index) {
-            return self.data.getValue(columnIndex, index);
+            return self.dataSource.getValue(columnIndex, index);
         }, sortType);
     };
 

@@ -2,8 +2,8 @@
 
 module.exports = (function() {
 
-    function DataFilter(data) {
-        this.data = data;
+    function DataFilter(dataSource) {
+        this.dataSource = dataSource;
         this.indexes = [];
         this.filters = [];
     }
@@ -16,28 +16,28 @@ module.exports = (function() {
     };
 
     DataFilter.prototype.getValue = function(x, y) {
-        var value = this.data.getValue(x, this.transposeY(y));
+        var value = this.dataSource.getValue(x, this.transposeY(y));
         return value;
     };
 
     DataFilter.prototype.getRow = function(y) {
 
-        return this.data.getRow(this.transposeY(y));
+        return this.dataSource.getRow(this.transposeY(y));
     };
 
     DataFilter.prototype.setValue = function(x, y, value) {
 
-        this.data.setValue(x, this.transposeY(y), value);
+        this.dataSource.setValue(x, this.transposeY(y), value);
     };
 
     DataFilter.prototype.getColumnCount = function() {
 
-        return this.data.getColumnCount();
+        return this.dataSource.getColumnCount();
     };
 
     DataFilter.prototype.getRowCount = function() {
         if (this.filters.length === 0) {
-            return this.data.getRowCount();
+            return this.dataSource.getRowCount();
         }
         return this.indexes.length;
     };
@@ -55,7 +55,7 @@ module.exports = (function() {
     DataFilter.prototype.applyFilters = function() {
         var indexes = this.indexes;
         indexes.length = 0;
-        var count = this.data.getRowCount();
+        var count = this.dataSource.getRowCount();
         for (var r = 0; r < count; r++) {
             if (this._applyFiltersTo(r)) {
                 indexes.push(r);
@@ -67,8 +67,8 @@ module.exports = (function() {
         var filters = this.filters;
         for (var f = 0; f < filters.length; f++) {
             var filter = filters[f];
-            var rowObject = this.data.getRow(r);
-            if (filter(this.data.getValue(filter.columnIndex,r),rowObject,r)) {
+            var rowObject = this.dataSource.getRow(r);
+            if (filter(this.dataSource.getValue(filter.columnIndex,r),rowObject,r)) {
                 return true;
             }
         }

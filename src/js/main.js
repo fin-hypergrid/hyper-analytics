@@ -15,10 +15,7 @@ window.fin.analytics = analytics;
 window.fin.sampleData = sampleData;
 
 window.d = new analytics.JSDataSource(sampleData);
-window.s1 = new analytics.DataSorter(window.d);
-window.s2 = new analytics.DataSorter(window.s1);
-window.s3 = new analytics.DataSorter(window.s2);
-window.f = new analytics.DataFilter(s3);
+window.a = new analytics.DataAggregator(window.d);
 
 var cols = {
     last_name: 0,
@@ -33,25 +30,13 @@ var cols = {
     order: 9
 };
 
-var first = cols.pets;
-var second = cols.birthState;
-var third = cols.employed;
+window.a.addGroupBy(cols.pets);
+window.a.addGroupBy(cols.birthState);
+window.a.addGroupBy(cols.last_name);
 
-window.s = function(a,b,c) {
-    console.clear();
-    var now = Date.now();
-    window.s1.sortOn(third, a); // last name
-    window.s2.sortOn(second, b); // state
-    window.s3.sortOn(first, c); // pets
-    //console.log(Date.now() - now);
-    //window.dump();
-};
-
-var f1 = function(a,b,c) {
-    return a.startsWith('N');
-};
-
-f1.columnIndex = cols.birthState;
+var start = Date.now();
+window.a.build();
+console.log(Date.now() - start);
 
 window.dump = function() {
     var count = f.getRowCount();
@@ -66,10 +51,11 @@ window.dump = function() {
     }
 }
 
-window.s(1,1,1);
-//f.addFilter(f1);
+// window.s(1,1,1);
+// f.addFilter(f1);
+// f.addFilter(f2);
 
-var m = new Utils.Map();
+// var m = new Utils.Map();
 // var a = {foo:'a'};
 // var b = {foo:'b'};
 // var date = new Date();
@@ -103,13 +89,11 @@ var m = new Utils.Map();
 // window.b = b;
 // window.b = date;
 // window.arr = arr;
-window.m = m;
-//dump();
 
-var count = f.getRowCount();
-for (var i = 0; i < count; i++) {
-    window.m.set(f.getValue(cols.birthState, i), i);
-}
+// var count = f.getRowCount();
+// for (var i = 0; i < count; i++) {
+//     window.m.set(f.getValue(cols.birthState, i), i);
+// }
 
 
 

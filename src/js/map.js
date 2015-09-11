@@ -77,7 +77,7 @@ module.exports = (function() {
     };
 
     Map.prototype.getIfAbsent = function(key, ifAbsentFunc) {
-        var value = get(key);
+        var value = this.get(key);
         if (value === undefined) {
             value = ifAbsentFunc(key, this);
         }
@@ -119,6 +119,17 @@ module.exports = (function() {
             var key = keys[i];
             var value = this.get(key);
             var transformed = func(value, key, this);
+            newMap.set(key, transformed);
+        }
+        return newMap;
+    };
+
+    Map.prototype.copy = function() {
+        var keys = this.keys;
+        var newMap = new Map();
+        for (var i = 0; i < keys.length; i++) {
+            var key = keys[i];
+            var value = this.get(key);
             newMap.set(key, value);
         }
         return newMap;
@@ -127,3 +138,10 @@ module.exports = (function() {
     return Map;
 
 })();
+
+
+
+
+
+
+

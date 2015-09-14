@@ -20,10 +20,11 @@ module.exports = (function() {
         this.aggregates = [];
         this.groupBys = [];
         this.view = [];
-        this.filterInstance;
+        this.sorterInstance;
     }
 
-    DataAggregator.prototype.addAggregate = function(func) {
+    DataAggregator.prototype.addAggregate = function(columnName, func) {
+        func.columnName = columnName;
         this.aggregates.push(func);
     };
 
@@ -86,7 +87,15 @@ module.exports = (function() {
     };
 
     DataAggregator.prototype.getValue = function(x, y) {
-        return this.view[y].getValue(x);
+        if (y === 0) {
+            if (x === 0) {
+                return 'hierarchy     |';
+            } else {
+                return this.aggregates[x - 1].columnName;
+            }
+        } else {
+            return this.view[y - 1].getValue(x); //header row
+        }
     };
 
     DataAggregator.prototype.getColumnCount = function() {
@@ -96,12 +105,12 @@ module.exports = (function() {
 
     DataAggregator.prototype.getRowCount = function() {
 
-        return this.tree.height;
+        return this.tree.height + 1; //header column
     };
 
     DataAggregator.prototype.click = function(y) {
         var group = this.view[y];
-        group.expanded = !group.expanded;
+        group.toggleExpansionState();
         this.buildView();
     };
 

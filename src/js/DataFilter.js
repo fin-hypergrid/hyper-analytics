@@ -42,7 +42,8 @@ module.exports = (function() {
         return this.indexes.length;
     };
 
-    DataFilter.prototype.addFilter = function(filter) {
+    DataFilter.prototype.addFilter = function(columnIndex, filter) {
+        filter.columnIndex = columnIndex;
         this.filters.push(filter);
         this.applyFilters();
     };

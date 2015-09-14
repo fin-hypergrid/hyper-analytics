@@ -4,6 +4,7 @@ var JSDataSource = require('./JSDataSource');
 var DataSorter = require('./DataSorter');
 var DataFilter = require('./DataFilter');
 var DataAggregator = require('./DataAggregator');
+var aggregations = require('./aggregations');
 
 module.exports = (function() {
 
@@ -11,7 +12,8 @@ module.exports = (function() {
         JSDataSource: JSDataSource,
         DataSorter: DataSorter,
         DataFilter: DataFilter,
-        DataAggregator: DataAggregator
+        DataAggregator: DataAggregator,
+        aggregations: aggregations
     };
 
 })();

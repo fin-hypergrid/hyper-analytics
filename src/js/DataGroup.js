@@ -4,6 +4,10 @@ var Map = require('./map');
 
 module.exports = (function() {
 
+    var ExpandedMap = {
+        true: '▾',
+        false: '▸'
+    };
     var depthString = '                                                                                ';
 
     function DataGroup(key) {
@@ -34,6 +38,11 @@ module.exports = (function() {
             Array.prototype.splice.apply(result, [result.length, 0].concat(childIndexes));
         }
         return result;
+    };
+
+    DataGroup.prototype.toggleExpansionState = function(aggregator) {
+        this.expanded = !this.expanded;
+        this.data[0] = this.computeDepthString();
     };
 
     DataGroup.prototype.computeAggregates = function(aggregator) {
@@ -79,7 +88,8 @@ module.exports = (function() {
     };
 
     DataGroup.prototype.computeDepthString = function() {
-        var string = depthString.substring(0, this.depth * 3) + this.label;
+        var icon = ExpandedMap[this.expanded + ''];
+        var string = depthString.substring(0, this.depth * 3) + icon + ' ' + this.label + '     |';
         return string;
     };
 

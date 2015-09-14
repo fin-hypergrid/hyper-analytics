@@ -69,22 +69,24 @@ module.exports = (function() {
                 createFunc = (c === leafDepth) ? createLeaf : createBranch;
                 path = path.children.getIfAbsent(value, createFunc);
             }
-            path.rowIndex = r;
+            path.rowIndexes.push(r);
             path = tree;
         }
         this.sorterInstance = new DataSorter(source);
         tree.prune();
-        tree.computeHeight();
         this.tree = tree;
+        this.tree.computeAggregates(this);
         this.buildView();
     };
 
     DataAggregator.prototype.buildView = function() {
-        this.tree.computeAggregates(this);
+        this.view.length = 0;
+        this.tree.computeHeight();
+        this.tree.buildView(this);
     };
 
     DataAggregator.prototype.getValue = function(x, y) {
-        return this.tree.getValue(x, y);
+        return this.view[y].getValue(x);
     };
 
     DataAggregator.prototype.getColumnCount = function() {
@@ -95,6 +97,12 @@ module.exports = (function() {
     DataAggregator.prototype.getRowCount = function() {
 
         return this.tree.height;
+    };
+
+    DataAggregator.prototype.click = function(y) {
+        var group = this.view[y];
+        group.expanded = !group.expanded;
+        this.buildView();
     };
 
     return DataAggregator;

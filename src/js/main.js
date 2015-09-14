@@ -35,6 +35,7 @@ window.a.addGroupBy(cols.last_name);
 window.a.addGroupBy(cols.pets);
 window.a.addGroupBy(cols.residenceState);
 
+//sum
 window.a.addAggregate(function(dataSource) {
     var sum = 0;
     var rows = dataSource.getRowCount();
@@ -42,6 +43,47 @@ window.a.addAggregate(function(dataSource) {
         sum = sum + dataSource.getValue(cols.pets, r);
     }
     return sum;
+});
+
+//min
+window.a.addAggregate(function(dataSource) {
+    var min = 0;
+    var rows = dataSource.getRowCount();
+    for (var r = 0; r < rows; r++) {
+        min = Math.min(min, dataSource.getValue(cols.pets, r));
+    }
+    return min;
+});
+
+//max
+window.a.addAggregate(function(dataSource) {
+    var max = 0;
+    var rows = dataSource.getRowCount();
+    for (var r = 0; r < rows; r++) {
+        max = Math.max(max, dataSource.getValue(cols.pets, r));
+    }
+    return max;
+});
+
+//avg
+window.a.addAggregate(function(dataSource) {
+    var sum = 0;
+    var rows = dataSource.getRowCount();
+    for (var r = 0; r < rows; r++) {
+        sum = sum + dataSource.getValue(cols.pets, r);
+    }
+    return sum/rows;
+});
+
+//first
+window.a.addAggregate(function(dataSource) {
+    return dataSource.getValue(cols.birthState, 0);
+});
+
+//last
+window.a.addAggregate(function(dataSource) {
+    var rows = dataSource.getRowCount();
+    return dataSource.getValue(cols.birthState, rows - 1);
 });
 
 var start = Date.now();
@@ -61,6 +103,17 @@ window.dump = function() {
     }
 }
 
+window.click = function(y) {
+    window.a.click(y);
+    console.clear();
+    for (var r = 0; r < window.a.getRowCount(); r++) {
+        var row = '';
+        for (var c = 0; c < window.a.getColumnCount(); c++) {
+            row = row + window.a.getValue(c, r) + '     ';
+        }
+        console.log(row);
+    }
+}
 // window.s(1,1,1);
 // f.addFilter(f1);
 // f.addFilter(f2);

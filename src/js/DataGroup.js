@@ -4,9 +4,11 @@ var Map = require('./map');
 
 module.exports = (function() {
 
+    var depthString = '                                                                                ';
+
     function DataGroup(key) {
         this.label = key;
-        this.data = [];
+        this.data = [''];
         this.children = new Map();
         this.hasChildren = true;
         this.expanded = false;
@@ -14,18 +16,8 @@ module.exports = (function() {
         this.height = 1;
         this.parent;
         this.rowIndexes = [];
+        this.displayString = '';
     }
-
-    DataGroup.prototype.computeAggregates = function(aggregator) {
-        var hasChildLeafs = !this.children[0].hasChildren;
-        if (hasChildLeafs) { // are my children leafs?
-            this.applyAggregates(aggregator);
-        } else {
-            for (var i = 0; i < this.children.length; i++) {
-                this.children[i].computeAggregates(aggregator);
-            }
-        }
-    };
 
     DataGroup.prototype.getAllRowIndexes = function() {
         if (this.rowIndexes.length === 0) {
@@ -35,52 +27,44 @@ module.exports = (function() {
     };
 
     DataGroup.prototype.computeAllRowIndexes = function() {
-        var hasChildLeafs = !this.children[0].hasChildren;
-        if (hasChildLeafs) {
-            var indexes = this.children.map(function(e) { return e.rowIndex; });
-            return indexes;
-        } else {
-            var result = [];
-            for (var i = 0; i < this.children.length; i++) {
-                var child = this.children[i];
-                var childIndexes = child.getAllRowIndexes();
-                Array.prototype.splice.apply(result, [1,0].concat(childIndexes));
-            }
-            return result;
+        var result = [];
+        for (var i = 0; i < this.children.length; i++) {
+            var child = this.children[i];
+            var childIndexes = child.getAllRowIndexes();
+            Array.prototype.splice.apply(result, [result.length, 0].concat(childIndexes));
+        }
+        return result;
+    };
+
+    DataGroup.prototype.computeAggregates = function(aggregator) {
+        this.applyAggregates(aggregator);
+        for (var i = 0; i < this.children.length; i++) {
+            this.children[i].computeAggregates(aggregator);
         }
     };
 
     DataGroup.prototype.applyAggregates = function(aggregator) {
         var aggregates = aggregator.aggregates;
         var data = this.data;
-        data.length = aggregates.length;
+        data.length = aggregates.length + 1;
         var indexes = this.getAllRowIndexes();
         var sorter = aggregator.sorterInstance;
         sorter.indexes = indexes;
 
         for (var i = 0; i < aggregates.length; i++) {
             var aggregate = aggregates[i];
-            data[i] = aggregate(sorter);
+            data[i + 1] = aggregate(sorter);
         }
 
         this.data = data;
-        this.parent.doRollups(this, aggregator);
-    };
-
-    DataGroup.prototype.doRollups = function(child, aggregator) {
-        var isChildTheLastOne = this.children[this.children.length - 1] !== child;
-        if (isChildTheLastOne) {
-            return;
-        }
-        this.applyAggregates(aggregator);
     };
 
     DataGroup.prototype.getRowCount = function() {
         return this.children.length;
     };
 
-    DataGroup.prototype.getValue = function(x, y) {
-        return this.data[y][x];
+    DataGroup.prototype.getValue = function(x) {
+        return this.data[x];
     };
 
     DataGroup.prototype.prune = function(depth) {
@@ -90,6 +74,22 @@ module.exports = (function() {
             var child = this.children[i];
             child.parent = this;
             child.prune(this.depth + 1);
+        }
+        this.data[0] = this.computeDepthString();
+    };
+
+    DataGroup.prototype.computeDepthString = function() {
+        var string = depthString.substring(0, this.depth * 3) + this.label;
+        return string;
+    };
+
+    DataGroup.prototype.buildView = function(aggregator) {
+        aggregator.view.push(this);
+        if (this.expanded) {
+            for (var i = 0; i < this.children.length; i++) {
+                var child = this.children[i];
+                child.buildView(aggregator);
+            }
         }
     };
 

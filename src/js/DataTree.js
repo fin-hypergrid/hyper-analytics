@@ -15,11 +15,9 @@ module.exports = (function() {
     }
 
     DataTree.prototype.computeAggregates = function(aggregator) {
-        if (!this.children[0].hasChildren) { // are my children leafs?
-        } else {
-            for (var i = 0; i < this.children.length; i++) {
-                this.children[i].computeAggregates(aggregator);
-            }
+        this.applyAggregates(aggregator);
+        for (var i = 0; i < this.children.length; i++) {
+            this.children[i].computeAggregates(aggregator);
         }
     };
 
@@ -42,6 +40,13 @@ module.exports = (function() {
         return this.height;
     };
 
+    DataTree.prototype.buildView = function(aggregator) {
+        for (var i = 0; i < this.children.length; i++) {
+            var child = this.children[i];
+            child.buildView(aggregator);
+        }
+    };
+
     DataTree.prototype.applyAggregates = function(aggregator) {
         var aggregates = aggregator.aggregates;
         var data = this.data;
@@ -58,14 +63,6 @@ module.exports = (function() {
         this.data = data;
     };
 
-    DataTree.prototype.doRollups = function(child, aggregator) {
-        var isChildTheLastOne = this.children[this.children.length - 1] !== child;
-        if (isChildTheLastOne) {
-            return;
-        }
-        this.applyAggregates(aggregator);
-    };
-
     DataTree.prototype.getAllRowIndexes = function() {
         if (this.rowIndexes.length === 0) {
             this.rowIndexes = this.computeAllRowIndexes();
@@ -74,21 +71,14 @@ module.exports = (function() {
     };
 
     DataTree.prototype.computeAllRowIndexes = function() {
-        var hasChildLeafs = !this.children[0].hasChildren;
-        if (hasChildLeafs) {
-            var indexes = this.children.map(function(e) { return e.rowIndex; });
-            return indexes;
-        } else {
-            var result = [];
-            for (var i = 0; i < this.children.length; i++) {
-                var child = this.children[i];
-                var childIndexes = child.getAllRowIndexes();
-                Array.prototype.splice.apply(result, [1,0].concat(childIndexes));
-            }
-            return result;
+        var result = [];
+        for (var i = 0; i < this.children.length; i++) {
+            var child = this.children[i];
+            var childIndexes = child.getAllRowIndexes();
+            Array.prototype.splice.apply(result, [result.length, 0].concat(childIndexes));
         }
+        return result;
     };
-
 
     return DataTree;
 

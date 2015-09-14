@@ -39,7 +39,7 @@ module.exports = (function() {
 
     DataSorter.prototype.getRowCount = function() {
 
-        return this.dataSource.getRowCount();
+        return this.indexes.length;
     };
 
     DataSorter.prototype.sortOn = function(columnIndex, sortType) {
@@ -55,7 +55,7 @@ module.exports = (function() {
     };
 
     DataSorter.prototype.initializeIndexVector = function() {
-        var rowCount = this.getRowCount();
+        var rowCount = this.dataSource.getRowCount();
         var indexVector = new Array(rowCount);
         for (var r = 0; r < rowCount; r++) {
             indexVector[r] = r;

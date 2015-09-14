@@ -4,6 +4,7 @@ var DataSorter = require('./DataSorter');
 var DataTree = require('./DataTree');
 var DataGroup = require('./DataGroup');
 var DataLeaf = require('./DataLeaf');
+var DataFilter = require('./DataFilter');
 var Map = require('./map');
 
 module.exports = (function() {
@@ -18,6 +19,8 @@ module.exports = (function() {
         this.dataSource = dataSource;
         this.aggregates = [];
         this.groupBys = [];
+        this.view = [];
+        this.filterInstance;
     }
 
     DataAggregator.prototype.addAggregate = function(func) {
@@ -32,6 +35,7 @@ module.exports = (function() {
         this.buildGroupTree();
     };
     DataAggregator.prototype.buildGroupTree = function() {
+        var g,value,createFunc;
         var createBranch = function(key, map) {
             var value = new DataGroup(key);
             map.set(key, value);
@@ -44,11 +48,18 @@ module.exports = (function() {
         };
         var groupBys = this.groupBys;
         var source = this.dataSource;
+
+        // lets sort our data first....
+        for (var c = 0; c < groupBys.length; c++) {
+            g = groupBys[groupBys.length - c - 1];
+            source = new DataSorter(source);
+            source.sortOn(g);
+        }
+
         var rowCount = source.getRowCount();
         var tree = new DataTree();
         var path = tree;
         var leafDepth = groupBys.length - 1;
-        var g,value,createFunc;
         for (var r = 0; r < rowCount; r++) {
             for (var c = 0; c < groupBys.length; c++) {
                 g = groupBys[c];
@@ -61,12 +72,19 @@ module.exports = (function() {
             path.rowIndex = r;
             path = tree;
         }
+        this.sorterInstance = new DataSorter(source);
         tree.prune();
+        tree.computeHeight();
         this.tree = tree;
+        this.buildView();
+    };
+
+    DataAggregator.prototype.buildView = function() {
+        this.tree.computeAggregates(this);
     };
 
     DataAggregator.prototype.getValue = function(x, y) {
-        return x + ', '+ y;
+        return this.tree.getValue(x, y);
     };
 
     DataAggregator.prototype.getColumnCount = function() {
@@ -76,7 +94,7 @@ module.exports = (function() {
 
     DataAggregator.prototype.getRowCount = function() {
 
-        return this.data.length;
+        return this.tree.height;
     };
 
     return DataAggregator;

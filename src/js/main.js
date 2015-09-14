@@ -30,10 +30,19 @@ var cols = {
     order: 9
 };
 
-window.a.addGroupBy(cols.pets);
 window.a.addGroupBy(cols.birthState);
 window.a.addGroupBy(cols.last_name);
+window.a.addGroupBy(cols.pets);
 window.a.addGroupBy(cols.residenceState);
+
+window.a.addAggregate(function(dataSource) {
+    var sum = 0;
+    var rows = dataSource.getRowCount();
+    for (var r = 0; r < rows; r++) {
+        sum = sum + dataSource.getValue(cols.pets, r);
+    }
+    return sum;
+});
 
 var start = Date.now();
 window.a.build();

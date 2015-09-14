@@ -1,10 +1,9 @@
 'use strict';
 
-var DataSorter = require('./DataSorter');
+var DataSourceSorter = require('./DataSourceSorter');
 var DataTree = require('./DataTree');
 var DataGroup = require('./DataGroup');
 var DataLeaf = require('./DataLeaf');
-var DataFilter = require('./DataFilter');
 var Map = require('./map');
 
 module.exports = (function() {
@@ -53,7 +52,7 @@ module.exports = (function() {
         // lets sort our data first....
         for (var c = 0; c < groupBys.length; c++) {
             g = groupBys[groupBys.length - c - 1];
-            source = new DataSorter(source);
+            source = new DataSourceSorter(source);
             source.sortOn(g);
         }
 
@@ -73,7 +72,7 @@ module.exports = (function() {
             path.rowIndexes.push(r);
             path = tree;
         }
-        this.sorterInstance = new DataSorter(source);
+        this.sorterInstance = new DataSourceSorter(source);
         tree.prune();
         this.tree = tree;
         this.tree.computeAggregates(this);

@@ -18,7 +18,6 @@ module.exports = (function() {
         this.expanded = false;
         this.depth = 0;
         this.height = 1;
-        this.parent;
         this.rowIndexes = [];
         this.displayString = '';
     }
@@ -81,7 +80,6 @@ module.exports = (function() {
         this.children = this.children.values;
         for (var i = 0; i < this.children.length; i++) {
             var child = this.children[i];
-            child.parent = this;
             child.prune(this.depth + 1);
         }
         this.data[0] = this.computeDepthString();

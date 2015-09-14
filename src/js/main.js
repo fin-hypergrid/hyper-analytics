@@ -10,7 +10,7 @@ if (!window.fin) {
 }
 
 window.d = new analytics.JSDataSource(sampleData);
-window.f = new analytics.DataFilter(window.d);
+window.f = new analytics.DataSourceFilter(window.d);
 window.a = new analytics.DataAggregator(window.f);
 
 var cols = {

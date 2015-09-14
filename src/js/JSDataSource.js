@@ -10,10 +10,8 @@ module.exports = (function() {
     };
 
     function JSDataSource(data, fields) {
-
         this.fields = fields || computeFieldNames(data[0]);
         this.data = data;
-
     }
 
     JSDataSource.prototype.getValue = function(x, y) {

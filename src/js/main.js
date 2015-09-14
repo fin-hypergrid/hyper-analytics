@@ -31,9 +31,9 @@ var cols = {
 };
 
 window.a.addGroupBy(cols.birthState);
-window.a.addGroupBy(cols.last_name);
-window.a.addGroupBy(cols.pets);
-window.a.addGroupBy(cols.residenceState);
+// window.a.addGroupBy(cols.last_name);
+// window.a.addGroupBy(cols.pets);
+// window.a.addGroupBy(cols.residenceState);
 
 //sum
 window.a.addAggregate(function(dataSource) {
@@ -84,6 +84,23 @@ window.a.addAggregate(function(dataSource) {
 window.a.addAggregate(function(dataSource) {
     var rows = dataSource.getRowCount();
     return dataSource.getValue(cols.birthState, rows - 1);
+});
+
+//stddev
+window.a.addAggregate(function(dataSource) {
+    var sum = 0;
+    var rows = dataSource.getRowCount();
+    for (var r = 0; r < rows; r++) {
+        sum = sum + dataSource.getValue(cols.pets, r);
+    }
+    var mean = sum/rows;
+    var variance = 0;
+    for (var r = 0; r < rows; r++) {
+        var dev = (dataSource.getValue(cols.pets, r) - mean);
+        variance = variance + (dev * dev);
+    }
+    var stddev = Math.sqrt(variance / rows);
+    return stddev;
 });
 
 var start = Date.now();

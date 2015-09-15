@@ -1,16 +1,16 @@
 'use strict';
 
-module.exports = (function() {
+module.exports = (function () {
 
-   var count = function(/* columIndex */) {
-        return function(group) {
+    var count = function ( /* columIndex */ ) {
+        return function (group) {
             var rows = group.getRowCount();
             return rows;
         }
     };
 
-    var sum = function(columIndex) {
-        return function(group) {
+    var sum = function (columIndex) {
+        return function (group) {
             var sum = 0;
             var rows = group.getRowCount();
             for (var r = 0; r < rows; r++) {
@@ -20,8 +20,8 @@ module.exports = (function() {
         }
     };
 
-    var min = function(columIndex) {
-        return function(group) {
+    var min = function (columIndex) {
+        return function (group) {
             var min = 0;
             var rows = group.getRowCount();
             for (var r = 0; r < rows; r++) {
@@ -32,8 +32,8 @@ module.exports = (function() {
     };
 
 
-    var max = function(columIndex) {
-        return function(group) {
+    var max = function (columIndex) {
+        return function (group) {
             var max = 0;
             var rows = group.getRowCount();
             for (var r = 0; r < rows; r++) {
@@ -43,38 +43,38 @@ module.exports = (function() {
         }
     };
 
-    var avg = function(columIndex) {
-        return function(group) {
+    var avg = function (columIndex) {
+        return function (group) {
             var sum = 0;
             var rows = group.getRowCount();
             for (var r = 0; r < rows; r++) {
                 sum = sum + group.getValue(columIndex, r);
             }
-            return sum/rows;
+            return sum / rows;
         }
     };
 
-    var first = function(columIndex) {
-        return function(group) {
+    var first = function (columIndex) {
+        return function (group) {
             return group.getValue(columIndex, 0);
         }
     };
 
-    var last = function(columIndex) {
-        return function(group) {
+    var last = function (columIndex) {
+        return function (group) {
             var rows = group.getRowCount();
             return group.getValue(columIndex, rows - 1);
         }
     };
 
-    var stddev = function(columIndex) {
-        return function(group) {
+    var stddev = function (columIndex) {
+        return function (group) {
             var sum = 0;
             var rows = group.getRowCount();
             for (var r = 0; r < rows; r++) {
                 sum = sum + group.getValue(columIndex, r);
             }
-            var mean = sum/rows;
+            var mean = sum / rows;
             var variance = 0;
             for (var r = 0; r < rows; r++) {
                 var dev = (group.getValue(columIndex, r) - mean);
@@ -93,7 +93,7 @@ module.exports = (function() {
         avg: avg,
         first: first,
         last: last,
-        stddev:stddev
+        stddev: stddev
     };
 
 })();

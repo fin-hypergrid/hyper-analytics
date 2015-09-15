@@ -1,52 +1,56 @@
 'use strict';
 
-var stabilize  = function(comparator, descending) {
-    return function(arr1, arr2) {
+var stabilize = function (comparator, descending) {
+    return function (arr1, arr2) {
         var x = arr1[0];
         var y = arr2[0];
         if (x === y) {
-            x = descending? arr2[1] : arr1[1];
-            y = descending? arr1[1] : arr2[1];
+            x = descending ? arr2[1] : arr1[1];
+            y = descending ? arr1[1] : arr2[1];
         } else {
-            if (y === null) {return -1;}
-            if (x === null) {return 1;}
+            if (y === null) {
+                return -1;
+            }
+            if (x === null) {
+                return 1;
+            }
         }
         return comparator(x, y);
     };
 };
 
 
-var ascendingNumbers = function(x, y) {
+var ascendingNumbers = function (x, y) {
     return x - y;
 };
 
-var descendingNumbers = function(x, y) {
+var descendingNumbers = function (x, y) {
     return y - x;
 };
 
-var ascendingAllOthers = function(x, y) {
+var ascendingAllOthers = function (x, y) {
     return x < y ? -1 : 1;
 };
 
-var descendingAllOthers = function(x, y) {
+var descendingAllOthers = function (x, y) {
     return y < x ? -1 : 1;
 };
 
-var ascending = function(typeOfData) {
+var ascending = function (typeOfData) {
     if (typeOfData === "number") {
         return stabilize(ascendingNumbers, false);
     }
     return stabilize(ascendingAllOthers, false);
 };
 
-var descending = function(typeOfData) {
+var descending = function (typeOfData) {
     if (typeOfData === "number") {
         return stabilize(descendingNumbers, true);
     }
     return stabilize(descendingAllOthers, true);
 };
 
-module.exports = (function() {
+module.exports = (function () {
 
     function sort(indexVector, dataSource, sortType) {
 

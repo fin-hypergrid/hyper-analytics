@@ -1,14 +1,12 @@
 'use strict';
 
-var gulp      = require('gulp');
-var eslint    = require('gulp-eslint');
-var gitignore = require('gulp-exclude-gitignore');
-var mocha     = require('gulp-mocha');
-var plumber   = require('gulp-plumber');
-var exec      = require('child_process').exec;
-var path      = require('path');
-var browserify = require('gulp-browserify');
-var browserSync = require('browser-sync');
+var gulp      = require('gulp'),
+    eslint    = require('gulp-eslint'),
+    gitignore = require('gulp-exclude-gitignore'),
+    browserify = require('gulp-browserify'),
+    browserSync = require('browser-sync').create(),
+    beautify = require('gulp-beautify'),
+    uglify = require('gulp-uglify');
 
 var src = './src/';
 var jsDir = src + 'js/';
@@ -20,70 +18,63 @@ var js = {
     path  : jsDir + jsFiles
 };
 
-function lint() {
+gulp.task('lint', function() {
     return gulp.src(js.path)
         .pipe(gitignore())
         .pipe(eslint())
         .pipe(eslint.format())
         .pipe(eslint.failAfterError());
-}
+});
 
-function test(cb) {
-    var mochaErr;
-
-    gulp.src('test/index.js')
-        .pipe(plumber())
-        .pipe(mocha({reporter: 'spec'}))
-        .on('error', function(err) {
-            mochaErr = err;
-        })
-        .on('end', function() {
-            cb(mochaErr);
-        });
-}
-
-function doc(cb) {
-    exec(path.resolve('jsdoc.sh'), function (err, stdout, stderr) {
-        console.log(stdout);
-        console.log(stderr);
-        cb(err);
+gulp.task('browserSyncLaunchServer', function() {
+    browserSync.init({
+        server: {
+         // Serve up our build folder
+         baseDir: ['./build']
+        },
+        port: 5000
     });
-}
+});
 
-function browserifydef() {
+var isBuilding = false;
+// Basic usage
+
+gulp.task('build', function() {
     // Single entry point to browserify
-    gulp.src('src/js/main.js')
+    if (isBuilding) {
+        return;
+    } else {
+        isBuilding = true;
+        setTimeout(function() {
+            isBuilding = false;
+        }, 1500);
+    }
+
+    gulp.src(js.path)
+    .pipe(beautify())
+    .pipe(gulp.dest(js.dir));
+
+    return gulp.src('src/js/main.js')
         .pipe(browserify({
           insertGlobals : true,
           debug : true
         }))
-        .pipe(gulp.dest('./build'))
-}
-
-gulp.task('browserSync', function() {
- browserSync.init({
-   server: {
-     // Serve up our build folder
-     baseDir: ['./build']
-   },
-   port: 5000
- });
-});
-// Basic usage
-gulp.task('browserify', browserifydef);
-
-gulp.task('lint', lint);
-gulp.task('test', test);
-gulp.task('doc', doc);
-
-//gulp.task('depTest', ['lint'], test);
-gulp.task('depTest', test);
-gulp.task('depDoc', ['depTest'], doc);
-gulp.task('reload', browserSync.reload);
-
-gulp.task('watch', function() {
-    gulp.watch(js.path, ['depDoc', 'browserify', 'reload']);
+        .pipe(uglify())
+        .pipe(gulp.dest('./build'));
 });
 
-gulp.task('default', ['depDoc', 'browserSync', 'watch']);
+gulp.task('reload', function() {
+    browserSync.reload();
+});
+
+gulp.task('watch-dev', function() {
+    gulp.watch(js.path, ['build']);
+});
+
+gulp.task('watch-build', function() {
+    gulp.watch('./build/**/*.js', ['reload']);
+});
+
+gulp.task('default', ['browserSyncLaunchServer','watch-dev','watch-build']);
+
 

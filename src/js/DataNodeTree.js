@@ -2,7 +2,7 @@
 
 var DataNodeGroup = require('./DataNodeGroup');
 
-module.exports = (function() {
+module.exports = (function () {
 
     function DataNodeTree(key) {
         DataNodeGroup.call(this, key);
@@ -10,7 +10,7 @@ module.exports = (function() {
 
     DataNodeTree.prototype = Object.create(DataNodeGroup.prototype);
 
-    DataNodeTree.prototype.prune = function() {
+    DataNodeTree.prototype.prune = function () {
         this.children = this.children.values;
         for (var i = 0; i < this.children.length; i++) {
             var child = this.children[i];
@@ -18,14 +18,14 @@ module.exports = (function() {
         }
     };
 
-    DataNodeTree.prototype.buildView = function(aggregator) {
+    DataNodeTree.prototype.buildView = function (aggregator) {
         for (var i = 0; i < this.children.length; i++) {
             var child = this.children[i];
             child.buildView(aggregator);
         }
     };
 
-    DataNodeTree.prototype.computeHeight = function() {
+    DataNodeTree.prototype.computeHeight = function () {
         var height = 0;
         for (var i = 0; i < this.children.length; i++) {
             height = height + this.children[i].computeHeight();
@@ -39,6 +39,3 @@ module.exports = (function() {
     return DataNodeTree;
 
 })();
-
-
-

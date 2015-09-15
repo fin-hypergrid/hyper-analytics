@@ -1,45 +1,45 @@
 'use strict';
 
-module.exports = (function() {
+module.exports = (function () {
 
     function DataSourceDecorator(dataSource) {
         this.dataSource = dataSource;
         this.initializeIndexVector();
     }
 
-    DataSourceDecorator.prototype.transposeY = function(y) {
+    DataSourceDecorator.prototype.transposeY = function (y) {
         if (this.indexes.length !== 0) {
             return this.indexes[y];
         }
         return y;
     };
 
-    DataSourceDecorator.prototype.getValue = function(x, y) {
+    DataSourceDecorator.prototype.getValue = function (x, y) {
         var value = this.dataSource.getValue(x, this.transposeY(y));
         return value;
     };
 
-    DataSourceDecorator.prototype.getRow = function(y) {
+    DataSourceDecorator.prototype.getRow = function (y) {
 
         return this.dataSource.getRow(this.transposeY(y));
     };
 
-    DataSourceDecorator.prototype.setValue = function(x, y, value) {
+    DataSourceDecorator.prototype.setValue = function (x, y, value) {
 
         this.dataSource.setValue(x, this.transposeY(y), value);
     };
 
-    DataSourceDecorator.prototype.getColumnCount = function() {
+    DataSourceDecorator.prototype.getColumnCount = function () {
 
         return this.dataSource.getColumnCount();
     };
 
-    DataSourceDecorator.prototype.getRowCount = function() {
+    DataSourceDecorator.prototype.getRowCount = function () {
 
         return this.indexes.length;
     };
 
-    DataSourceDecorator.prototype.initializeIndexVector = function() {
+    DataSourceDecorator.prototype.initializeIndexVector = function () {
         var rowCount = this.dataSource.getRowCount();
         var indexVector = new Array(rowCount);
         for (var r = 0; r < rowCount; r++) {

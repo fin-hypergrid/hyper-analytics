@@ -3,7 +3,7 @@
 var stableSort = require('./stableSort.js');
 var Map = require('./Map.js');
 
-module.exports = (function() {
+module.exports = (function () {
 
     return {
         stableSort: stableSort,

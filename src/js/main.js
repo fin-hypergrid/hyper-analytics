@@ -26,11 +26,11 @@ var cols = {
     order: 9
 };
 
-window.f.addFilter(cols.birthState, function(each) {
+window.f.addFilter(cols.birthState, function (each) {
     return each.startsWith('A');
 });
 
-window.f.addFilter(cols.pets, function(each) {
+window.f.addFilter(cols.pets, function (each) {
     return each > 5;
 });
 
@@ -53,7 +53,7 @@ window.a.build();
 console.log(Date.now() - start);
 
 //perform a click and dump the table out to the console
-window.click = function(y) {
+window.click = function (y) {
     window.a.click(y);
     console.clear();
     for (var r = 0; r < window.a.getRowCount(); r++) {
@@ -69,13 +69,3 @@ window.click = function(y) {
 window.click(0);
 window.click(1);
 window.click(2);
-
-
-
-
-
-
-
-
-
-

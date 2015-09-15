@@ -3,7 +3,6 @@
 
 var analytics = require('./analytics.js');
 var sampleData = require('./sampledata.js');
-var Utils = require('./Utils.js');
 
 if (!window.fin) {
     window.fin = {};
@@ -26,11 +25,11 @@ var cols = {
     order: 9
 };
 
-window.f.addFilter(cols.birthState, function (each) {
+window.f.addFilter(cols.birthState, function(each) {
     return each.startsWith('A');
 });
 
-window.f.addFilter(cols.pets, function (each) {
+window.f.addFilter(cols.pets, function(each) {
     return each > 5;
 });
 
@@ -53,7 +52,7 @@ window.a.build();
 console.log(Date.now() - start);
 
 //perform a click and dump the table out to the console
-window.click = function (y) {
+window.click = function(y) {
     window.a.click(y);
     console.clear();
     for (var r = 0; r < window.a.getRowCount(); r++) {
@@ -63,7 +62,7 @@ window.click = function (y) {
         }
         console.log(row);
     }
-}
+};
 
 //lets try a few clicks
 window.click(0);

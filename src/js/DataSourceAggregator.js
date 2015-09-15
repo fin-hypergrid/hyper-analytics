@@ -4,9 +4,8 @@ var DataSourceSorter = require('./DataSourceSorter');
 var DataNodeTree = require('./DataNodeTree');
 var DataNodeGroup = require('./DataNodeGroup');
 var DataNodeLeaf = require('./DataNodeLeaf');
-var Map = require('./Map');
 
-module.exports = (function () {
+module.exports = (function() {
 
     //?[t,c,b,a]
     // t is a dataSource,
@@ -19,31 +18,31 @@ module.exports = (function () {
         this.aggregates = [];
         this.groupBys = [];
         this.view = [];
-        this.sorterInstance;
+        this.sorterInstance = {};
     }
 
-    DataSourceAggregator.prototype.addAggregate = function (columnName, func) {
+    DataSourceAggregator.prototype.addAggregate = function(columnName, func) {
         func.columnName = columnName;
         this.aggregates.push(func);
     };
 
-    DataSourceAggregator.prototype.addGroupBy = function (columnIndex) {
+    DataSourceAggregator.prototype.addGroupBy = function(columnIndex) {
         this.groupBys.push(columnIndex);
     };
 
-    DataSourceAggregator.prototype.build = function () {
+    DataSourceAggregator.prototype.build = function() {
         this.buildGroupTree();
     };
 
-    DataSourceAggregator.prototype.buildGroupTree = function () {
-        var g, value, createFunc;
-        var createBranch = function (key, map) {
-            var value = new DataNodeGroup(key);
+    DataSourceAggregator.prototype.buildGroupTree = function() {
+        var c, r, g, value, createFunc;
+        var createBranch = function(key, map) {
+            value = new DataNodeGroup(key);
             map.set(key, value);
             return value;
         };
-        var createLeaf = function (key, map) {
-            var value = new DataNodeLeaf(key);
+        var createLeaf = function(key, map) {
+            value = new DataNodeLeaf(key);
             map.set(key, value);
             return value;
         };
@@ -51,7 +50,7 @@ module.exports = (function () {
         var source = this.dataSource;
 
         // lets sort our data first....
-        for (var c = 0; c < groupBys.length; c++) {
+        for (c = 0; c < groupBys.length; c++) {
             g = groupBys[groupBys.length - c - 1];
             source = new DataSourceSorter(source);
             source.sortOn(g);
@@ -61,8 +60,8 @@ module.exports = (function () {
         var tree = new DataNodeTree('root');
         var path = tree;
         var leafDepth = groupBys.length - 1;
-        for (var r = 0; r < rowCount; r++) {
-            for (var c = 0; c < groupBys.length; c++) {
+        for (r = 0; r < rowCount; r++) {
+            for (c = 0; c < groupBys.length; c++) {
                 g = groupBys[c];
                 value = source.getValue(g, r);
 
@@ -80,13 +79,13 @@ module.exports = (function () {
         this.buildView();
     };
 
-    DataSourceAggregator.prototype.buildView = function () {
+    DataSourceAggregator.prototype.buildView = function() {
         this.view.length = 0;
         this.tree.computeHeight();
         this.tree.buildView(this);
     };
 
-    DataSourceAggregator.prototype.getValue = function (x, y) {
+    DataSourceAggregator.prototype.getValue = function(x, y) {
         if (y === 0) {
             if (x === 0) {
                 return 'hierarchy     |';
@@ -98,17 +97,17 @@ module.exports = (function () {
         }
     };
 
-    DataSourceAggregator.prototype.getColumnCount = function () {
+    DataSourceAggregator.prototype.getColumnCount = function() {
 
         return this.aggregates.length + 1; // 1 is for the hierarchy column
     };
 
-    DataSourceAggregator.prototype.getRowCount = function () {
+    DataSourceAggregator.prototype.getRowCount = function() {
 
         return this.tree.height + 1; //header column
     };
 
-    DataSourceAggregator.prototype.click = function (y) {
+    DataSourceAggregator.prototype.click = function(y) {
         var group = this.view[y];
         group.toggleExpansionState();
         this.buildView();

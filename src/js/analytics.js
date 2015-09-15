@@ -6,7 +6,7 @@ var DataSourceFilter = require('./DataSourceFilter');
 var DataSourceAggregator = require('./DataSourceAggregator');
 var aggregations = require('./aggregations');
 
-module.exports = (function () {
+module.exports = (function() {
 
     return {
         JSDataSource: JSDataSource,

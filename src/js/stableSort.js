@@ -1,7 +1,7 @@
 'use strict';
 
-var stabilize = function (comparator, descending) {
-    return function (arr1, arr2) {
+var stabilize = function(comparator, descending) {
+    return function(arr1, arr2) {
         var x = arr1[0];
         var y = arr2[0];
         if (x === y) {
@@ -20,41 +20,41 @@ var stabilize = function (comparator, descending) {
 };
 
 
-var ascendingNumbers = function (x, y) {
+var ascendingNumbers = function(x, y) {
     return x - y;
 };
 
-var descendingNumbers = function (x, y) {
+var descendingNumbers = function(x, y) {
     return y - x;
 };
 
-var ascendingAllOthers = function (x, y) {
+var ascendingAllOthers = function(x, y) {
     return x < y ? -1 : 1;
 };
 
-var descendingAllOthers = function (x, y) {
+var descendingAllOthers = function(x, y) {
     return y < x ? -1 : 1;
 };
 
-var ascending = function (typeOfData) {
-    if (typeOfData === "number") {
+var ascending = function(typeOfData) {
+    if (typeOfData === 'number') {
         return stabilize(ascendingNumbers, false);
     }
     return stabilize(ascendingAllOthers, false);
 };
 
-var descending = function (typeOfData) {
-    if (typeOfData === "number") {
+var descending = function(typeOfData) {
+    if (typeOfData === 'number') {
         return stabilize(descendingNumbers, true);
     }
     return stabilize(descendingAllOthers, true);
 };
 
-module.exports = (function () {
+module.exports = (function() {
 
     function sort(indexVector, dataSource, sortType) {
 
-        var compare;
+        var compare, i;
 
         if (indexVector.length === 0) {
             return; //nothing to do;
@@ -76,14 +76,14 @@ module.exports = (function () {
         var tmp = new Array(indexVector.length);
 
         //lets add the index for stability
-        for (var i = 0; i < indexVector.length; i++) {
+        for (i = 0; i < indexVector.length; i++) {
             tmp[i] = [dataSource(i), i];
         }
 
         tmp.sort(compare);
 
         //copy the sorted values into our index vector
-        for (var i = 0; i < indexVector.length; i++) {
+        for (i = 0; i < indexVector.length; i++) {
             indexVector[i] = tmp[i][1];
         }
     }

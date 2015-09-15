@@ -1,6 +1,6 @@
 'use strict';
 
-module.exports = (function () {
+module.exports = (function() {
 
     var numRows = 10000;
     var firstNames = ['Olivia', 'Sophia', 'Ava', 'Isabella', 'Boy', 'Liam', 'Noah', 'Ethan', 'Mason', 'Logan', 'Moe', 'Larry', 'Curly', 'Shemp', 'Groucho', 'Harpo', 'Chico', 'Zeppo', 'Stanley', 'Hardy'];
@@ -11,7 +11,7 @@ module.exports = (function () {
 
     var randomFunc = Math.random;
     //var randomFunc = rnd;
-    var randomPerson = function () {
+    var randomPerson = function() {
         var firstName = Math.round((firstNames.length - 1) * randomFunc());
         var lastName = Math.round((lastNames.length - 1) * randomFunc());
         var pets = Math.round(10 * randomFunc());

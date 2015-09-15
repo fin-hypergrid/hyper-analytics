@@ -19,6 +19,9 @@ var js = {
 };
 
 gulp.task('lint', function() {
+    if (isBuilding) {
+        return;
+    }
     return gulp.src(js.path)
         .pipe(gitignore())
         .pipe(eslint())
@@ -39,7 +42,7 @@ gulp.task('browserSyncLaunchServer', function() {
 var isBuilding = false;
 // Basic usage
 
-gulp.task('build', function() {
+gulp.task('build', ['lint'], function() {
     // Single entry point to browserify
     if (isBuilding) {
         return;
@@ -51,7 +54,9 @@ gulp.task('build', function() {
     }
 
     gulp.src(js.path)
-    .pipe(beautify())
+    .pipe(beautify({
+        spaceAfterAnonFunction: false
+    }))
     .pipe(gulp.dest(js.dir));
 
     return gulp.src('src/js/main.js')

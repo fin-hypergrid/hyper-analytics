@@ -11,7 +11,7 @@ if (!window.fin) {
 
 window.d = new analytics.JSDataSource(sampleData);
 window.f = new analytics.DataSourceFilter(window.d);
-window.a = new analytics.DataAggregator(window.f);
+window.a = new analytics.DataSourceAggregator(window.f);
 
 var cols = {
     last_name: 0,

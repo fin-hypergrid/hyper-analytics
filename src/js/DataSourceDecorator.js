@@ -1,7 +1,5 @@
 'use strict';
 
-var Map = require('./map');
-
 module.exports = (function() {
 
     function DataSourceDecorator(dataSource) {

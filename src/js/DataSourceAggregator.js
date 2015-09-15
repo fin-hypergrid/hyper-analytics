@@ -1,10 +1,10 @@
 'use strict';
 
 var DataSourceSorter = require('./DataSourceSorter');
-var DataTree = require('./DataTree');
-var DataGroup = require('./DataGroup');
-var DataLeaf = require('./DataLeaf');
-var Map = require('./map');
+var DataNodeTree = require('./DataNodeTree');
+var DataNodeGroup = require('./DataNodeGroup');
+var DataNodeLeaf = require('./DataNodeLeaf');
+var Map = require('./Map');
 
 module.exports = (function() {
 
@@ -14,7 +14,7 @@ module.exports = (function() {
     // b is a dicitionary of groupbys, columnName:sourceColumnName
     // c is a list of constraints,
 
-    function DataAggregator(dataSource) {
+    function DataSourceAggregator(dataSource) {
         this.dataSource = dataSource;
         this.aggregates = [];
         this.groupBys = [];
@@ -22,27 +22,28 @@ module.exports = (function() {
         this.sorterInstance;
     }
 
-    DataAggregator.prototype.addAggregate = function(columnName, func) {
+    DataSourceAggregator.prototype.addAggregate = function(columnName, func) {
         func.columnName = columnName;
         this.aggregates.push(func);
     };
 
-    DataAggregator.prototype.addGroupBy = function(columnIndex) {
+    DataSourceAggregator.prototype.addGroupBy = function(columnIndex) {
         this.groupBys.push(columnIndex);
     };
 
-    DataAggregator.prototype.build = function() {
+    DataSourceAggregator.prototype.build = function() {
         this.buildGroupTree();
     };
-    DataAggregator.prototype.buildGroupTree = function() {
+
+    DataSourceAggregator.prototype.buildGroupTree = function() {
         var g,value,createFunc;
         var createBranch = function(key, map) {
-            var value = new DataGroup(key);
+            var value = new DataNodeGroup(key);
             map.set(key, value);
             return value;
         };
         var createLeaf = function(key, map) {
-            var value = new DataLeaf(key);
+            var value = new DataNodeLeaf(key);
             map.set(key, value);
             return value;
         };
@@ -57,7 +58,7 @@ module.exports = (function() {
         }
 
         var rowCount = source.getRowCount();
-        var tree = new DataTree();
+        var tree = new DataNodeTree('root');
         var path = tree;
         var leafDepth = groupBys.length - 1;
         for (var r = 0; r < rowCount; r++) {
@@ -79,13 +80,13 @@ module.exports = (function() {
         this.buildView();
     };
 
-    DataAggregator.prototype.buildView = function() {
+    DataSourceAggregator.prototype.buildView = function() {
         this.view.length = 0;
         this.tree.computeHeight();
         this.tree.buildView(this);
     };
 
-    DataAggregator.prototype.getValue = function(x, y) {
+    DataSourceAggregator.prototype.getValue = function(x, y) {
         if (y === 0) {
             if (x === 0) {
                 return 'hierarchy     |';
@@ -97,22 +98,22 @@ module.exports = (function() {
         }
     };
 
-    DataAggregator.prototype.getColumnCount = function() {
+    DataSourceAggregator.prototype.getColumnCount = function() {
 
         return this.aggregates.length + 1; // 1 is for the hierarchy column
     };
 
-    DataAggregator.prototype.getRowCount = function() {
+    DataSourceAggregator.prototype.getRowCount = function() {
 
         return this.tree.height + 1; //header column
     };
 
-    DataAggregator.prototype.click = function(y) {
+    DataSourceAggregator.prototype.click = function(y) {
         var group = this.view[y];
         group.toggleExpansionState();
         this.buildView();
     };
 
-    return DataAggregator;
+    return DataSourceAggregator;
 
 })();

@@ -65,7 +65,7 @@
     "space-infix-ops": 2,
     "no-eval": 2,
     "no-with": 2,
-    "eol-last": 2,
+    "eol-last": 1,
     "comma-dangle": [
       2,
       "never"

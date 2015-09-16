@@ -34,16 +34,16 @@ module.exports = (function() {
         return this.dataSource.getColumnCount();
     };
 
+    DataSourceDecorator.prototype.getFields = function() {
+
+        return this.dataSource.getFields();
+    };
+
     DataSourceDecorator.prototype.getRowCount = function() {
         if (this.indexes.length !== 0) {
             return this.indexes.length;
         }
         return this.dataSource.getRowCount();
-    };
-
-    DataSourceDecorator.prototype.getFields = function() {
-
-        return this.dataSource.getFields();
     };
 
     DataSourceDecorator.prototype.getHeaders = function() {

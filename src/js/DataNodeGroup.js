@@ -30,7 +30,7 @@ module.exports = (function() {
 
     DataNodeGroup.prototype.computeDepthString = function() {
         var icon = ExpandedMap[this.expanded + ''];
-        var string = depthString.substring(0, this.depth * 3) + icon + ' ' + this.label + '     |';
+        var string = depthString.substring(0, this.depth * 3) + icon + ' ' + this.label;
         return string;
     };
 

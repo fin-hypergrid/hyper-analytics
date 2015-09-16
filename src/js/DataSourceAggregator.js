@@ -16,13 +16,14 @@ module.exports = (function() {
     function DataSourceAggregator(dataSource) {
         this.dataSource = dataSource;
         this.aggregates = [];
+        this.headers = [];
         this.groupBys = [];
         this.view = [];
         this.sorterInstance = {};
     }
 
     DataSourceAggregator.prototype.addAggregate = function(columnName, func) {
-        func.columnName = columnName;
+        this.headers.push(columnName);
         this.aggregates.push(func);
     };
 
@@ -86,15 +87,7 @@ module.exports = (function() {
     };
 
     DataSourceAggregator.prototype.getValue = function(x, y) {
-        if (y === 0) {
-            if (x === 0) {
-                return 'hierarchy     |';
-            } else {
-                return this.aggregates[x - 1].columnName;
-            }
-        } else {
-            return this.view[y - 1].getValue(x); //header row
-        }
+        return this.view[y - 1].getValue(x); //header row
     };
 
     DataSourceAggregator.prototype.getColumnCount = function() {
@@ -113,6 +106,13 @@ module.exports = (function() {
         this.buildView();
     };
 
+    DataSourceAggregator.prototype.getHeaders = function() {
+        return this.headers;
+    };
+
+    DataSourceAggregator.prototype.getGrandTotals = function() {
+        return this.view[0].data;
+    };
     return DataSourceAggregator;
 
 })();

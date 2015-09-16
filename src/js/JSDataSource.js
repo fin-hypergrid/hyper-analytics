@@ -47,6 +47,11 @@ module.exports = (function() {
         return this.fields;
     };
 
+    JSDataSource.prototype.getHeaders = function() {
+
+        return this.getFields();
+    };
+
     JSDataSource.prototype.setFields = function(fields) {
 
         this.fields = fields;

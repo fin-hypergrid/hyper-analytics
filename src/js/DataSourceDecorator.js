@@ -39,6 +39,16 @@ module.exports = (function() {
         return this.indexes.length;
     };
 
+    DataSourceDecorator.prototype.getFields = function() {
+
+        return this.dataSource.getFields();
+    };
+
+    DataSourceDecorator.prototype.getHeaders = function() {
+
+        return this.dataSource.getHeaders();
+    };
+
     DataSourceDecorator.prototype.initializeIndexVector = function() {
         var rowCount = this.dataSource.getRowCount();
         var indexVector = new Array(rowCount);

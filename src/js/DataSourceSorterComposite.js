@@ -8,7 +8,6 @@ module.exports = (function() {
     function DataSourceSorterComposite(dataSource) {
         DataSourceDecorator.call(this, dataSource);
         this.sorts = [];
-        this.first = this.dataSource;
         this.last = this.dataSource;
     }
 
@@ -25,25 +24,21 @@ module.exports = (function() {
             var sort = sorts[i];
             each = new DataSourceSorter(each);
             each.sortOn(sort[0], sort[1]);
-            if (i === 0) {
-                this.first = each;
-            }
         }
         this.last = each;
     };
 
     DataSourceSorterComposite.prototype.clearSorts = function() {
         this.sorts.length = 0;
-        this.first = this.dataSource;
         this.last = this.dataSource;
     };
 
     DataSourceSorterComposite.prototype.getValue = function(x, y) {
-        return this.first.getValue(x, y);
+        return this.last.getValue(x, y);
     };
 
     DataSourceSorterComposite.prototype.setValue = function(x, y, value) {
-        this.first.setValue(x, y, value);
+        this.last.setValue(x, y, value);
     };
 
     return DataSourceSorterComposite;

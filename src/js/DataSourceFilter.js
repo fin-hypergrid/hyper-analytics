@@ -11,13 +11,6 @@ module.exports = (function() {
 
     DataSourceFilter.prototype = Object.create(DataSourceDecorator.prototype);
 
-    DataSourceFilter.prototype.getRowCount = function() {
-        if (this.filters.length === 0) {
-            return this.dataSource.getRowCount();
-        }
-        return this.indexes.length;
-    };
-
     DataSourceFilter.prototype.addFilter = function(columnIndex, filter) {
         filter.columnIndex = columnIndex;
         this.filters.push(filter);

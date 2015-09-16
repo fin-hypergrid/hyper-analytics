@@ -2,9 +2,11 @@
 
 module.exports = (function() {
 
-    function DataSourceDecorator(dataSource) {
+    function DataSourceDecorator(dataSource, skipIndexVectorInitialize) {
         this.dataSource = dataSource;
-        this.initializeIndexVector();
+        if (!skipIndexVectorInitialize) {
+            this.initializeIndexVector();
+        }
     }
 
     DataSourceDecorator.prototype.transposeY = function(y) {

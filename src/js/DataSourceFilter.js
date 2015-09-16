@@ -5,7 +5,7 @@ var DataSourceDecorator = require('./DataSourceDecorator');
 module.exports = (function() {
 
     function DataSourceFilter(dataSource) {
-        DataSourceDecorator.call(this, dataSource);
+        DataSourceDecorator.call(this, dataSource, false);
         this.filters = [];
     }
 

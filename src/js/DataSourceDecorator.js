@@ -35,8 +35,10 @@ module.exports = (function() {
     };
 
     DataSourceDecorator.prototype.getRowCount = function() {
-
-        return this.indexes.length;
+        if (this.indexes.length !== 0) {
+            return this.indexes.length;
+        }
+        return this.dataSource.getRowCount();
     };
 
     DataSourceDecorator.prototype.getFields = function() {

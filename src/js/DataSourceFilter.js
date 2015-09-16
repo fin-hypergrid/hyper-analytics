@@ -21,7 +21,6 @@ module.exports = (function() {
     DataSourceFilter.prototype.addFilter = function(columnIndex, filter) {
         filter.columnIndex = columnIndex;
         this.filters.push(filter);
-        this.applyFilters();
     };
 
     DataSourceFilter.prototype.clearFilters = function() { /* filter */
@@ -42,14 +41,13 @@ module.exports = (function() {
 
     DataSourceFilter.prototype.applyFiltersTo = function(r) {
         var filters = this.filters;
+        var isFiltered = true;
         for (var f = 0; f < filters.length; f++) {
             var filter = filters[f];
             var rowObject = this.dataSource.getRow(r);
-            if (filter(this.dataSource.getValue(filter.columnIndex, r), rowObject, r)) {
-                return true;
-            }
+            isFiltered = isFiltered && filter(this.dataSource.getValue(filter.columnIndex, r), rowObject, r);
         }
-        return false;
+        return isFiltered;
     };
 
     return DataSourceFilter;

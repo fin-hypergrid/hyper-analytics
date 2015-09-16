@@ -57,6 +57,10 @@ module.exports = (function() {
         this.fields = fields;
     };
 
+    JSDataSource.prototype.getGrandTotals = function() {
+        //nothing here
+        return;
+    };
     return JSDataSource;
 
 })();

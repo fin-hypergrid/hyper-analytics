@@ -49,6 +49,11 @@ module.exports = (function() {
         return this.dataSource.getHeaders();
     };
 
+    DataSourceDecorator.prototype.getGrandTotals = function() {
+        //nothing here
+        return;
+    };
+
     DataSourceDecorator.prototype.initializeIndexVector = function() {
         var rowCount = this.dataSource.getRowCount();
         var indexVector = new Array(rowCount);

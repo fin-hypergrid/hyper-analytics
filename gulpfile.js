@@ -6,6 +6,10 @@ var gulp      = require('gulp'),
     browserify = require('gulp-browserify'),
     browserSync = require('browser-sync').create(),
     beautify = require('gulp-beautify'),
+    gutil = require('gulp-util'),
+    sourcemaps = require('gulp-sourcemaps'),
+    source = require('vinyl-source-stream'),
+    buffer = require('vinyl-buffer'),
     uglify = require('gulp-uglify');
 
 var src = './src/';
@@ -59,13 +63,32 @@ gulp.task('build', ['lint'], function() {
     }))
     .pipe(gulp.dest(js.dir));
 
-    return gulp.src('src/js/main.js')
+    // return gulp.src('src/js/main.js')
+    //     .pipe(browserify({
+    //       insertGlobals : true,
+    //       debug : true
+    //     }))
+    //     .pipe(uglify())
+    //     .pipe(gulp.dest('./build'));
+
+
+
+  // set up the browserify instance on a task basis
+  return gulp.src('src/js/main.js')
         .pipe(browserify({
           insertGlobals : true,
           debug : true
         }))
+        .pipe(sourcemaps.init({loadMaps: true}))
+        // Add transformation tasks to the pipeline here.
         .pipe(uglify())
-        .pipe(gulp.dest('./build'));
+        .on('error', gutil.log)
+    .pipe(sourcemaps.write('./'))
+    .pipe(gulp.dest('./build'));
+
+
+
+
 });
 
 gulp.task('reload', function() {

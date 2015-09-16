@@ -41,14 +41,6 @@ module.exports = (function() {
         this.last.setValue(x, y, value);
     };
 
-    DataSourceSorterComposite.prototype.getRowCount = function(x, y, value) {
-        this.last.getRowCount(x, y, value);
-    };
-
-    DataSourceSorterComposite.prototype.getRow = function(y) {
-        this.last.getRow(y);
-    };
-
     return DataSourceSorterComposite;
 
 })();

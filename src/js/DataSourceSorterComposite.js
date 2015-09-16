@@ -20,7 +20,7 @@ module.exports = (function() {
     DataSourceSorterComposite.prototype.applySorts = function() {
         var sorts = this.sorts;
         var each = this.dataSource;
-        for (var i = 0; sorts.length; i++) {
+        for (var i = 0; i < sorts.length; i++) {
             var sort = sorts[i];
             each = new DataSourceSorter(each);
             each.sortOn(sort[0], sort[1]);

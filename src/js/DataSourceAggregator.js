@@ -14,6 +14,7 @@ module.exports = (function() {
     // c is a list of constraints,
 
     function DataSourceAggregator(dataSource) {
+        this.tree = new DataNodeTree('root');
         this.dataSource = dataSource;
         this.aggregates = [];
         this.headers = [];
@@ -58,7 +59,7 @@ module.exports = (function() {
         }
 
         var rowCount = source.getRowCount();
-        var tree = new DataNodeTree('root');
+        var tree = this.tree;
         var path = tree;
         var leafDepth = groupBys.length - 1;
         for (r = 0; r < rowCount; r++) {
@@ -75,7 +76,6 @@ module.exports = (function() {
         }
         this.sorterInstance = new DataSourceSorter(source);
         tree.prune();
-        this.tree = tree;
         this.tree.computeAggregates(this);
         this.buildView();
     };
@@ -96,7 +96,6 @@ module.exports = (function() {
     };
 
     DataSourceAggregator.prototype.getRowCount = function() {
-
         return this.tree.height + 1; //header column
     };
 

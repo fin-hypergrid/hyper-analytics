@@ -68,6 +68,7 @@ gulp.task('build', ['lint'], function() {
           insertGlobals : true,
           debug : true
         }))
+        .pipe(sourcemaps.init({loadMaps: true}))
 //        .pipe(uglify())
         .pipe(gulp.dest('./build'));
 

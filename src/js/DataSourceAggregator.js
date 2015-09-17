@@ -40,6 +40,10 @@ module.exports = (function() {
         this.buildGroupTree();
     };
 
+    DataSourceAggregator.prototype.clearAggregations = function() {
+        this.aggregates.length = 0;
+    };
+
     DataSourceAggregator.prototype.buildGroupTree = function() {
         var c, r, g, value, createFunc;
         var createBranch = function(key, map) {

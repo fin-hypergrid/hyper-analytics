@@ -32,6 +32,10 @@ module.exports = (function() {
         this.groupBys.push(columnIndex);
     };
 
+    DataSourceAggregator.prototype.getAggregates = function() {
+        return this.aggregates;
+    };
+
     DataSourceAggregator.prototype.hasGroups = function() {
         return this.groupBys.length > 0;
     };
@@ -81,7 +85,7 @@ module.exports = (function() {
         this.sorterInstance = new DataSourceSorter(source);
         tree.prune();
         this.tree.computeAggregates(this);
-        this.buildView();
+        this.apply();
     };
 
     DataSourceAggregator.prototype.apply = function() {
@@ -106,11 +110,13 @@ module.exports = (function() {
     DataSourceAggregator.prototype.click = function(y) {
         var group = this.view[y];
         group.toggleExpansionState();
-        this.buildView();
+        this.apply();
     };
 
     DataSourceAggregator.prototype.getHeaders = function() {
-        return this.headers;
+        if (this.headers.length === 0) {
+            return this.dataSource.getHeaders();
+        }
     };
 
     DataSourceAggregator.prototype.getFields = function() {

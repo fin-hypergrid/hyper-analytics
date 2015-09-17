@@ -41,7 +41,7 @@ module.exports = (function() {
     };
 
     DataNodeBase.prototype.applyAggregates = function(aggregator) {
-        var aggregates = aggregator.aggregates;
+        var aggregates = aggregator.getAggregates();
         var data = this.data;
         data.length = aggregates.length + 1;
         var indexes = this.getAllRowIndexes();

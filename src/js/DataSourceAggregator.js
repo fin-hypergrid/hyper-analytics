@@ -84,7 +84,7 @@ module.exports = (function() {
         this.buildView();
     };
 
-    DataSourceAggregator.prototype.buildView = function() {
+    DataSourceAggregator.prototype.apply = function() {
         this.view.length = 0;
         this.tree.computeHeight();
         this.tree.buildView(this);

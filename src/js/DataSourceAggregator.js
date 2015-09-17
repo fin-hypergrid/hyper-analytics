@@ -115,7 +115,7 @@ module.exports = (function() {
     };
 
     DataSourceAggregator.prototype.getHeaders = function() {
-        return this.dataSource.getHeaders();
+        return ['tree'].concat(this.dataSource.getHeaders());
 
     };
 

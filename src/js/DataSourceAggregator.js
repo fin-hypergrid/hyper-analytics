@@ -113,6 +113,10 @@ module.exports = (function() {
         return this.headers;
     };
 
+    DataSourceAggregator.prototype.getFields = function() {
+        return this.getHeaders();
+    };
+
     DataSourceAggregator.prototype.getGrandTotals = function() {
         var view = this.view[0];
         if (!view) {

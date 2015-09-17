@@ -41,6 +41,10 @@ module.exports = (function() {
         this.buildGroupTree();
     };
 
+    DataSourceAggregator.prototype.clearGroups = function() {
+        this.aggregates.groupBys.length = 0;
+    };
+
     DataSourceAggregator.prototype.clearAggregations = function() {
         this.aggregates.length = 0;
     };

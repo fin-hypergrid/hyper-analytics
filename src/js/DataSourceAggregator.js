@@ -114,9 +114,8 @@ module.exports = (function() {
     };
 
     DataSourceAggregator.prototype.getHeaders = function() {
-        if (this.headers.length === 0) {
-            return this.dataSource.getHeaders();
-        }
+        return this.dataSource.getHeaders();
+
     };
 
     DataSourceAggregator.prototype.getFields = function() {

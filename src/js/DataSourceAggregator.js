@@ -110,7 +110,7 @@ module.exports = (function() {
 
     DataSourceAggregator.prototype.click = function(y) {
         var group = this.view[y];
-        group.toggleExpansionState();
+        group.toggleExpansionState(this);
         this.buildView();
     };
 

@@ -51,13 +51,19 @@ module.exports = (function() {
         return result;
     };
 
-    DataNodeGroup.prototype.toggleExpansionState = function() { /* aggregator */
+    DataNodeGroup.prototype.toggleExpansionState = function(aggregator) { /* aggregator */
         this.expanded = !this.expanded;
         this.data[0] = this.computeDepthString();
+        if (this.expanded) {
+            this.computeAggregates(aggregator);
+        }
     };
 
     DataNodeGroup.prototype.computeAggregates = function(aggregator) {
         this.applyAggregates(aggregator);
+        if (!this.expanded) {
+            return; // were not being viewed, don't have child nodes do computation;
+        }
         for (var i = 0; i < this.children.length; i++) {
             this.children[i].computeAggregates(aggregator);
         }

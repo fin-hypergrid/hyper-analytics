@@ -114,7 +114,11 @@ module.exports = (function() {
     };
 
     DataSourceAggregator.prototype.getGrandTotals = function() {
-        return this.view[0].data;
+        var view = this.view[0];
+        if (!view) {
+            return [];
+        }
+        return view.data;
     };
     return DataSourceAggregator;
 

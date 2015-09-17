@@ -105,7 +105,7 @@ module.exports = (function() {
     };
 
     DataSourceAggregator.prototype.getRowCount = function() {
-        return this.tree.height + 1; //header column
+        return this.view.length; //header column
     };
 
     DataSourceAggregator.prototype.click = function(y) {

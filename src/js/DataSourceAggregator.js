@@ -15,6 +15,7 @@ module.exports = (function() {
 
     function DataSourceAggregator(dataSource) {
         this.tree = new DataNodeTree('root');
+        this.indexes = [];
         this.dataSource = dataSource;
         this.aggregates = [];
         this.headers = [];

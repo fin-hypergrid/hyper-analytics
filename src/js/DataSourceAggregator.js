@@ -32,6 +32,10 @@ module.exports = (function() {
         this.groupBys.push(columnIndex);
     };
 
+    DataSourceAggregator.prototype.hasGroups = function() {
+        return this.groupBys.length > 0;
+    };
+
     DataSourceAggregator.prototype.build = function() {
         this.buildGroupTree();
     };

@@ -7,6 +7,7 @@ module.exports = (function() {
     function DataNodeTree(key) {
         DataNodeGroup.call(this, key);
         this.height = 0;
+        this.expanded = true;
     }
 
     DataNodeTree.prototype = Object.create(DataNodeGroup.prototype);

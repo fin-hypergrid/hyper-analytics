@@ -24,7 +24,7 @@ module.exports = (function() {
     };
 
     DataNodeBase.prototype.computeDepthString = function() {
-        var string = depthString.substring(0, this.depth * 3) + this.label;
+        var string = depthString.substring(0, this.depth * 4)  + this.label;
         return string;
     };
 

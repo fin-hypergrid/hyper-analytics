@@ -42,7 +42,7 @@ module.exports = (function() {
     };
 
     DataSourceAggregator.prototype.clearGroups = function() {
-        this.aggregates.groupBys.length = 0;
+        this.aggregates.length = 0;
     };
 
     DataSourceAggregator.prototype.clearAggregations = function() {

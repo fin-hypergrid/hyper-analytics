@@ -1688,6 +1688,10 @@ module.exports = (function() {
         return this.groupBys.length > 0;
     };
 
+    DataSourceAggregator.prototype.hasAggregates = function() {
+        return this.aggregates.length > 0;
+    };
+
     DataSourceAggregator.prototype.apply = function() {
         this.buildGroupTree();
     };
@@ -1770,6 +1774,9 @@ module.exports = (function() {
     };
 
     DataSourceAggregator.prototype.getHeaders = function() {
+        if (this.hasAggregates()) {
+            return ['tree'].concat(this.headers);
+        }
         return ['tree'].concat(this.dataSource.getHeaders());
 
     };
@@ -2351,7 +2358,7 @@ if (!window.fin) {
 if (!window.fin.analytics) {
     window.fin.analytics = analytics;
 }
-}).call(this,require("oMfpAn"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/fake_8aa0dce8.js","/")
+}).call(this,require("oMfpAn"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/fake_da640be0.js","/")
 },{"./analytics.js":18,"buffer":1,"oMfpAn":4}],20:[function(require,module,exports){
 (function (process,global,Buffer,__argument0,__argument1,__argument2,__argument3,__filename,__dirname){
 'use strict';

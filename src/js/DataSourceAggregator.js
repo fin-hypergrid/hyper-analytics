@@ -51,6 +51,7 @@ module.exports = (function() {
 
     DataSourceAggregator.prototype.clearAggregations = function() {
         this.aggregates.length = 0;
+        this.headers.length = 0;
     };
 
     DataSourceAggregator.prototype.buildGroupTree = function() {

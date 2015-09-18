@@ -1793,6 +1793,17 @@ module.exports = (function() {
         }
         return view.data;
     };
+
+    DataSourceAggregator.prototype.getRow = function(y) {
+        var rowIndexes = this.view[y].rowIndexes;
+        var result = new Array(rowIndexes.length);
+        for (var i = 0; i < result.length; i++) {
+            var object = this.dataSource.getRow(rowIndexes[i]);
+            result[i] = object;
+        }
+        return result;
+    };
+
     return DataSourceAggregator;
 
 })();
@@ -2359,7 +2370,7 @@ if (!window.fin) {
 if (!window.fin.analytics) {
     window.fin.analytics = analytics;
 }
-}).call(this,require("oMfpAn"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/fake_e0b15c3d.js","/")
+}).call(this,require("oMfpAn"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/fake_1b858bac.js","/")
 },{"./analytics.js":18,"buffer":1,"oMfpAn":4}],20:[function(require,module,exports){
 (function (process,global,Buffer,__argument0,__argument1,__argument2,__argument3,__filename,__dirname){
 'use strict';

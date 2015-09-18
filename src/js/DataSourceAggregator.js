@@ -142,6 +142,17 @@ module.exports = (function() {
         }
         return view.data;
     };
+
+    DataSourceAggregator.prototype.getRow = function(y) {
+        var rowIndexes = this.view[y].rowIndexes;
+        var result = new Array(rowIndexes.length);
+        for (var i = 0; i < result.length; i++) {
+            var object = this.dataSource.getRow(rowIndexes[i]);
+            result[i] = object;
+        }
+        return result;
+    };
+
     return DataSourceAggregator;
 
 })();

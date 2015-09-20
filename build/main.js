@@ -1677,6 +1677,7 @@ module.exports = (function() {
         this.groupBys = [];
         this.view = [];
         this.sorterInstance = {};
+        this.presortGroups = true;
     }
 
     DataSourceAggregator.prototype.addAggregate = function(columnName, func) {
@@ -1725,10 +1726,13 @@ module.exports = (function() {
         var source = this.dataSource;
 
         // lets sort our data first....
-        for (c = 0; c < groupBys.length; c++) {
-            g = groupBys[groupBys.length - c - 1];
-            source = new DataSourceSorter(source);
-            source.sortOn(g);
+
+        if (this.presortGroups) {
+            for (c = 0; c < groupBys.length; c++) {
+                g = groupBys[groupBys.length - c - 1];
+                source = new DataSourceSorter(source);
+                source.sortOn(g);
+            }
         }
 
         var rowCount = source.getRowCount();
@@ -1811,6 +1815,7 @@ module.exports = (function() {
     return DataSourceAggregator;
 
 })();
+
 }).call(this,require("oMfpAn"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/DataSourceAggregator.js","/")
 },{"./DataNodeGroup":6,"./DataNodeLeaf":7,"./DataNodeTree":8,"./DataSourceSorter":12,"buffer":1,"oMfpAn":4}],10:[function(require,module,exports){
 (function (process,global,Buffer,__argument0,__argument1,__argument2,__argument3,__filename,__dirname){
@@ -2373,7 +2378,7 @@ if (!window.fin) {
 if (!window.fin.analytics) {
     window.fin.analytics = analytics;
 }
-}).call(this,require("oMfpAn"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/fake_49803250.js","/")
+}).call(this,require("oMfpAn"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/fake_c5ec5eaa.js","/")
 },{"./analytics.js":18,"buffer":1,"oMfpAn":4}],20:[function(require,module,exports){
 (function (process,global,Buffer,__argument0,__argument1,__argument2,__argument3,__filename,__dirname){
 'use strict';

@@ -22,6 +22,7 @@ module.exports = (function() {
         this.groupBys = [];
         this.view = [];
         this.sorterInstance = {};
+        this.presortGroups = true;
     }
 
     DataSourceAggregator.prototype.addAggregate = function(columnName, func) {
@@ -70,10 +71,13 @@ module.exports = (function() {
         var source = this.dataSource;
 
         // lets sort our data first....
-        for (c = 0; c < groupBys.length; c++) {
-            g = groupBys[groupBys.length - c - 1];
-            source = new DataSourceSorter(source);
-            source.sortOn(g);
+
+        if (this.presortGroups) {
+            for (c = 0; c < groupBys.length; c++) {
+                g = groupBys[groupBys.length - c - 1];
+                source = new DataSourceSorter(source);
+                source.sortOn(g);
+            }
         }
 
         var rowCount = source.getRowCount();

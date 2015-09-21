@@ -41,10 +41,14 @@ module.exports = (function() {
     };
 
     DataNodeBase.prototype.applyAggregates = function(aggregator) {
+        var indexes = this.getAllRowIndexes();
+        if (indexes.length === 0) {
+            return; // no data to rollup on
+        }
         var aggregates = aggregator.aggregates;
         var data = this.data;
         data.length = aggregates.length + 1;
-        var indexes = this.getAllRowIndexes();
+
         var sorter = aggregator.sorterInstance;
         sorter.indexes = indexes;
 

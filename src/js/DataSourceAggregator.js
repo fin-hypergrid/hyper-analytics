@@ -32,6 +32,8 @@ module.exports = (function() {
         this.presortGroups = true;
     }
 
+    DataSourceAggregator.prototype.isNullObject = false;
+
     DataSourceAggregator.prototype.addAggregate = function(columnName, func) {
         this.headers.push(headerify(columnName));
         this.aggregates.push(func);

@@ -14,6 +14,8 @@ module.exports = (function() {
         this.expanded = false;
     }
 
+    DataNodeBase.prototype.isNullObject = false;
+
     DataNodeBase.prototype.getValue = function(x) {
         return this.data[x];
     };

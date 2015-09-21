@@ -1412,6 +1412,8 @@ module.exports = (function() {
         this.expanded = false;
     }
 
+    DataNodeBase.prototype.isNullObject = false;
+
     DataNodeBase.prototype.getValue = function(x) {
         return this.data[x];
     };
@@ -1691,6 +1693,8 @@ module.exports = (function() {
         this.presortGroups = true;
     }
 
+    DataSourceAggregator.prototype.isNullObject = false;
+
     DataSourceAggregator.prototype.addAggregate = function(columnName, func) {
         this.headers.push(headerify(columnName));
         this.aggregates.push(func);
@@ -1846,6 +1850,8 @@ module.exports = (function() {
         this.indexes = [];
     }
 
+    DataSourceDecorator.prototype.isNullObject = false;
+
     DataSourceDecorator.prototype.transposeY = function(y) {
         if (this.indexes.length !== 0) {
             return this.indexes[y];
@@ -1920,7 +1926,6 @@ module.exports = (function() {
     return DataSourceDecorator;
 
 })();
-
 }).call(this,require("oMfpAn"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/DataSourceDecorator.js","/")
 },{"buffer":1,"oMfpAn":4}],11:[function(require,module,exports){
 (function (process,global,Buffer,__argument0,__argument1,__argument2,__argument3,__filename,__dirname){
@@ -2083,6 +2088,8 @@ module.exports = (function() {
         this.data = data;
     }
 
+    JSDataSource.prototype.isNullObject = false;
+
     JSDataSource.prototype.getValue = function(x, y) {
         if (x === -1) {
             return y;
@@ -2152,7 +2159,6 @@ module.exports = (function() {
     return JSDataSource;
 
 })();
-
 }).call(this,require("oMfpAn"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/JSDataSource.js","/")
 },{"buffer":1,"oMfpAn":4}],15:[function(require,module,exports){
 (function (process,global,Buffer,__argument0,__argument1,__argument2,__argument3,__filename,__dirname){
@@ -2441,7 +2447,7 @@ if (!window.fin) {
 if (!window.fin.analytics) {
     window.fin.analytics = analytics;
 }
-}).call(this,require("oMfpAn"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/fake_20071fdc.js","/")
+}).call(this,require("oMfpAn"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/fake_aca5bf53.js","/")
 },{"./analytics.js":18,"buffer":1,"oMfpAn":4}],20:[function(require,module,exports){
 (function (process,global,Buffer,__argument0,__argument1,__argument2,__argument3,__filename,__dirname){
 'use strict';

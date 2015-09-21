@@ -25,6 +25,8 @@ module.exports = (function() {
         this.data = data;
     }
 
+    JSDataSource.prototype.isNullObject = false;
+
     JSDataSource.prototype.getValue = function(x, y) {
         if (x === -1) {
             return y;

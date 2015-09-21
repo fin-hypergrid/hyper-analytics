@@ -7,6 +7,8 @@ module.exports = (function() {
         this.indexes = [];
     }
 
+    DataSourceDecorator.prototype.isNullObject = false;
+
     DataSourceDecorator.prototype.transposeY = function(y) {
         if (this.indexes.length !== 0) {
             return this.indexes[y];

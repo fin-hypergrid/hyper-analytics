@@ -51,6 +51,15 @@ module.exports = (function() {
     };
 
     JSDataSource.prototype.getHeaders = function() {
+        if (!this.headers || this.headers.length === 0) {
+            this.headers = this.getDefaultHeaders().map(function(each) {
+                return headerify(each);
+            });
+        }
+        return this.headers;
+    }
+
+    JSDataSource.prototype.getDefaultHeaders = function() {
 
         return this.getFields();
     };

@@ -39,11 +39,20 @@ module.exports = (function() {
         return this.dataSource.getFields();
     };
 
+    DataSourceDecorator.prototype.setFields = function(fields) {
+
+        return this.dataSource.setFields(fields);
+    };
+
     DataSourceDecorator.prototype.getRowCount = function() {
         if (this.indexes.length !== 0) {
             return this.indexes.length;
         }
         return this.dataSource.getRowCount();
+    };
+
+    DataSourceDecorator.prototype.setHeaders = function(headers) {
+        return this.dataSource.setHeaders(headers);
     };
 
     DataSourceDecorator.prototype.getHeaders = function() {

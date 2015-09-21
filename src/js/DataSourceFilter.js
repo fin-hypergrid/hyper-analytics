@@ -22,7 +22,7 @@ module.exports = (function() {
     };
 
     DataSourceFilter.prototype.applyFilters = function() {
-        if (filters.length === 0) {
+        if (this.filters.length === 0) {
             this.indexes.length = 0;
             return;
         }

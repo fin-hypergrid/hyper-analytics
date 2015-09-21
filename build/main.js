@@ -2481,6 +2481,7 @@ module.exports = (function() {
         };
         var groupBys = this.groupBys;
         var source = this.dataSource;
+        var rowCount = source.getRowCount();
 
         // lets sort our data first....
         if (this.presortGroups) {
@@ -2491,7 +2492,6 @@ module.exports = (function() {
             }
         }
 
-        var rowCount = source.getRowCount();
         var tree = this.tree = new DataNodeTree('root');
         var path = tree;
         var leafDepth = groupBys.length - 1;
@@ -3195,7 +3195,7 @@ if (!window.fin) {
 if (!window.fin.analytics) {
     window.fin.analytics = analytics;
 }
-}).call(this,require("oMfpAn"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/fake_bad4a431.js","/")
+}).call(this,require("oMfpAn"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/fake_cb08a77a.js","/")
 },{"./analytics.js":19,"buffer":1,"oMfpAn":4,"object.observe":5}],21:[function(require,module,exports){
 (function (process,global,Buffer,__argument0,__argument1,__argument2,__argument3,__filename,__dirname){
 'use strict';

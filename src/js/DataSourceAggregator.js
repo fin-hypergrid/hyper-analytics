@@ -78,6 +78,7 @@ module.exports = (function() {
         };
         var groupBys = this.groupBys;
         var source = this.dataSource;
+        var rowCount = source.getRowCount();
 
         // lets sort our data first....
         if (this.presortGroups) {
@@ -88,7 +89,6 @@ module.exports = (function() {
             }
         }
 
-        var rowCount = dataSource.getRowCount();
         var tree = this.tree = new DataNodeTree('root');
         var path = tree;
         var leafDepth = groupBys.length - 1;

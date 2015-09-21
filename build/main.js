@@ -1814,7 +1814,6 @@ module.exports = (function() {
     return DataSourceAggregator;
 
 })();
-
 }).call(this,require("oMfpAn"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/DataSourceAggregator.js","/")
 },{"./DataNodeGroup":6,"./DataNodeLeaf":7,"./DataNodeTree":8,"./DataSourceSorter":12,"buffer":1,"oMfpAn":4}],10:[function(require,module,exports){
 (function (process,global,Buffer,__argument0,__argument1,__argument2,__argument3,__filename,__dirname){
@@ -1897,7 +1896,6 @@ module.exports = (function() {
     return DataSourceDecorator;
 
 })();
-
 }).call(this,require("oMfpAn"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/DataSourceDecorator.js","/")
 },{"buffer":1,"oMfpAn":4}],11:[function(require,module,exports){
 (function (process,global,Buffer,__argument0,__argument1,__argument2,__argument3,__filename,__dirname){
@@ -2056,6 +2054,7 @@ module.exports = (function() {
 
     function JSDataSource(data, fields) {
         this.fields = fields || computeFieldNames(data[0]);
+        this.headers = [];
         this.data = data;
     }
 
@@ -2109,6 +2108,11 @@ module.exports = (function() {
     JSDataSource.prototype.setFields = function(fields) {
 
         this.fields = fields;
+    };
+
+    JSDataSource.prototype.setHeaders = function(headers) {
+
+        this.headers = headers;
     };
 
     JSDataSource.prototype.getGrandTotals = function() {
@@ -2407,7 +2411,7 @@ if (!window.fin) {
 if (!window.fin.analytics) {
     window.fin.analytics = analytics;
 }
-}).call(this,require("oMfpAn"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/fake_1e540c.js","/")
+}).call(this,require("oMfpAn"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/fake_5ab1e006.js","/")
 },{"./analytics.js":18,"buffer":1,"oMfpAn":4}],20:[function(require,module,exports){
 (function (process,global,Buffer,__argument0,__argument1,__argument2,__argument3,__filename,__dirname){
 'use strict';

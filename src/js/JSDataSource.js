@@ -21,6 +21,7 @@ module.exports = (function() {
 
     function JSDataSource(data, fields) {
         this.fields = fields || computeFieldNames(data[0]);
+        this.headers = [];
         this.data = data;
     }
 
@@ -74,6 +75,11 @@ module.exports = (function() {
     JSDataSource.prototype.setFields = function(fields) {
 
         this.fields = fields;
+    };
+
+    JSDataSource.prototype.setHeaders = function(headers) {
+
+        this.headers = headers;
     };
 
     JSDataSource.prototype.getGrandTotals = function() {

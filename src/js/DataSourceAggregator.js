@@ -171,6 +171,7 @@ module.exports = (function() {
 
     DataSourceAggregator.prototype.setData = function(arrayOfUniformObjects) {
         this.dataSource.setData(arrayOfUniformObjects);
+        this.apply();
     };
 
     return DataSourceAggregator;

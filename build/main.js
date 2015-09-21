@@ -1814,6 +1814,7 @@ module.exports = (function() {
     return DataSourceAggregator;
 
 })();
+
 }).call(this,require("oMfpAn"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/DataSourceAggregator.js","/")
 },{"./DataNodeGroup":6,"./DataNodeLeaf":7,"./DataNodeTree":8,"./DataSourceSorter":12,"buffer":1,"oMfpAn":4}],10:[function(require,module,exports){
 (function (process,global,Buffer,__argument0,__argument1,__argument2,__argument3,__filename,__dirname){
@@ -1858,11 +1859,20 @@ module.exports = (function() {
         return this.dataSource.getFields();
     };
 
+    DataSourceDecorator.prototype.setFields = function(fields) {
+
+        return this.dataSource.setFields(fields);
+    };
+
     DataSourceDecorator.prototype.getRowCount = function() {
         if (this.indexes.length !== 0) {
             return this.indexes.length;
         }
         return this.dataSource.getRowCount();
+    };
+
+    DataSourceDecorator.prototype.setHeaders = function(headers) {
+        return this.dataSource.setHeaders(headers);
     };
 
     DataSourceDecorator.prototype.getHeaders = function() {
@@ -1887,6 +1897,7 @@ module.exports = (function() {
     return DataSourceDecorator;
 
 })();
+
 }).call(this,require("oMfpAn"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/DataSourceDecorator.js","/")
 },{"buffer":1,"oMfpAn":4}],11:[function(require,module,exports){
 (function (process,global,Buffer,__argument0,__argument1,__argument2,__argument3,__filename,__dirname){
@@ -2026,6 +2037,13 @@ module.exports = (function() {
 
 module.exports = (function() {
 
+    var headerify = function(string) {
+        var pieces = string.replace(/[_-]/g, ' ').replace(/[A-Z]/g, ' $&').split(' ').map(function(s) {
+            return s.charAt(0).toUpperCase() + s.slice(1);
+        });
+        return pieces.join(' ');
+    };
+
     var computeFieldNames = function(object) {
         if (!object) {
             return [];
@@ -2075,6 +2093,15 @@ module.exports = (function() {
     };
 
     JSDataSource.prototype.getHeaders = function() {
+        if (!this.headers || this.headers.length === 0) {
+            this.headers = this.getDefaultHeaders().map(function(each) {
+                return headerify(each);
+            });
+        }
+        return this.headers;
+    };
+
+    JSDataSource.prototype.getDefaultHeaders = function() {
 
         return this.getFields();
     };
@@ -2380,7 +2407,7 @@ if (!window.fin) {
 if (!window.fin.analytics) {
     window.fin.analytics = analytics;
 }
-}).call(this,require("oMfpAn"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/fake_f7fa87d9.js","/")
+}).call(this,require("oMfpAn"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/fake_1e540c.js","/")
 },{"./analytics.js":18,"buffer":1,"oMfpAn":4}],20:[function(require,module,exports){
 (function (process,global,Buffer,__argument0,__argument1,__argument2,__argument3,__filename,__dirname){
 'use strict';

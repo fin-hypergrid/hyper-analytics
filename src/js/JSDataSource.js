@@ -2,6 +2,13 @@
 
 module.exports = (function() {
 
+    var headerify = function(string) {
+        var pieces = string.replace(/[_-]/g, ' ').replace(/[A-Z]/g, ' $&').split(' ').map(function(s) {
+            return s.charAt(0).toUpperCase() + s.slice(1);
+        });
+        return pieces.join(' ');
+    };
+
     var computeFieldNames = function(object) {
         if (!object) {
             return [];
@@ -57,7 +64,7 @@ module.exports = (function() {
             });
         }
         return this.headers;
-    }
+    };
 
     JSDataSource.prototype.getDefaultHeaders = function() {
 

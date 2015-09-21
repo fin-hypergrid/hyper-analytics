@@ -60,6 +60,10 @@ module.exports = (function() {
         aggregator.view.push(this);
     };
 
+    DataNodeBase.prototype.toggleExpansionState = function() { /* aggregator */
+        //do nothing by default
+    };
+
     return DataNodeBase;
 
 })();

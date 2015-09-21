@@ -22,6 +22,7 @@ module.exports = (function() {
         this.groupBys = [];
         this.view = [];
         this.sorterInstance = {};
+        this.presortGroups = true;
     }
 
     DataSourceAggregator.prototype.addAggregate = function(columnName, func) {
@@ -37,6 +38,10 @@ module.exports = (function() {
         return this.groupBys.length > 0;
     };
 
+    DataSourceAggregator.prototype.hasAggregates = function() {
+        return this.aggregates.length > 0;
+    };
+
     DataSourceAggregator.prototype.apply = function() {
         this.buildGroupTree();
     };
@@ -47,6 +52,7 @@ module.exports = (function() {
 
     DataSourceAggregator.prototype.clearAggregations = function() {
         this.aggregates.length = 0;
+        this.headers.length = 0;
     };
 
     DataSourceAggregator.prototype.buildGroupTree = function() {
@@ -65,10 +71,12 @@ module.exports = (function() {
         var source = this.dataSource;
 
         // lets sort our data first....
-        for (c = 0; c < groupBys.length; c++) {
-            g = groupBys[groupBys.length - c - 1];
-            source = new DataSourceSorter(source);
-            source.sortOn(g);
+        if (this.presortGroups) {
+            for (c = 0; c < groupBys.length; c++) {
+                g = groupBys[groupBys.length - c - 1];
+                source = new DataSourceSorter(source);
+                source.sortOn(g);
+            }
         }
 
         var rowCount = source.getRowCount();
@@ -119,6 +127,9 @@ module.exports = (function() {
     };
 
     DataSourceAggregator.prototype.getHeaders = function() {
+        if (this.hasAggregates()) {
+            return ['tree'].concat(this.headers);
+        }
         return ['tree'].concat(this.dataSource.getHeaders());
 
     };
@@ -134,6 +145,17 @@ module.exports = (function() {
         }
         return view.data;
     };
+
+    DataSourceAggregator.prototype.getRow = function(y) {
+        var rowIndexes = this.view[y].rowIndexes;
+        var result = new Array(rowIndexes.length);
+        for (var i = 0; i < result.length; i++) {
+            var object = this.dataSource.getRow(rowIndexes[i]);
+            result[i] = object;
+        }
+        return result;
+    };
+
     return DataSourceAggregator;
 
 })();

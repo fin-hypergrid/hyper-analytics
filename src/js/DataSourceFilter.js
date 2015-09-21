@@ -6,7 +6,7 @@ module.exports = (function() {
 
     function DataSourceFilter(dataSource) {
         DataSourceDecorator.call(this, dataSource, false);
-        this.filters = [];
+        this.clearFilters();
     }
 
     DataSourceFilter.prototype = Object.create(DataSourceDecorator.prototype);

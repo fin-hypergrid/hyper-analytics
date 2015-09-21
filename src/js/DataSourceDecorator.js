@@ -74,6 +74,10 @@ module.exports = (function() {
         this.indexes = indexVector;
     };
 
+    JSDataSource.prototype.setData = function(arrayOfUniformObjects) {
+        this.dataSource.setData(arrayOfUniformObjects);
+    };
+
     return DataSourceDecorator;
 
 })();

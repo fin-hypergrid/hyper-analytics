@@ -167,6 +167,10 @@ module.exports = (function() {
         return result;
     };
 
+    DataSourceAggregator.prototype.setData = function(arrayOfUniformObjects) {
+        this.dataSource.setData(arrayOfUniformObjects);
+    };
+
     return DataSourceAggregator;
 
 })();

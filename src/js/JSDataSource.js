@@ -86,6 +86,11 @@ module.exports = (function() {
         //nothing here
         return;
     };
+
+    JSDataSource.prototype.setData = function(arrayOfUniformObjects) {
+        this.data = arrayOfUniformObjects;
+    };
+
     return JSDataSource;
 
 })();

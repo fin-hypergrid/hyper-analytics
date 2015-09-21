@@ -88,7 +88,7 @@ module.exports = (function() {
             }
         }
 
-        var rowCount = source.getRowCount();
+        var rowCount = dataSource.getRowCount();
         var tree = this.tree = new DataNodeTree('root');
         var path = tree;
         var leafDepth = groupBys.length - 1;

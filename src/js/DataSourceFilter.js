@@ -6,7 +6,7 @@ module.exports = (function() {
 
     function DataSourceFilter(dataSource) {
         DataSourceDecorator.call(this, dataSource, false);
-        this.clearFilters();
+        this.filters = [];
     }
 
     DataSourceFilter.prototype = Object.create(DataSourceDecorator.prototype);
@@ -22,6 +22,10 @@ module.exports = (function() {
     };
 
     DataSourceFilter.prototype.applyFilters = function() {
+        if (filters.length === 0) {
+            this.indexes.length = 0;
+            return;
+        }
         var indexes = this.indexes;
         indexes.length = 0;
         var count = this.dataSource.getRowCount();

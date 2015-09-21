@@ -153,7 +153,8 @@ module.exports = (function() {
 
     DataSourceAggregator.prototype.getGrandTotals = function() {
         var view = this.view[0];
-        if (!view) {
+        var rowCount = this.getRowCount();
+        if (!view || rowCount === 0) {
             return [];
         }
         return view.data;

@@ -3,6 +3,9 @@
 module.exports = (function() {
 
     var computeFieldNames = function(object) {
+        if (!object) {
+            return [];
+        }
         var fields = [].concat(Object.getOwnPropertyNames(object).filter(function(e) {
             return e.substr(0, 2) !== '__';
         }));

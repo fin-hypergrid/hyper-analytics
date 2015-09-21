@@ -37,7 +37,7 @@ module.exports = (function() {
 
     JSDataSource.prototype.getColumnCount = function() {
 
-        return this.fields.length;
+        return this.getHeaders().length;
     };
 
     JSDataSource.prototype.getRowCount = function() {

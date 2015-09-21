@@ -7,6 +7,13 @@ var DataNodeLeaf = require('./DataNodeLeaf');
 
 module.exports = (function() {
 
+    var headerify = function(string) {
+        var pieces = string.replace(/[_-]/g, ' ').replace(/[A-Z]/g, ' $&').split(' ').map(function(s) {
+            return s.charAt(0).toUpperCase() + s.slice(1);
+        });
+        return pieces.join(' ');
+    };
+
     //?[t,c,b,a]
     // t is a dataSource,
     // a is a dicitionary of aggregates,  columnName:function
@@ -26,7 +33,7 @@ module.exports = (function() {
     }
 
     DataSourceAggregator.prototype.addAggregate = function(columnName, func) {
-        this.headers.push(columnName);
+        this.headers.push(headerify(columnName));
         this.aggregates.push(func);
     };
 

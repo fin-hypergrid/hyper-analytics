@@ -1662,6 +1662,13 @@ var DataNodeLeaf = require('./DataNodeLeaf');
 
 module.exports = (function() {
 
+    var headerify = function(string) {
+        var pieces = string.replace(/[_-]/g, ' ').replace(/[A-Z]/g, ' $&').split(' ').map(function(s) {
+            return s.charAt(0).toUpperCase() + s.slice(1);
+        });
+        return pieces.join(' ');
+    };
+
     //?[t,c,b,a]
     // t is a dataSource,
     // a is a dicitionary of aggregates,  columnName:function
@@ -1681,7 +1688,7 @@ module.exports = (function() {
     }
 
     DataSourceAggregator.prototype.addAggregate = function(columnName, func) {
-        this.headers.push(columnName);
+        this.headers.push(headerify(columnName));
         this.aggregates.push(func);
     };
 
@@ -2415,7 +2422,7 @@ if (!window.fin) {
 if (!window.fin.analytics) {
     window.fin.analytics = analytics;
 }
-}).call(this,require("oMfpAn"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/fake_f2e4d03f.js","/")
+}).call(this,require("oMfpAn"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/fake_f06ef48e.js","/")
 },{"./analytics.js":18,"buffer":1,"oMfpAn":4}],20:[function(require,module,exports){
 (function (process,global,Buffer,__argument0,__argument1,__argument2,__argument3,__filename,__dirname){
 'use strict';

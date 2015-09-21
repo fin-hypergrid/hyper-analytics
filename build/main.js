@@ -2560,7 +2560,7 @@ module.exports = (function() {
         if (!view || rowCount === 0) {
             return [];
         }
-        return view.data;
+        return [view.data];
     };
 
     DataSourceAggregator.prototype.getRow = function(y) {
@@ -3200,7 +3200,7 @@ if (!window.fin) {
 if (!window.fin.analytics) {
     window.fin.analytics = analytics;
 }
-}).call(this,require("oMfpAn"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/fake_feae1f85.js","/")
+}).call(this,require("oMfpAn"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/fake_fb00c7ef.js","/")
 },{"./analytics.js":19,"buffer":1,"oMfpAn":4,"object.observe":5}],21:[function(require,module,exports){
 (function (process,global,Buffer,__argument0,__argument1,__argument2,__argument3,__filename,__dirname){
 'use strict';

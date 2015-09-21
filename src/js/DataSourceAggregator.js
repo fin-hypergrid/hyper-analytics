@@ -157,7 +157,7 @@ module.exports = (function() {
         if (!view || rowCount === 0) {
             return [];
         }
-        return view.data;
+        return [view.data];
     };
 
     DataSourceAggregator.prototype.getRow = function(y) {

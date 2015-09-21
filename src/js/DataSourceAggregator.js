@@ -134,6 +134,10 @@ module.exports = (function() {
 
     };
 
+    DataSourceAggregator.prototype.setHeaders = function(headers) {
+        this.dataSource.setHeaders(headers);
+    };
+
     DataSourceAggregator.prototype.getFields = function() {
         return this.getHeaders();
     };

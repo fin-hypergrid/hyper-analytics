@@ -2581,7 +2581,6 @@ module.exports = (function() {
     return DataSourceAggregator;
 
 })();
-
 }).call(this,require("oMfpAn"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/DataSourceAggregator.js","/")
 },{"./DataNodeGroup":7,"./DataNodeLeaf":8,"./DataNodeTree":9,"./DataSourceSorter":13,"buffer":1,"oMfpAn":4}],11:[function(require,module,exports){
 (function (process,global,Buffer,__argument0,__argument1,__argument2,__argument3,__filename,__dirname){
@@ -2831,9 +2830,7 @@ module.exports = (function() {
     };
 
     function JSDataSource(data, fields) {
-        this.fields = fields || computeFieldNames(data[0]);
-        this.headers = [];
-        this.data = data;
+        this.setData(data, fields);
     }
 
     JSDataSource.prototype.isNullObject = false;
@@ -2900,13 +2897,16 @@ module.exports = (function() {
         return;
     };
 
-    JSDataSource.prototype.setData = function(arrayOfUniformObjects) {
+    JSDataSource.prototype.setData = function(arrayOfUniformObjects, fields) {
+        this.fields = fields || computeFieldNames(arrayOfUniformObjects[0]);
+        this.headers = [];
         this.data = arrayOfUniformObjects;
     };
 
     return JSDataSource;
 
 })();
+
 }).call(this,require("oMfpAn"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/JSDataSource.js","/")
 },{"buffer":1,"oMfpAn":4}],16:[function(require,module,exports){
 (function (process,global,Buffer,__argument0,__argument1,__argument2,__argument3,__filename,__dirname){
@@ -3200,7 +3200,7 @@ if (!window.fin) {
 if (!window.fin.analytics) {
     window.fin.analytics = analytics;
 }
-}).call(this,require("oMfpAn"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/fake_9241f084.js","/")
+}).call(this,require("oMfpAn"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/fake_1374d970.js","/")
 },{"./analytics.js":19,"buffer":1,"oMfpAn":4,"object.observe":5}],21:[function(require,module,exports){
 (function (process,global,Buffer,__argument0,__argument1,__argument2,__argument3,__filename,__dirname){
 'use strict';

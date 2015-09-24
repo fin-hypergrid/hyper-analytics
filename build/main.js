@@ -2830,7 +2830,9 @@ module.exports = (function() {
     };
 
     function JSDataSource(data, fields) {
-        this.setData(data, fields);
+        this.fields = fields || computeFieldNames(data[0]);
+        this.headers = [];
+        this.data = data;
     }
 
     JSDataSource.prototype.isNullObject = false;
@@ -2897,9 +2899,7 @@ module.exports = (function() {
         return;
     };
 
-    JSDataSource.prototype.setData = function(arrayOfUniformObjects, fields) {
-        this.fields = fields || computeFieldNames(arrayOfUniformObjects[0]);
-        this.headers = [];
+    JSDataSource.prototype.setData = function(arrayOfUniformObjects) {
         this.data = arrayOfUniformObjects;
     };
 
@@ -3200,7 +3200,7 @@ if (!window.fin) {
 if (!window.fin.analytics) {
     window.fin.analytics = analytics;
 }
-}).call(this,require("oMfpAn"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/fake_1374d970.js","/")
+}).call(this,require("oMfpAn"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/fake_de0e99b3.js","/")
 },{"./analytics.js":19,"buffer":1,"oMfpAn":4,"object.observe":5}],21:[function(require,module,exports){
 (function (process,global,Buffer,__argument0,__argument1,__argument2,__argument3,__filename,__dirname){
 'use strict';

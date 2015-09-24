@@ -20,7 +20,9 @@ module.exports = (function() {
     };
 
     function JSDataSource(data, fields) {
-        this.setData(data, fields);
+        this.fields = fields || computeFieldNames(data[0]);
+        this.headers = [];
+        this.data = data;
     }
 
     JSDataSource.prototype.isNullObject = false;
@@ -87,9 +89,7 @@ module.exports = (function() {
         return;
     };
 
-    JSDataSource.prototype.setData = function(arrayOfUniformObjects, fields) {
-        this.fields = fields || computeFieldNames(arrayOfUniformObjects[0]);
-        this.headers = [];
+    JSDataSource.prototype.setData = function(arrayOfUniformObjects) {
         this.data = arrayOfUniformObjects;
     };
 

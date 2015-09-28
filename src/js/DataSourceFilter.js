@@ -15,6 +15,10 @@ module.exports = (function() {
         filter.columnIndex = columnIndex;
         this.filters.push(filter);
     };
+    DataSourceFilter.prototype.setFilter = function(columnIndex, filter) {
+        filter.columnIndex = columnIndex;
+        this.filters.push(filter);
+    };
 
     DataSourceFilter.prototype.clearFilters = function() { /* filter */
         this.filters.length = 0;

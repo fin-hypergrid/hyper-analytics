@@ -2314,7 +2314,7 @@ module.exports = (function() {
 
 })();
 }).call(this,require("oMfpAn"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/DataNodeGroup.js","/")
-},{"./DataNodeBase":6,"./Map":16,"buffer":1,"oMfpAn":4}],8:[function(require,module,exports){
+},{"./DataNodeBase":6,"./Map":17,"buffer":1,"oMfpAn":4}],8:[function(require,module,exports){
 (function (process,global,Buffer,__argument0,__argument1,__argument2,__argument3,__filename,__dirname){
 'use strict';
 
@@ -2582,7 +2582,7 @@ module.exports = (function() {
 
 })();
 }).call(this,require("oMfpAn"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/DataSourceAggregator.js","/")
-},{"./DataNodeGroup":7,"./DataNodeLeaf":8,"./DataNodeTree":9,"./DataSourceSorter":13,"buffer":1,"oMfpAn":4}],11:[function(require,module,exports){
+},{"./DataNodeGroup":7,"./DataNodeLeaf":8,"./DataNodeTree":9,"./DataSourceSorter":14,"buffer":1,"oMfpAn":4}],11:[function(require,module,exports){
 (function (process,global,Buffer,__argument0,__argument1,__argument2,__argument3,__filename,__dirname){
 'use strict';
 
@@ -2689,6 +2689,10 @@ module.exports = (function() {
         filter.columnIndex = columnIndex;
         this.filters.push(filter);
     };
+    DataSourceFilter.prototype.setFilter = function(columnIndex, filter) {
+        filter.columnIndex = columnIndex;
+        this.filters.push(filter);
+    };
 
     DataSourceFilter.prototype.clearFilters = function() { /* filter */
         this.filters.length = 0;
@@ -2729,6 +2733,64 @@ module.exports = (function() {
 (function (process,global,Buffer,__argument0,__argument1,__argument2,__argument3,__filename,__dirname){
 'use strict';
 
+var DataSourceDecorator = require('./DataSourceDecorator');
+
+module.exports = (function() {
+
+    function DataSourceGlobalFilter(dataSource) {
+        DataSourceDecorator.call(this, dataSource, false);
+        this.filter = null;
+    }
+
+    DataSourceGlobalFilter.prototype = Object.create(DataSourceDecorator.prototype);
+
+    DataSourceGlobalFilter.prototype.setFilter = function(filter) {
+        this.filter = filter;
+    };
+
+    DataSourceGlobalFilter.prototype.clearFilters = function() { /* filter */
+        this.filter = null;
+        this.indexes.length = 0;
+    };
+
+    DataSourceGlobalFilter.prototype.applyFilters = function() {
+        if (!this.filter) {
+            this.indexes.length = 0;
+            return;
+        }
+        var indexes = this.indexes;
+        indexes.length = 0;
+        var count = this.dataSource.getRowCount();
+        for (var r = 0; r < count; r++) {
+            if (this.applyFilterTo(r)) {
+                indexes.push(r);
+            }
+        }
+    };
+
+    DataSourceGlobalFilter.prototype.applyFilterTo = function(r) {
+        var isFiltered = false;
+        var filter = this.filter;
+        var colCount = this.getColumnCount();
+        var rowObject = this.dataSource.getRow(r);
+        for (var i = 0; i < colCount; i++) {
+            isFiltered = isFiltered || filter(this.dataSource.getValue(i, r), rowObject, r);
+            if (isFiltered) {
+                return true;
+            }
+        }
+        return false;
+    };
+
+    return DataSourceGlobalFilter;
+
+})();
+
+}).call(this,require("oMfpAn"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/DataSourceGlobalFilter.js","/")
+},{"./DataSourceDecorator":11,"buffer":1,"oMfpAn":4}],14:[function(require,module,exports){
+(function (process,global,Buffer,__argument0,__argument1,__argument2,__argument3,__filename,__dirname){
+'use strict';
+
 var Utils = require('./Utils.js');
 var DataSourceDecorator = require('./DataSourceDecorator');
 
@@ -2757,7 +2819,7 @@ module.exports = (function() {
 
 })();
 }).call(this,require("oMfpAn"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/DataSourceSorter.js","/")
-},{"./DataSourceDecorator":11,"./Utils.js":17,"buffer":1,"oMfpAn":4}],14:[function(require,module,exports){
+},{"./DataSourceDecorator":11,"./Utils.js":18,"buffer":1,"oMfpAn":4}],15:[function(require,module,exports){
 (function (process,global,Buffer,__argument0,__argument1,__argument2,__argument3,__filename,__dirname){
 'use strict';
 
@@ -2806,7 +2868,7 @@ module.exports = (function() {
 
 })();
 }).call(this,require("oMfpAn"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/DataSourceSorterComposite.js","/")
-},{"./DataSourceDecorator":11,"./DataSourceSorter":13,"buffer":1,"oMfpAn":4}],15:[function(require,module,exports){
+},{"./DataSourceDecorator":11,"./DataSourceSorter":14,"buffer":1,"oMfpAn":4}],16:[function(require,module,exports){
 (function (process,global,Buffer,__argument0,__argument1,__argument2,__argument3,__filename,__dirname){
 'use strict';
 
@@ -2906,9 +2968,8 @@ module.exports = (function() {
     return JSDataSource;
 
 })();
-
 }).call(this,require("oMfpAn"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/JSDataSource.js","/")
-},{"buffer":1,"oMfpAn":4}],16:[function(require,module,exports){
+},{"buffer":1,"oMfpAn":4}],17:[function(require,module,exports){
 (function (process,global,Buffer,__argument0,__argument1,__argument2,__argument3,__filename,__dirname){
 'use strict';
 
@@ -3047,7 +3108,7 @@ module.exports = (function() {
 
 })();
 }).call(this,require("oMfpAn"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/Map.js","/")
-},{"buffer":1,"oMfpAn":4}],17:[function(require,module,exports){
+},{"buffer":1,"oMfpAn":4}],18:[function(require,module,exports){
 (function (process,global,Buffer,__argument0,__argument1,__argument2,__argument3,__filename,__dirname){
 'use strict';
 
@@ -3063,7 +3124,7 @@ module.exports = (function() {
 
 })();
 }).call(this,require("oMfpAn"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/Utils.js","/")
-},{"./Map.js":16,"./stableSort.js":21,"buffer":1,"oMfpAn":4}],18:[function(require,module,exports){
+},{"./Map.js":17,"./stableSort.js":22,"buffer":1,"oMfpAn":4}],19:[function(require,module,exports){
 (function (process,global,Buffer,__argument0,__argument1,__argument2,__argument3,__filename,__dirname){
 'use strict';
 
@@ -3158,7 +3219,7 @@ module.exports = (function() {
 
 })();
 }).call(this,require("oMfpAn"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/aggregations.js","/")
-},{"buffer":1,"oMfpAn":4}],19:[function(require,module,exports){
+},{"buffer":1,"oMfpAn":4}],20:[function(require,module,exports){
 (function (process,global,Buffer,__argument0,__argument1,__argument2,__argument3,__filename,__dirname){
 'use strict';
 
@@ -3166,6 +3227,7 @@ var JSDataSource = require('./JSDataSource');
 var DataSourceSorter = require('./DataSourceSorter');
 var DataSourceSorterComposite = require('./DataSourceSorterComposite');
 var DataSourceFilter = require('./DataSourceFilter');
+var DataSourceGlobalFilter = require('./DataSourceGlobalFilter');
 var DataSourceAggregator = require('./DataSourceAggregator');
 var aggregations = require('./aggregations');
 
@@ -3176,13 +3238,15 @@ module.exports = (function() {
         DataSourceSorter: DataSourceSorter,
         DataSourceSorterComposite: DataSourceSorterComposite,
         DataSourceFilter: DataSourceFilter,
+        DataSourceGlobalFilter: DataSourceGlobalFilter,
         DataSourceAggregator: DataSourceAggregator,
         aggregations: aggregations
     };
 
 })();
+
 }).call(this,require("oMfpAn"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/analytics.js","/")
-},{"./DataSourceAggregator":10,"./DataSourceFilter":12,"./DataSourceSorter":13,"./DataSourceSorterComposite":14,"./JSDataSource":15,"./aggregations":18,"buffer":1,"oMfpAn":4}],20:[function(require,module,exports){
+},{"./DataSourceAggregator":10,"./DataSourceFilter":12,"./DataSourceGlobalFilter":13,"./DataSourceSorter":14,"./DataSourceSorterComposite":15,"./JSDataSource":16,"./aggregations":19,"buffer":1,"oMfpAn":4}],21:[function(require,module,exports){
 (function (process,global,Buffer,__argument0,__argument1,__argument2,__argument3,__filename,__dirname){
 /* eslint-env node, browser */
 'use strict';
@@ -3200,8 +3264,8 @@ if (!window.fin) {
 if (!window.fin.analytics) {
     window.fin.analytics = analytics;
 }
-}).call(this,require("oMfpAn"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/fake_de0e99b3.js","/")
-},{"./analytics.js":19,"buffer":1,"oMfpAn":4,"object.observe":5}],21:[function(require,module,exports){
+}).call(this,require("oMfpAn"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/fake_c9fd83c6.js","/")
+},{"./analytics.js":20,"buffer":1,"oMfpAn":4,"object.observe":5}],22:[function(require,module,exports){
 (function (process,global,Buffer,__argument0,__argument1,__argument2,__argument3,__filename,__dirname){
 'use strict';
 
@@ -3296,5 +3360,5 @@ module.exports = (function() {
     return sort;
 })();
 }).call(this,require("oMfpAn"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/stableSort.js","/")
-},{"buffer":1,"oMfpAn":4}]},{},[20])
+},{"buffer":1,"oMfpAn":4}]},{},[21])
 

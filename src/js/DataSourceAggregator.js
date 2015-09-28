@@ -11,6 +11,9 @@ module.exports = (function() {
         var pieces = string.replace(/[_-]/g, ' ').replace(/[A-Z]/g, ' $&').split(' ').map(function(s) {
             return (s.charAt(0).toUpperCase() + s.slice(1)).trim();
         });
+        pieces = pieces.filter(function(e) {
+            return e.length !== 0;
+        });
         return pieces.join(' ').trim();
     };
 

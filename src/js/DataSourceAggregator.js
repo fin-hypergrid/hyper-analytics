@@ -9,7 +9,7 @@ module.exports = (function() {
 
     var headerify = function(string) {
         var pieces = string.replace(/[_-]/g, ' ').replace(/[A-Z]/g, ' $&').split(' ').map(function(s) {
-            return s.charAt(0).toUpperCase() + s.slice(1);
+            return (s.charAt(0).toUpperCase() + s.slice(1)).trim();
         });
         return pieces.join(' ').trim();
     };

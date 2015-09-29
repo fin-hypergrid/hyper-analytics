@@ -120,7 +120,11 @@ module.exports = (function() {
     };
 
     DataSourceAggregator.prototype.getValue = function(x, y) {
-        return this.view[y - 1].getValue(x); //header row
+        var row = this.view[y - 1];
+        if (!row) {
+            return null;
+        }
+        return row.getValue(x); //header row
     };
 
     DataSourceAggregator.prototype.getColumnCount = function() {

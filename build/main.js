@@ -2523,7 +2523,11 @@ module.exports = (function() {
     };
 
     DataSourceAggregator.prototype.getValue = function(x, y) {
-        return this.view[y - 1].getValue(x); //header row
+        var row = this.view[y - 1];
+        if (!row) {
+            return null;
+        }
+        return row.getValue(x); //header row
     };
 
     DataSourceAggregator.prototype.getColumnCount = function() {
@@ -2584,6 +2588,7 @@ module.exports = (function() {
     return DataSourceAggregator;
 
 })();
+
 }).call(this,require("oMfpAn"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/DataSourceAggregator.js","/")
 },{"./DataNodeGroup":7,"./DataNodeLeaf":8,"./DataNodeTree":9,"./DataSourceSorter":14,"buffer":1,"oMfpAn":4}],11:[function(require,module,exports){
 (function (process,global,Buffer,__argument0,__argument1,__argument2,__argument3,__filename,__dirname){
@@ -2974,7 +2979,6 @@ module.exports = (function() {
     return JSDataSource;
 
 })();
-
 }).call(this,require("oMfpAn"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/JSDataSource.js","/")
 },{"buffer":1,"oMfpAn":4}],17:[function(require,module,exports){
 (function (process,global,Buffer,__argument0,__argument1,__argument2,__argument3,__filename,__dirname){
@@ -3270,7 +3274,7 @@ if (!window.fin) {
 if (!window.fin.analytics) {
     window.fin.analytics = analytics;
 }
-}).call(this,require("oMfpAn"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/fake_8a5f1ea0.js","/")
+}).call(this,require("oMfpAn"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/fake_d85ff1de.js","/")
 },{"./analytics.js":20,"buffer":1,"oMfpAn":4,"object.observe":5}],22:[function(require,module,exports){
 (function (process,global,Buffer,__argument0,__argument1,__argument2,__argument3,__filename,__dirname){
 'use strict';

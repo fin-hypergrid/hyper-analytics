@@ -8,37 +8,37 @@ module.exports = (function() {
     var hash = function(key) {
         var typeOf = typeof key;
         switch (typeOf) {
-        case 'number':
-            return oidPrefix + typeOf + '_' + key;
-        case 'string':
-            return oidPrefix + typeOf + '_' + key;
-        case 'boolean':
-            return oidPrefix + typeOf + '_' + key;
-        case 'symbol':
-            return oidPrefix + typeOf + '_' + key;
-        case 'undefined':
-            return oidPrefix + 'undefined';
-        case 'object':
-            /*eslint-disable */
-            if (key.___finhash) {
+            case 'number':
+                return oidPrefix + typeOf + '_' + key;
+            case 'string':
+                return oidPrefix + typeOf + '_' + key;
+            case 'boolean':
+                return oidPrefix + typeOf + '_' + key;
+            case 'symbol':
+                return oidPrefix + typeOf + '_' + key;
+            case 'undefined':
+                return oidPrefix + 'undefined';
+            case 'object':
+                /*eslint-disable */
+                if (key.___finhash) {
+                    return key.___finhash;
+                }
+                key.___finhash = oidPrefix + counter++;
                 return key.___finhash;
-            }
-            key.___finhash = oidPrefix + counter++;
-            return key.___finhash;
-        case 'function':
-            if (key.___finhash) {
-                return key.___finhash;
-            }
-            key.___finhash = oidPrefix + counter++;
-            return key.___finhash; /*eslint-enable */
+            case 'function':
+                if (key.___finhash) {
+                    return key.___finhash;
+                }
+                key.___finhash = oidPrefix + counter++;
+                return key.___finhash; /*eslint-enable */
         }
     };
 
     // Object.is polyfill, courtesy of @WebReflection
     var is = Object.is ||
-    function(a, b) {
-        return a === b ? a !== 0 || 1 / a == 1 / b : a != a && b != b; // eslint-disable-line
-    };
+        function(a, b) {
+            return a === b ? a !== 0 || 1 / a == 1 / b : a != a && b != b; // eslint-disable-line
+        };
 
     // More reliable indexOf, courtesy of @WebReflection
     var betterIndexOf = function(arr, value) {

@@ -4,7 +4,7 @@
 
 var assert = require('assert');
 
-var finanalytics = require('../src/js/main.js');
+//var finanalytics = require('../src/js/main.js');
 
 describe('finanalytics module', function() {
 });

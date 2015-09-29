@@ -10,7 +10,10 @@
     ],
     "indent": [
       2,
-      4
+      4,
+      {
+        SwitchCase: 1
+      }
     ],
     "consistent-return": 0,
     "no-use-before-define": [

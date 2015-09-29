@@ -1,109 +1,112 @@
 'use strict';
 
-var gulp      = require('gulp'),
-    eslint    = require('gulp-eslint'),
-    gitignore = require('gulp-exclude-gitignore'),
-    browserify = require('gulp-browserify'),
+var gulp        = require('gulp'),
+    $$          = require('gulp-load-plugins')(),
+    runSequence = require('run-sequence'),
     browserSync = require('browser-sync').create(),
-    beautify = require('gulp-beautify'),
-    gutil = require('gulp-util'),
-    sourcemaps = require('gulp-sourcemaps'),
-    source = require('vinyl-source-stream'),
-    buffer = require('vinyl-buffer'),
-    uglify = require('gulp-uglify');
+    exec        = require('child_process').exec,
+    path        = require('path');
 
-var src = './src/';
-var jsDir = src + 'js/';
-var jsFiles = '**/*.js';
+var srcDir   = './src/',
+    testDir  = './test/',
+    jsDir    = srcDir + 'js/',
+    jsFiles  = '**/*.js',
+    buildDir = './build/';
+
+//var isBuilding = false;
 
 var js = {
     dir   : jsDir,
-    files : jsFiles,
-    path  : jsDir + jsFiles
+    files : jsDir + jsFiles
 };
 
-gulp.task('lint', function() {
-    if (isBuilding) {
-        return;
-    }
-    return gulp.src(js.path)
-        .pipe(gitignore())
-        .pipe(eslint())
-        .pipe(eslint.format())
-        .pipe(eslint.failAfterError());
+//  //  //  //  //  //  //  //  //  //  //  //
+
+gulp.task('lint', lint);
+gulp.task('test', test);
+gulp.task('doc', doc);
+gulp.task('beautify', beautify);
+gulp.task('browserify', browserify);
+gulp.task('browserSyncLaunchServer', browserSyncLaunchServer);
+
+gulp.task('build', function(callback) {
+    clearBashScreen();
+    runSequence(
+        'lint',
+        'test',
+        'doc',
+        'beautify',
+        'browserify',
+        callback
+    );
 });
 
-gulp.task('browserSyncLaunchServer', function() {
+gulp.task('watch', function () {
+    gulp.watch([srcDir + '**', testDir + '**'], ['build'])
+        .on('change', function(event) {
+            browserSync.reload();
+        });
+});
+
+gulp.task('default', ['build', 'watch'], browserSyncLaunchServer);
+
+//  //  //  //  //  //  //  //  //  //  //  //
+
+function lint() {
+    return gulp.src(js.files)
+        .pipe($$.excludeGitignore())
+        .pipe($$.eslint())
+        .pipe($$.eslint.format())
+        .pipe($$.eslint.failAfterError());
+}
+
+function test(cb) {
+    return gulp.src(testDir + 'index.js')
+        .pipe($$.mocha({reporter: 'spec'}));
+}
+
+function beautify() {
+    return gulp.src(js.files)
+        .pipe($$.beautify()) //apparent bug: presence of a .jsbeautifyrc file seems to force all options to their defaults (except space_after_anon_function which is forced to true) so I deleted the file. Any needed options can be included here.
+        .pipe(gulp.dest(js.dir));
+}
+
+function browserify() {
+    return gulp.src(js.dir + 'main.js')
+        .pipe($$.browserify({
+            insertGlobals : true,
+            debug : true
+        }))
+        //.pipe($$.sourcemaps.init({loadMaps: true}))
+        // Add transformation tasks to the pipeline here:
+        //.pipe(uglify())
+        //.on('error', $$.gutil.log)
+        //.pipe($$.sourcemaps.write('./'))
+        .pipe(gulp.dest(buildDir));
+}
+
+function doc(cb) {
+    exec(path.resolve('jsdoc.sh'), function (err, stdout, stderr) {
+        console.log(stdout);
+        console.log(stderr);
+        cb(err);
+    });
+}
+
+function browserSyncLaunchServer() {
     browserSync.init({
         server: {
-         // Serve up our build folder
-         baseDir: ['./build']
+            // Serve up our build folder
+            baseDir: buildDir,
+            routes: {
+                "/bower_components": "bower_components"
+            }
         },
         port: 5000
     });
-});
+}
 
-var isBuilding = false;
-// Basic usage
-
-gulp.task('build', ['lint'], function() {
-    // Single entry point to browserify
-    if (isBuilding) {
-        return;
-    } else {
-        isBuilding = true;
-        setTimeout(function() {
-            isBuilding = false;
-        }, 1500);
-    }
-
-    gulp.src(js.path)
-    .pipe(beautify({
-        spaceAfterAnonFunction: false
-    }))
-    .pipe(gulp.dest(js.dir));
-
-    return gulp.src('src/js/main.js')
-        .pipe(browserify({
-          insertGlobals : true,
-          debug : true
-        }))
-        .pipe(sourcemaps.init({loadMaps: true}))
-//        .pipe(uglify())
-        .pipe(gulp.dest('./build'));
-
-
-
-  // // set up the browserify instance on a task basis
-  // return gulp.src('src/js/main.js')
-  //       .pipe(browserify({
-  //         insertGlobals : true,
-  //         debug : true
-  //       }))
-  //       .pipe(sourcemaps.init({loadMaps: true}))
-  //       // Add transformation tasks to the pipeline here.
-  //       .pipe(uglify())
-  //       .on('error', gutil.log)
-  //   .pipe(sourcemaps.write('./'))
-  //   .pipe(gulp.dest('./build'));
-
-
-
-
-});
-
-gulp.task('reload', function() {
-    browserSync.reload();
-});
-
-gulp.task('watch-dev', function() {
-    gulp.watch(js.path, ['build']);
-});
-
-gulp.task('watch-build', function() {
-    gulp.watch('./build/**/*.js', ['reload']);
-});
-
-gulp.task('default', ['browserSyncLaunchServer','watch-dev','watch-build']);
-
-
+function clearBashScreen() {
+    var ESC = '\x1B';
+    console.log(ESC + 'c'); // (VT-100 escape sequence)
+}

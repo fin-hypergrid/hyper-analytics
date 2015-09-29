@@ -124,8 +124,8 @@ module.exports = (function() {
     };
 
     DataSourceAggregator.prototype.getColumnCount = function() {
-
-        return this.aggregates.length + 1; // 1 is for the hierarchy column
+        var colCount = this.getHeaders().length; // 1 is for the hierarchy column
+        return colCount;
     };
 
     DataSourceAggregator.prototype.getRowCount = function() {

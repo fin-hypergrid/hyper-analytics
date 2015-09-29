@@ -31,7 +31,11 @@ module.exports = (function() {
         if (x === -1) {
             return y;
         }
-        var value = this.data[y][this.fields[x]];
+        var row = this.data[y];
+        if (!row) {
+            return null;
+        }
+        var value = row[this.fields[x]];
         return value;
     };
 

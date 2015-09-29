@@ -143,10 +143,10 @@ module.exports = (function() {
     };
 
     DataSourceAggregator.prototype.getHeaders = function() {
-        if (this.hasAggregates()) {
+        if (this.hasAggregates() && this.hasGroups()) {
             return ['Tree'].concat(this.headers);
         }
-        return ['Tree'].concat(this.dataSource.getHeaders());
+        return this.dataSource.getHeaders();
 
     };
 

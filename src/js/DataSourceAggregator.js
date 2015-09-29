@@ -9,9 +9,12 @@ module.exports = (function() {
 
     var headerify = function(string) {
         var pieces = string.replace(/[_-]/g, ' ').replace(/[A-Z]/g, ' $&').split(' ').map(function(s) {
-            return s.charAt(0).toUpperCase() + s.slice(1);
+            return (s.charAt(0).toUpperCase() + s.slice(1)).trim();
         });
-        return pieces.join(' ');
+        pieces = pieces.filter(function(e) {
+            return e.length !== 0;
+        });
+        return pieces.join(' ').trim();
     };
 
     //?[t,c,b,a]
@@ -117,12 +120,16 @@ module.exports = (function() {
     };
 
     DataSourceAggregator.prototype.getValue = function(x, y) {
-        return this.view[y - 1].getValue(x); //header row
+        var row = this.view[y - 1];
+        if (!row) {
+            return null;
+        }
+        return row.getValue(x); //header row
     };
 
     DataSourceAggregator.prototype.getColumnCount = function() {
-
-        return this.aggregates.length + 1; // 1 is for the hierarchy column
+        var colCount = this.getHeaders().length; // 1 is for the hierarchy column
+        return colCount;
     };
 
     DataSourceAggregator.prototype.getRowCount = function() {
@@ -136,10 +143,10 @@ module.exports = (function() {
     };
 
     DataSourceAggregator.prototype.getHeaders = function() {
-        if (this.hasAggregates()) {
+        if (this.hasAggregates() && this.hasGroups()) {
             return ['Tree'].concat(this.headers);
         }
-        return ['Tree'].concat(this.dataSource.getHeaders());
+        return this.dataSource.getHeaders();
 
     };
 

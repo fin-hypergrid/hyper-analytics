@@ -5,6 +5,7 @@ var DataNodeTree = require('./DataNodeTree');
 var DataNodeGroup = require('./DataNodeGroup');
 var DataNodeLeaf = require('./DataNodeLeaf');
 var DataNodeLeaf = require('./DataNodeLeaf');
+var Aggregations = require('./aggregations');
 
 module.exports = (function () {
 
@@ -34,6 +35,7 @@ module.exports = (function () {
         this.view = [];
         this.sorterInstance = {};
         this.presortGroups = true;
+        this.setAggregates({});
     }
 
     DataSourceAggregator.prototype.isNullObject = false;
@@ -52,7 +54,7 @@ module.exports = (function () {
             var fields = [].concat(this.dataSource.getFields());
             fields.shift();
             for (i = 0; i < fields.length; i++) {
-                props.push([fields[i], fin.analytics.aggregations.first(i)]); /* jshint ignore:line */
+                props.push([fields[i], Aggregations.first(i)]); /* jshint ignore:line */
             }
         }
 

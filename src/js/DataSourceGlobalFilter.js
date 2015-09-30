@@ -2,7 +2,7 @@
 
 var DataSourceDecorator = require('./DataSourceDecorator');
 
-module.exports = (function() {
+module.exports = (function () {
 
     function DataSourceGlobalFilter(dataSource) {
         DataSourceDecorator.call(this, dataSource, false);
@@ -11,16 +11,16 @@ module.exports = (function() {
 
     DataSourceGlobalFilter.prototype = Object.create(DataSourceDecorator.prototype);
 
-    DataSourceGlobalFilter.prototype.setFilter = function(filter) {
+    DataSourceGlobalFilter.prototype.setFilter = function (filter) {
         this.filter = filter;
     };
 
-    DataSourceGlobalFilter.prototype.clearFilters = function() { /* filter */
+    DataSourceGlobalFilter.prototype.clearFilters = function () { /* filter */
         this.filter = null;
         this.indexes.length = 0;
     };
 
-    DataSourceGlobalFilter.prototype.applyFilters = function() {
+    DataSourceGlobalFilter.prototype.applyFilters = function () {
         if (!this.filter) {
             this.indexes.length = 0;
             return;
@@ -35,7 +35,7 @@ module.exports = (function() {
         }
     };
 
-    DataSourceGlobalFilter.prototype.applyFilterTo = function(r) {
+    DataSourceGlobalFilter.prototype.applyFilterTo = function (r) {
         var isFiltered = false;
         var filter = this.filter;
         var colCount = this.getColumnCount();

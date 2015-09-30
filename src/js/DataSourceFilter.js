@@ -2,7 +2,7 @@
 
 var DataSourceDecorator = require('./DataSourceDecorator');
 
-module.exports = (function() {
+module.exports = (function () {
 
     function DataSourceFilter(dataSource) {
         DataSourceDecorator.call(this, dataSource, false);
@@ -11,21 +11,21 @@ module.exports = (function() {
 
     DataSourceFilter.prototype = Object.create(DataSourceDecorator.prototype);
 
-    DataSourceFilter.prototype.addFilter = function(columnIndex, filter) {
+    DataSourceFilter.prototype.addFilter = function (columnIndex, filter) {
         filter.columnIndex = columnIndex;
         this.filters.push(filter);
     };
-    DataSourceFilter.prototype.setFilter = function(columnIndex, filter) {
+    DataSourceFilter.prototype.setFilter = function (columnIndex, filter) {
         filter.columnIndex = columnIndex;
         this.filters.push(filter);
     };
 
-    DataSourceFilter.prototype.clearFilters = function() { /* filter */
+    DataSourceFilter.prototype.clearFilters = function () { /* filter */
         this.filters.length = 0;
         this.indexes.length = 0;
     };
 
-    DataSourceFilter.prototype.applyFilters = function() {
+    DataSourceFilter.prototype.applyFilters = function () {
         if (this.filters.length === 0) {
             this.indexes.length = 0;
             return;
@@ -40,7 +40,7 @@ module.exports = (function() {
         }
     };
 
-    DataSourceFilter.prototype.applyFiltersTo = function(r) {
+    DataSourceFilter.prototype.applyFiltersTo = function (r) {
         var filters = this.filters;
         var isFiltered = true;
         for (var f = 0; f < filters.length; f++) {

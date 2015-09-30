@@ -1,7 +1,7 @@
 /* eslint-env node, browser */
 'use strict';
 
-var noop = function() {};
+var noop = function () {};
 
 var oo = require('object.observe');
 var analytics = require('./analytics.js');

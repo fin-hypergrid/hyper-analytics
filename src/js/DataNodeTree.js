@@ -21,6 +21,7 @@ module.exports = (function () {
     };
 
     DataNodeTree.prototype.buildView = function (aggregator) {
+        aggregator.view.push(this);
         for (var i = 0; i < this.children.length; i++) {
             var child = this.children[i];
             child.buildView(aggregator);

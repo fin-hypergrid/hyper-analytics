@@ -4,6 +4,7 @@ var DataSourceSorter = require('./DataSourceSorter');
 var DataNodeTree = require('./DataNodeTree');
 var DataNodeGroup = require('./DataNodeGroup');
 var DataNodeLeaf = require('./DataNodeLeaf');
+var DataNodeLeaf = require('./DataNodeLeaf');
 
 module.exports = (function () {
 
@@ -37,13 +38,36 @@ module.exports = (function () {
 
     DataSourceAggregator.prototype.isNullObject = false;
 
-    DataSourceAggregator.prototype.addAggregate = function (columnName, func) {
-        this.headers.push(headerify(columnName));
-        this.aggregates.push(func);
+    DataSourceAggregator.prototype.setAggregates = function(aggregations) {
+        var props = [];
+        var i;
+        this.clearAggregations();
+        this.headers.length = 0;
+
+        for (var key in aggregations) {
+            props.push([key, aggregations[key]]);
+        }
+
+        if (props.length === 0) {
+            var fields = [].concat(this.dataSource.getFields());
+            fields.shift();
+            for (i = 0; i < fields.length; i++) {
+                props.push([fields[i], fin.analytics.aggregations.first(i)]); /* jshint ignore:line */
+            }
+        }
+
+        for (i = 0; i < props.length; i++) {
+            var agg = props[i];
+            this.headers.push(agg[0]);
+            this.aggregates.push(agg[1]);
+        }
     };
 
-    DataSourceAggregator.prototype.addGroupBy = function (columnIndex) {
-        this.groupBys.push(columnIndex);
+    DataSourceAggregator.prototype.setGroupBys = function (columnIndexArray) {
+        this.groupBys.length = 0;
+        for (var i = 0; i < columnIndexArray.length; i++) {
+            this.groupBys.push(columnIndexArray[i]);
+        }
     };
 
     DataSourceAggregator.prototype.hasGroups = function () {

@@ -186,6 +186,9 @@ module.exports = (function () {
         return this.getHeaders();
     };
 
+    DataSourceAggregator.prototype.setFields = function (arrayOfFieldNames) {
+    };
+
     DataSourceAggregator.prototype.getGrandTotals = function () {
         var view = this.view[0];
         var rowCount = this.getRowCount();

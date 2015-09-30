@@ -28,7 +28,7 @@ module.exports = (function () {
     };
 
     DataNodeTree.prototype.computeHeight = function () {
-        var height = 0;
+        var height = 1;
         for (var i = 0; i < this.children.length; i++) {
             height = height + this.children[i].computeHeight();
         }

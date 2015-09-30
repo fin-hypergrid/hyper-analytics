@@ -35,12 +35,14 @@ module.exports = (function () {
         this.view = [];
         this.sorterInstance = {};
         this.presortGroups = true;
+        this.lastAggregate = {};
         this.setAggregates({});
     }
 
     DataSourceAggregator.prototype.isNullObject = false;
 
     DataSourceAggregator.prototype.setAggregates = function(aggregations) {
+        this.lastAggregate = aggregations;
         var props = [];
         var i;
         this.clearAggregations();
@@ -58,9 +60,13 @@ module.exports = (function () {
             }
         }
 
+        if(this.hasGroups()) {
+            this.headers.push('Tree');
+        }
+
         for (i = 0; i < props.length; i++) {
             var agg = props[i];
-            this.headers.push(agg[0]);
+            this.headers.push(headerify(agg[0]));
             this.aggregates.push(agg[1]);
         }
     };
@@ -70,6 +76,7 @@ module.exports = (function () {
         for (var i = 0; i < columnIndexArray.length; i++) {
             this.groupBys.push(columnIndexArray[i]);
         }
+        this.setAggregates(this.lastAggregate);
     };
 
     DataSourceAggregator.prototype.hasGroups = function () {
@@ -150,7 +157,7 @@ module.exports = (function () {
         if (!row) {
             return null;
         }
-        return row.getValue(x); //header row
+        return row.getValue(x);
     };
 
     DataSourceAggregator.prototype.getColumnCount = function () {
@@ -169,9 +176,6 @@ module.exports = (function () {
     };
 
     DataSourceAggregator.prototype.getHeaders = function () {
-        if(this.hasGroups()) {
-            return ['Tree'].concat(this.headers);
-        }
         return this.headers;
     };
 

@@ -152,7 +152,7 @@ module.exports = (function () {
     };
 
     DataSourceAggregator.prototype.getValue = function (x, y) {
-        if (!this.hasGroups()) {
+        if (!this.hasGroups() && !this.hasAggregates()) {
             return this.dataSource.getValue(x, y);
         }
         var row = this.view[y];
@@ -168,7 +168,7 @@ module.exports = (function () {
     };
 
     DataSourceAggregator.prototype.getRowCount = function () {
-        if (!this.hasGroups()) {
+        if (!this.hasGroups() && !this.hasAggregates()) {
             return this.dataSource.getRowCount();
         }
         return this.view.length; //header column

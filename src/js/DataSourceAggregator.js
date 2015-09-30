@@ -54,7 +54,6 @@ module.exports = (function () {
 
         if (props.length === 0) {
             var fields = [].concat(this.dataSource.getFields());
-            fields.shift();
             for (i = 0; i < fields.length; i++) {
                 props.push([fields[i], Aggregations.first(i)]); /* jshint ignore:line */
             }

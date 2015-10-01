@@ -175,6 +175,9 @@ module.exports = (function () {
     };
 
     DataSourceAggregator.prototype.getRowCount = function () {
+        if (this.hasAggregates() && !this.hasGroups()) {
+            return 0;
+        }
         if (!this.viewMakesSense()) {
             return this.dataSource.getRowCount();
         }

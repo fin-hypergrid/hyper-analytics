@@ -65,9 +65,13 @@ module.exports = (function () {
 
         for (i = 0; i < props.length; i++) {
             var agg = props[i];
-            this.headers.push(headerify(agg[0]));
-            this.aggregates.push(agg[1]);
+            this.addAggregate(agg);
         }
+    };
+
+    DataSourceAggregator.prototype.addAggregate = function(aggregation) {
+        this.headers.push(headerify(aggregation[0]));
+        this.aggregates.push(aggregation[1]);
     };
 
     DataSourceAggregator.prototype.setGroupBys = function (columnIndexArray) {
@@ -76,6 +80,10 @@ module.exports = (function () {
             this.groupBys.push(columnIndexArray[i]);
         }
         this.setAggregates(this.lastAggregate);
+    };
+
+    DataSourceAggregator.prototype.addGroupBy = function(index) {
+            this.groupBys.push(index);
     };
 
     DataSourceAggregator.prototype.hasGroups = function () {

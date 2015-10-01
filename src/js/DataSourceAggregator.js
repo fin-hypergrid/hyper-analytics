@@ -151,8 +151,12 @@ module.exports = (function () {
         this.tree.buildView(this);
     };
 
+    DataSourceAggregator.prototype.viewMakesSense = function () {
+        return this.hasAggregates();
+    };
+
     DataSourceAggregator.prototype.getValue = function (x, y) {
-        if (!this.hasGroups() && !this.hasAggregates()) {
+        if (!this.viewMakesSense()) {
             return this.dataSource.getValue(x, y);
         }
         var row = this.view[y];
@@ -163,7 +167,7 @@ module.exports = (function () {
     };
 
     DataSourceAggregator.prototype.getColumnCount = function () {
-        if (!this.hasGroups() && !this.hasAggregates()) {
+        if (!this.viewMakesSense()) {
             return this.dataSource.getColumnCount();
         }
         var colCount = this.getHeaders().length;
@@ -171,7 +175,7 @@ module.exports = (function () {
     };
 
     DataSourceAggregator.prototype.getRowCount = function () {
-        if (!this.hasGroups() && !this.hasAggregates()) {
+        if (!this.viewMakesSense()) {
             return this.dataSource.getRowCount();
         }
         return this.view.length; //header column
@@ -184,7 +188,7 @@ module.exports = (function () {
     };
 
     DataSourceAggregator.prototype.getHeaders = function () {
-        if (!this.hasGroups() && !this.hasAggregates()) {
+        if (!this.viewMakesSense()) {
             return this.dataSource.getHeaders();
         }
         return this.headers;

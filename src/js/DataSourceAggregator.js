@@ -175,9 +175,6 @@ module.exports = (function () {
     };
 
     DataSourceAggregator.prototype.getRowCount = function () {
-        if (this.hasAggregates() && !this.hasGroups()) {
-            return 0;
-        }
         if (!this.viewMakesSense()) {
             return this.dataSource.getRowCount();
         }
@@ -209,11 +206,7 @@ module.exports = (function () {
     };
 
     DataSourceAggregator.prototype.getGrandTotals = function () {
-        var view = this.view[0];
-        var rowCount = this.getRowCount();
-        if (!view || rowCount === 0) {
-            return [];
-        }
+        var view = this.tree;
         return [view.data];
     };
 

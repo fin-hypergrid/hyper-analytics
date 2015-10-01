@@ -43,20 +43,21 @@ module.exports = (function () {
     };
 
     DataNodeBase.prototype.applyAggregates = function (aggregator) {
+        var hasGroupsOffset = aggregator.hasGroups() ? 1 : 0;
         var indexes = this.getAllRowIndexes();
         if (indexes.length === 0) {
             return; // no data to rollup on
         }
         var aggregates = aggregator.aggregates;
         var data = this.data;
-        data.length = aggregates.length + 1;
+        data.length = aggregates.length + hasGroupsOffset;
 
         var sorter = aggregator.sorterInstance;
         sorter.indexes = indexes;
 
         for (var i = 0; i < aggregates.length; i++) {
             var aggregate = aggregates[i];
-            data[i + 1] = aggregate(sorter);
+            data[i + hasGroupsOffset] = aggregate(sorter);
         }
 
         this.data = data;

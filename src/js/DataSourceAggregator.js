@@ -65,13 +65,13 @@ module.exports = (function () {
 
         for (i = 0; i < props.length; i++) {
             var agg = props[i];
-            this.addAggregate(agg);
+            this.addAggregate(agg[0], agg[1]);
         }
     };
 
-    DataSourceAggregator.prototype.addAggregate = function(aggregation) {
-        this.headers.push(headerify(aggregation[0]));
-        this.aggregates.push(aggregation[1]);
+    DataSourceAggregator.prototype.addAggregate = function(label, func) {
+        this.headers.push(headerify(label));
+        this.aggregates.push(func);
     };
 
     DataSourceAggregator.prototype.setGroupBys = function (columnIndexArray) {

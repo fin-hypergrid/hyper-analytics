@@ -163,7 +163,10 @@ module.exports = (function () {
     };
 
     DataSourceAggregator.prototype.getColumnCount = function () {
-        var colCount = this.getHeaders().length; // 1 is for the hierarchy column
+        if (!this.hasGroups() && !this.hasAggregates()) {
+            return this.dataSource.getColumnCount();
+        }
+        var colCount = this.getHeaders().length;
         return colCount;
     };
 
@@ -181,6 +184,9 @@ module.exports = (function () {
     };
 
     DataSourceAggregator.prototype.getHeaders = function () {
+        if (!this.hasGroups() && !this.hasAggregates()) {
+            return this.dataSource.getHeaders();
+        }
         return this.headers;
     };
 

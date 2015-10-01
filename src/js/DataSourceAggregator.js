@@ -52,12 +52,12 @@ module.exports = (function () {
             props.push([key, aggregations[key]]);
         }
 
-        if (props.length === 0) {
-            var fields = [].concat(this.dataSource.getFields());
-            for (i = 0; i < fields.length; i++) {
-                props.push([fields[i], Aggregations.first(i)]); /* jshint ignore:line */
-            }
-        }
+        // if (props.length === 0) {
+        //     var fields = [].concat(this.dataSource.getFields());
+        //     for (i = 0; i < fields.length; i++) {
+        //         props.push([fields[i], Aggregations.first(i)]); /* jshint ignore:line */
+        //     }
+        // }
 
         if(this.hasGroups()) {
             this.headers.push('Tree');

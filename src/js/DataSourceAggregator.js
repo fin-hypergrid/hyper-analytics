@@ -174,6 +174,12 @@ module.exports = (function () {
         return row.getValue(x);
     };
 
+    DataSourceAggregator.prototype.setValue = function (x, y, value) {
+        if (!this.viewMakesSense()) {
+            return this.dataSource.setValue(x, y, value);
+        }
+    };
+
     DataSourceAggregator.prototype.getColumnCount = function () {
         if (!this.viewMakesSense()) {
             return this.dataSource.getColumnCount();

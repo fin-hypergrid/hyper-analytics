@@ -206,11 +206,12 @@ module.exports = (function () {
         this.dataSource.setHeaders(headers);
     };
 
-    DataSourceAggregator.prototype.getFields = function () {
-        return this.getHeaders();
+    DataSourceAggregator.prototype.setHeaders = function (headers) {
+        //this.dataSource.setHeaders(headers);
     };
 
-    DataSourceAggregator.prototype.setFields = function (arrayOfFieldNames) {
+    DataSourceAggregator.prototype.getFields = function () {
+        return this.dataSource.getFields();
     };
 
     DataSourceAggregator.prototype.getGrandTotals = function () {

@@ -28,9 +28,6 @@ module.exports = (function () {
     JSDataSource.prototype.isNullObject = false;
 
     JSDataSource.prototype.getValue = function (x, y) {
-        if (x === -1) {
-            return y;
-        }
         var row = this.data[y];
         if (!row) {
             return null;
@@ -51,7 +48,7 @@ module.exports = (function () {
 
     JSDataSource.prototype.getColumnCount = function () {
 
-        return this.getHeaders().length;
+        return this.getFields().length;
     };
 
     JSDataSource.prototype.getRowCount = function () {

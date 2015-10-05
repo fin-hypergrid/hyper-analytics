@@ -132,7 +132,7 @@ module.exports = (function () {
             }
         }
 
-        var tree = this.tree = new DataNodeTree('root');
+        var tree = this.tree = new DataNodeTree('Totals');
         var path = tree;
         var leafDepth = groupBys.length - 1;
         for (r = 0; r < rowCount; r++) {

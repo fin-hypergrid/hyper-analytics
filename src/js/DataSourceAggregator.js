@@ -229,15 +229,15 @@ module.exports = (function () {
 
         if (!this.viewMakesSense()) {
             return this.dataSource.getRow(y);
+        } else if (!this.hasGroups()) {
+            return this.tree.data; //return the grand totals
         }
 
-        var rowIndexes = this.view[y].rowIndexes;
-        var result = new Array(rowIndexes.length);
-        for (var i = 0; i < result.length; i++) {
-            var object = this.dataSource.getRow(rowIndexes[i]);
-            result[i] = object;
+        var rollups = this.view[y];
+        if (!rollups) {
+            return this.tree.data;
         }
-        return result;
+        return rollups;
     };
 
     DataSourceAggregator.prototype.setData = function (arrayOfUniformObjects) {

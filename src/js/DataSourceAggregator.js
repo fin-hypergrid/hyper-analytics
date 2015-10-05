@@ -26,7 +26,7 @@ module.exports = (function () {
     // c is a list of constraints,
 
     function DataSourceAggregator(dataSource) {
-        this.tree = new DataNodeTree('root');
+        this.tree = new DataNodeTree('Totals');
         this.indexes = [];
         this.dataSource = dataSource;
         this.aggregates = [];

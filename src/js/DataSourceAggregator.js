@@ -231,10 +231,11 @@ module.exports = (function () {
             return this.dataSource.getRow(y);
         }
 
-        var rollups = this.view[y];
+        var rollups = this.view[y + 1];
         if (!rollups) {
             return this.tree;
         }
+
         return rollups;
     };
 

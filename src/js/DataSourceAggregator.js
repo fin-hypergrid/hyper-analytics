@@ -229,13 +229,11 @@ module.exports = (function () {
 
         if (!this.viewMakesSense()) {
             return this.dataSource.getRow(y);
-        } else if (!this.hasGroups()) {
-            return this.tree.data; //return the grand totals
         }
 
         var rollups = this.view[y];
         if (!rollups) {
-            return this.tree.data;
+            return this.tree;
         }
         return rollups;
     };

@@ -226,6 +226,11 @@ module.exports = (function () {
     };
 
     DataSourceAggregator.prototype.getRow = function (y) {
+
+        if (!this.viewMakesSense()) {
+            return this.dataSource.getRow(y);
+        }
+
         var rowIndexes = this.view[y].rowIndexes;
         var result = new Array(rowIndexes.length);
         for (var i = 0; i < result.length; i++) {

@@ -20,13 +20,7 @@
       2,
       "nofunc"
     ],
-    "space-before-function-paren": [
-      2,
-      {
-        "anonymous": "never",
-        "named": "never"
-      }
-    ],
+    "space-before-function-paren": 0,
     "space-after-keywords": [
       2,
       "always"

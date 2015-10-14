@@ -1,19 +1,19 @@
 'use strict';
 
-module.exports = (function () {
+module.exports = (function() {
 
-    var headerify = function (string) {
-        var pieces = string.replace(/[_-]/g, ' ').replace(/[A-Z]/g, ' $&').split(' ').map(function (s) {
+    var headerify = function(string) {
+        var pieces = string.replace(/[_-]/g, ' ').replace(/[A-Z]/g, ' $&').split(' ').map(function(s) {
             return s.charAt(0).toUpperCase() + s.slice(1);
         });
         return pieces.join(' ');
     };
 
-    var computeFieldNames = function (object) {
+    var computeFieldNames = function(object) {
         if (!object) {
             return [];
         }
-        var fields = [].concat(Object.getOwnPropertyNames(object).filter(function (e) {
+        var fields = [].concat(Object.getOwnPropertyNames(object).filter(function(e) {
             return e.substr(0, 2) !== '__';
         }));
         return fields;
@@ -27,7 +27,7 @@ module.exports = (function () {
 
     JSDataSource.prototype.isNullObject = false;
 
-    JSDataSource.prototype.getValue = function (x, y) {
+    JSDataSource.prototype.getValue = function(x, y) {
         var row = this.data[y];
         if (!row) {
             return null;
@@ -36,61 +36,61 @@ module.exports = (function () {
         return value;
     };
 
-    JSDataSource.prototype.getRow = function (y) {
+    JSDataSource.prototype.getRow = function(y) {
 
         return this.data[y];
     };
 
-    JSDataSource.prototype.setValue = function (x, y, value) {
+    JSDataSource.prototype.setValue = function(x, y, value) {
 
         this.data[y][this.fields[x]] = value;
     };
 
-    JSDataSource.prototype.getColumnCount = function () {
+    JSDataSource.prototype.getColumnCount = function() {
 
         return this.getFields().length;
     };
 
-    JSDataSource.prototype.getRowCount = function () {
+    JSDataSource.prototype.getRowCount = function() {
 
         return this.data.length;
     };
 
-    JSDataSource.prototype.getFields = function () {
+    JSDataSource.prototype.getFields = function() {
 
         return this.fields;
     };
 
-    JSDataSource.prototype.getHeaders = function () {
+    JSDataSource.prototype.getHeaders = function() {
         if (!this.headers || this.headers.length === 0) {
-            this.headers = this.getDefaultHeaders().map(function (each) {
+            this.headers = this.getDefaultHeaders().map(function(each) {
                 return headerify(each);
             });
         }
         return this.headers;
     };
 
-    JSDataSource.prototype.getDefaultHeaders = function () {
+    JSDataSource.prototype.getDefaultHeaders = function() {
 
         return this.getFields();
     };
 
-    JSDataSource.prototype.setFields = function (fields) {
+    JSDataSource.prototype.setFields = function(fields) {
 
         this.fields = fields;
     };
 
-    JSDataSource.prototype.setHeaders = function (headers) {
+    JSDataSource.prototype.setHeaders = function(headers) {
 
         this.headers = headers;
     };
 
-    JSDataSource.prototype.getGrandTotals = function () {
+    JSDataSource.prototype.getGrandTotals = function() {
         //nothing here
         return;
     };
 
-    JSDataSource.prototype.setData = function (arrayOfUniformObjects) {
+    JSDataSource.prototype.setData = function(arrayOfUniformObjects) {
         this.data = arrayOfUniformObjects;
     };
 

@@ -4,16 +4,14 @@ var DataSourceSorter = require('./DataSourceSorter');
 var DataNodeTree = require('./DataNodeTree');
 var DataNodeGroup = require('./DataNodeGroup');
 var DataNodeLeaf = require('./DataNodeLeaf');
-var DataNodeLeaf = require('./DataNodeLeaf');
-var Aggregations = require('./aggregations');
 
-module.exports = (function () {
+module.exports = (function() {
 
-    var headerify = function (string) {
-        var pieces = string.replace(/[_-]/g, ' ').replace(/[A-Z]/g, ' $&').split(' ').map(function (s) {
+    var headerify = function(string) {
+        var pieces = string.replace(/[_-]/g, ' ').replace(/[A-Z]/g, ' $&').split(' ').map(function(s) {
             return (s.charAt(0).toUpperCase() + s.slice(1)).trim();
         });
-        pieces = pieces.filter(function (e) {
+        pieces = pieces.filter(function(e) {
             return e.length !== 0;
         });
         return pieces.join(' ').trim();
@@ -58,8 +56,7 @@ module.exports = (function () {
         //         props.push([fields[i], Aggregations.first(i)]); /* jshint ignore:line */
         //     }
         // }
-
-        if(this.hasGroups()) {
+        if (this.hasGroups()) {
             this.headers.push('Tree');
         }
 
@@ -74,7 +71,7 @@ module.exports = (function () {
         this.aggregates.push(func);
     };
 
-    DataSourceAggregator.prototype.setGroupBys = function (columnIndexArray) {
+    DataSourceAggregator.prototype.setGroupBys = function(columnIndexArray) {
         this.groupBys.length = 0;
         for (var i = 0; i < columnIndexArray.length; i++) {
             this.groupBys.push(columnIndexArray[i]);
@@ -83,38 +80,38 @@ module.exports = (function () {
     };
 
     DataSourceAggregator.prototype.addGroupBy = function(index) {
-            this.groupBys.push(index);
+        this.groupBys.push(index);
     };
 
-    DataSourceAggregator.prototype.hasGroups = function () {
+    DataSourceAggregator.prototype.hasGroups = function() {
         return this.groupBys.length > 0;
     };
 
-    DataSourceAggregator.prototype.hasAggregates = function () {
+    DataSourceAggregator.prototype.hasAggregates = function() {
         return this.aggregates.length > 0;
     };
 
-    DataSourceAggregator.prototype.apply = function () {
+    DataSourceAggregator.prototype.apply = function() {
         this.buildGroupTree();
     };
 
-    DataSourceAggregator.prototype.clearGroups = function () {
+    DataSourceAggregator.prototype.clearGroups = function() {
         this.groupBys.length = 0;
     };
 
-    DataSourceAggregator.prototype.clearAggregations = function () {
+    DataSourceAggregator.prototype.clearAggregations = function() {
         this.aggregates.length = 0;
         this.headers.length = 0;
     };
 
-    DataSourceAggregator.prototype.buildGroupTree = function () {
+    DataSourceAggregator.prototype.buildGroupTree = function() {
         var c, r, g, value, createFunc;
-        var createBranch = function (key, map) {
+        var createBranch = function(key, map) {
             value = new DataNodeGroup(key);
             map.set(key, value);
             return value;
         };
-        var createLeaf = function (key, map) {
+        var createLeaf = function(key, map) {
             value = new DataNodeLeaf(key);
             map.set(key, value);
             return value;
@@ -153,17 +150,17 @@ module.exports = (function () {
         this.buildView();
     };
 
-    DataSourceAggregator.prototype.buildView = function () {
+    DataSourceAggregator.prototype.buildView = function() {
         this.view.length = 0;
         this.tree.computeHeight();
         this.tree.buildView(this);
     };
 
-    DataSourceAggregator.prototype.viewMakesSense = function () {
+    DataSourceAggregator.prototype.viewMakesSense = function() {
         return this.hasAggregates();
     };
 
-    DataSourceAggregator.prototype.getValue = function (x, y) {
+    DataSourceAggregator.prototype.getValue = function(x, y) {
         if (!this.viewMakesSense()) {
             return this.dataSource.getValue(x, y);
         }
@@ -174,13 +171,13 @@ module.exports = (function () {
         return row.getValue(x);
     };
 
-    DataSourceAggregator.prototype.setValue = function (x, y, value) {
+    DataSourceAggregator.prototype.setValue = function(x, y, value) {
         if (!this.viewMakesSense()) {
             return this.dataSource.setValue(x, y, value);
         }
     };
 
-    DataSourceAggregator.prototype.getColumnCount = function () {
+    DataSourceAggregator.prototype.getColumnCount = function() {
         if (!this.viewMakesSense()) {
             return this.dataSource.getColumnCount();
         }
@@ -188,44 +185,44 @@ module.exports = (function () {
         return colCount;
     };
 
-    DataSourceAggregator.prototype.getRowCount = function () {
+    DataSourceAggregator.prototype.getRowCount = function() {
         if (!this.viewMakesSense()) {
             return this.dataSource.getRowCount();
         }
         return this.view.length; //header column
     };
 
-    DataSourceAggregator.prototype.click = function (y) {
+    DataSourceAggregator.prototype.click = function(y) {
         var group = this.view[y];
         group.toggleExpansionState(this);
         this.buildView();
     };
 
-    DataSourceAggregator.prototype.getHeaders = function () {
+    DataSourceAggregator.prototype.getHeaders = function() {
         if (!this.viewMakesSense()) {
             return this.dataSource.getHeaders();
         }
         return this.headers;
     };
 
-    DataSourceAggregator.prototype.setHeaders = function (headers) {
+    DataSourceAggregator.prototype.setHeaders = function(headers) {
         this.dataSource.setHeaders(headers);
     };
 
-    DataSourceAggregator.prototype.getFields = function () {
+    DataSourceAggregator.prototype.getFields = function() {
         return this.dataSource.getFields();
     };
 
-    DataSourceAggregator.prototype.setFields = function (fields) {
+    DataSourceAggregator.prototype.setFields = function(fields) {
         return this.dataSource.setFields(fields);
     };
 
-    DataSourceAggregator.prototype.getGrandTotals = function () {
+    DataSourceAggregator.prototype.getGrandTotals = function() {
         var view = this.tree;
         return [view.data];
     };
 
-    DataSourceAggregator.prototype.getRow = function (y) {
+    DataSourceAggregator.prototype.getRow = function(y) {
 
         if (!this.viewMakesSense()) {
             return this.dataSource.getRow(y);
@@ -239,7 +236,7 @@ module.exports = (function () {
         return rollups;
     };
 
-    DataSourceAggregator.prototype.setData = function (arrayOfUniformObjects) {
+    DataSourceAggregator.prototype.setData = function(arrayOfUniformObjects) {
         this.dataSource.setData(arrayOfUniformObjects);
         this.apply();
     };

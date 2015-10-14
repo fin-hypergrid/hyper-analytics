@@ -2,7 +2,7 @@
 
 var Utils = require('./Utils.js');
 var DataSourceDecorator = require('./DataSourceDecorator');
-var valueOrFunctionExecute = function(config, valueOrFunction) {
+var valueOrFunctionExecute = function(valueOrFunction) {
     var isFunction = (((typeof valueOrFunction)[0]) === 'f');
     var result = isFunction ? valueOrFunction() : valueOrFunction;
     return result;

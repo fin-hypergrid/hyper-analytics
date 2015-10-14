@@ -51,6 +51,17 @@ module.exports = (function () {
         return isFiltered;
     };
 
+    DataSourceFilter.prototype.getRowCount = function () {
+        if (this.indexes.length !== 0) {
+            return this.indexes.length;
+        }
+        //our filter matched nothing....
+        if (this.filters.length !== 0) {
+            return 0;
+        }
+        return this.dataSource.getRowCount();
+    };
+
     return DataSourceFilter;
 
 })();

@@ -20,6 +20,17 @@ module.exports = (function () {
         this.indexes.length = 0;
     };
 
+    DataSourceGlobalFilter.prototype.getRowCount = function () {
+        if (this.indexes.length !== 0) {
+            return this.indexes.length;
+        }
+        //our filter matched nothing....
+        if (this.filter) {
+            return 0;
+        }
+        return this.dataSource.getRowCount();
+    };
+
     DataSourceGlobalFilter.prototype.applyFilters = function () {
         if (!this.filter) {
             this.indexes.length = 0;

@@ -1,2 +1,2 @@
-# rectangular
-Simple rectangle and point APIs
+# finanalytics
+Openfin Analytic - Data transformations on arrays of congruent JavaScript objects.

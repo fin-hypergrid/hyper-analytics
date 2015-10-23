@@ -24,7 +24,7 @@ module.exports = (function() {
 
         min: function(columIndex) {
             return function(group) {
-                var min = 0;
+                var min = Infinity;
                 var rows = group.getRowCount();
                 for (var r = 0; r < rows; r++) {
                     min = Math.min(min, group.getValue(columIndex, r));
@@ -36,7 +36,7 @@ module.exports = (function() {
 
         max: function(columIndex) {
             return function(group) {
-                var max = 0;
+                var max = -Infinity;
                 var rows = group.getRowCount();
                 for (var r = 0; r < rows; r++) {
                     max = Math.max(max, group.getValue(columIndex, r));

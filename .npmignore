@@ -1,0 +1,11 @@
+.*
+*.sh
+*.html
+gulp*
+README.md
+jsdoc-template
+node_modules
+src
+doc
+test
+build

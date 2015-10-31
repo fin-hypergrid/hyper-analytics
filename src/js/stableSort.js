@@ -1,92 +1,88 @@
 'use strict';
 
-var stabilize = function(comparator, descending) {
-    return function(arr1, arr2) {
-        var x = arr1[0];
-        var y = arr2[0];
-        if (x === y) {
-            x = descending ? arr2[1] : arr1[1];
-            y = descending ? arr1[1] : arr2[1];
-        } else {
-            if (y === null) {
-                return -1;
-            }
-            if (x === null) {
-                return 1;
-            }
+function stabilize(comparator, descending, arr1, arr2) { // eslint-disable-line no-shadow
+    var x = arr1[0];
+    var y = arr2[0];
+
+    if (x === y) {
+        x = descending ? arr2[1] : arr1[1];
+        y = descending ? arr1[1] : arr2[1];
+    } else {
+        if (y === null) {
+            return -1;
         }
-        return comparator(x, y);
-    };
-};
+        if (x === null) {
+            return 1;
+        }
+    }
 
+    return comparator(x, y);
+}
 
-var ascendingNumbers = function(x, y) {
+function ascendingNumbers(x, y) {
     return x - y;
-};
+}
 
-var descendingNumbers = function(x, y) {
+function descendingNumbers(x, y) {
     return y - x;
-};
+}
 
-var ascendingAllOthers = function(x, y) {
+function ascendingAllOthers(x, y) {
     return x < y ? -1 : 1;
-};
+}
 
-var descendingAllOthers = function(x, y) {
+function descendingAllOthers(x, y) {
     return y < x ? -1 : 1;
-};
+}
 
-var ascending = function(typeOfData) {
-    if (typeOfData === 'number') {
-        return stabilize(ascendingNumbers, false);
+function ascending(typeOfData) {
+    return stabilize.bind(this, typeOfData === 'number' ? ascendingNumbers : ascendingAllOthers, false);
+}
+
+function descending(typeOfData) {
+    return stabilize.bind(this, typeOfData === 'number' ? descendingNumbers : descendingAllOthers, true);
+}
+
+function sort(index, getValue, sortType) {
+
+    var compare, i;
+
+    // apply defaults
+    if (sortType === undefined) {
+        sortType = 1;
     }
-    return stabilize(ascendingAllOthers, false);
-};
 
-var descending = function(typeOfData) {
-    if (typeOfData === 'number') {
-        return stabilize(descendingNumbers, true);
-    }
-    return stabilize(descendingAllOthers, true);
-};
+    if (index.length) { // something to do
+        switch (sortType) {
+            case 0:
+                return; // bail: nothing to sort
 
-module.exports = (function() {
+            case 1:
+                compare = ascending(typeof getValue(0));
+                break;
 
-    function sort(indexVector, dataSource, sortType) {
-
-        var compare, i;
-
-        if (indexVector.length === 0) {
-            return; //nothing to do;
+            case -1:
+                compare = descending(typeof getValue(0));
+                break;
         }
 
-        if (sortType === undefined) {
-            sortType = 1;
+        // set up the sort.....
+        var tmp = new Array(index.length);
+
+        // add the index for "stability"
+        for (i = 0; i < index.length; i++) {
+            tmp[i] = [getValue(i), i];
         }
 
-        if (sortType === 0) {
-            return; // nothing to sort here;
-        }
-
-        var typeOfData = typeof dataSource(0);
-
-        compare = (sortType === 1) ? ascending(typeOfData) : descending(typeOfData);
-
-        //start the actually sorting.....
-        var tmp = new Array(indexVector.length);
-
-        //lets add the index for stability
-        for (i = 0; i < indexVector.length; i++) {
-            tmp[i] = [dataSource(i), i];
-        }
-
+        // do the actual sort
         tmp.sort(compare);
 
-        //copy the sorted values into our index vector
-        for (i = 0; i < indexVector.length; i++) {
-            indexVector[i] = tmp[i][1];
+        // copy the sorted values into our index vector
+        for (i = 0; i < index.length; i++) {
+            index[i] = tmp[i][1];
         }
     }
 
-    return sort;
-})();
+}
+
+module.exports = sort;

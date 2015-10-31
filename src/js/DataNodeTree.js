@@ -11,6 +11,7 @@ module.exports = (function() {
     }
 
     DataNodeTree.prototype = Object.create(DataNodeGroup.prototype);
+    DataNodeTree.prototype.constructor = DataNodeTree;
 
     DataNodeTree.prototype.prune = function() {
         this.children = this.children.values;

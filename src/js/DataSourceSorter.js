@@ -1,36 +1,33 @@
 'use strict';
 
-var Utils = require('./Utils.js');
-var DataSourceDecorator = require('./DataSourceDecorator');
-var valueOrFunctionExecute = function(valueOrFunction) {
-    var isFunction = (((typeof valueOrFunction)[0]) === 'f');
-    var result = isFunction ? valueOrFunction() : valueOrFunction;
-    return result;
-};
+var DataSource = require('./DataSource');
+var stableSort = require('./stableSort.js');
 
-module.exports = (function() {
-
-    function DataSourceSorter(dataSource) {
-        DataSourceDecorator.call(this, dataSource);
+var DataSourceSorter = DataSource.extend({
+    initialize: function() {
         this.descendingSort = false;
-    }
+    },
 
-    DataSourceSorter.prototype = Object.create(DataSourceDecorator.prototype);
+    prototype: {
+        sortOn: function(colIdx, sortType) {
+            if (sortType === 0) {
+                this.clearIndex();
+            } else {
+                var self = this;
+                this.buildIndex();
+                stableSort(this.index, getValue, sortType);
+            }
 
-    DataSourceSorter.prototype.sortOn = function(columnIndex, sortType) {
-        if (sortType === 0) {
-            this.indexes.length = 0;
-            return;
+            function getValue(rowIdx) {
+                return valueOrFunctionExecute(self.getUnfilteredValue(colIdx, rowIdx));
+            }
         }
-        this.initializeIndexVector();
-        var self = this;
-        Utils.stableSort(this.indexes, function(index) {
-            var val = self.dataSource.getValue(columnIndex, index);
-            val = valueOrFunctionExecute(val);
-            return val;
-        }, sortType);
-    };
+    }
+});
 
-    return DataSourceSorter;
+function valueOrFunctionExecute(valueOrFunction) {
+    var isFunction = ((typeof valueOrFunction)[0] === 'f');
+    return isFunction ? valueOrFunction() : valueOrFunction;
+}
 
-})();
+module.exports = DataSourceSorter;

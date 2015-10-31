@@ -9,6 +9,7 @@ module.exports = (function() {
     }
 
     DataNodeLeaf.prototype = Object.create(DataNodeBase.prototype);
+    DataNodeLeaf.prototype.constructor = DataNodeLeaf;
 
     DataNodeLeaf.prototype.prune = function(depth) {
         this.depth = depth;

@@ -1,67 +1,57 @@
 'use strict';
 
-var DataSourceDecorator = require('./DataSourceDecorator');
+var DataSource = require('./DataSource');
 
-module.exports = (function() {
-
-    function DataSourceFilter(dataSource) {
-        DataSourceDecorator.call(this, dataSource, false);
+var DataSourceFilter = DataSource.extend({
+    initialize: function() {
         this.filters = [];
-    }
+    },
 
-    DataSourceFilter.prototype = Object.create(DataSourceDecorator.prototype);
+    prototype: {
+        addFilter: function(columnIndex, filter) {
+            filter.columnIndex = columnIndex;
+            this.filters.push(filter);
+        },
 
-    DataSourceFilter.prototype.addFilter = function(columnIndex, filter) {
-        filter.columnIndex = columnIndex;
-        this.filters.push(filter);
-    };
-    DataSourceFilter.prototype.setFilter = function(columnIndex, filter) {
-        filter.columnIndex = columnIndex;
-        this.filters.push(filter);
-    };
+        clearFilters: function() {
+            this.filters.length = 0;
+            this.clearIndex();
+        },
 
-    DataSourceFilter.prototype.clearFilters = function() { /* filter */
-        this.filters.length = 0;
-        this.indexes.length = 0;
-    };
-
-    DataSourceFilter.prototype.applyFilters = function() {
-        if (this.filters.length === 0) {
-            this.indexes.length = 0;
-            return;
-        }
-        var indexes = this.indexes;
-        indexes.length = 0;
-        var count = this.dataSource.getRowCount();
-        for (var r = 0; r < count; r++) {
-            if (this.applyFiltersTo(r)) {
-                indexes.push(r);
+        applyFilters: function() {
+            if (!this.filters.length) {
+                this.clearIndex();
+            } else {
+                this.buildIndex(applyFilter);
             }
-        }
-    };
+        },
 
-    DataSourceFilter.prototype.applyFiltersTo = function(r) {
-        var filters = this.filters;
-        var isFiltered = true;
-        for (var f = 0; f < filters.length; f++) {
-            var filter = filters[f];
-            var rowObject = this.dataSource.getRow(r);
-            isFiltered = isFiltered && filter(this.dataSource.getValue(filter.columnIndex, r), rowObject, r);
-        }
-        return isFiltered;
-    };
+        getRowCount: function() {
+            var result;
 
-    DataSourceFilter.prototype.getRowCount = function() {
-        if (this.indexes.length !== 0) {
-            return this.indexes.length;
-        }
-        //our filter matched nothing....
-        if (this.filters.length !== 0) {
-            return 0;
-        }
-        return this.dataSource.getRowCount();
-    };
+            if (this.index && this.index.length) {
+                result = this.index.length; // indexed data -> num hits in index
+            } else if (this.filters.length) {
+                result = 0; // non-indexed data but active filter(s) -> 0 (no hits)
+            } else {
+                result = this.getUnfilteredRowCount(); // non-indexed data with inactive filter(s): all rows
+            }
 
-    return DataSourceFilter;
+            return result;
+        }
+    },
 
-})();
+    aliases: {
+        setFilter: 'addFilter'
+    }
+});
+
+function applyFilter(r, rowObject) {
+    var self = this;
+    return this.filters.find(function(filter) {
+        var cellValue = self.getUnfilteredValue(filter.columnIndex, r, true);
+        return filter(cellValue, rowObject, r);
+    });
+}
+
+module.exports = DataSourceFilter;

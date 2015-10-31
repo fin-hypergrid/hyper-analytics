@@ -1,6 +1,6 @@
 'use strict';
 
-var Map = require('./Map');
+var Map = require('./util/Map');
 var DataNodeBase = require('./DataNodeBase');
 
 module.exports = (function() {
@@ -17,6 +17,7 @@ module.exports = (function() {
     }
 
     DataNodeGroup.prototype = Object.create(DataNodeBase.prototype);
+    DataNodeGroup.prototype.constructor = DataNodeGroup;
 
     DataNodeGroup.prototype.prune = function(depth) {
         this.depth = depth;

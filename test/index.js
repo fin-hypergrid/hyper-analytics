@@ -4,9 +4,16 @@
 var test = require('./util/test');
 //var should = require('should'); // extends `Object` (!) with `.should`; creates `should()`
 //var sinon = require('sinon');
-//require('should-sinon');
+//require('should-sinon'); // extends Object.should to make should-like asserts for sinon spies
 
-require('./aggregations')();
-require('./stableSort')();
-require('./DataSource')();
-require('./DataSourceFilter')();
+var moduleNames = [
+    //'aggregations',
+    //'stableSort',
+    //'DataSource',
+    //'DataSourceFilter',
+    'DataSourceSorter',
+];
+
+moduleNames.forEach(function(moduleName) {
+    require('./' + moduleName)();
+});

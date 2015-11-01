@@ -23,8 +23,11 @@ module.exports = function() {
             object.filters.length.should.equal(0);
         });
 
-        describe('has similar methods', function () {
-            ['addFilter', 'setFilter'].forEach(function (methodName) {
+        describe('HAS TWO SIMILAR METHODS', function () {
+            [
+                'addFilter',
+                'setFilter'
+            ].forEach(function (methodName) {
                 test.method(methodName, 2, function () {
                     var index, filter;
                     beforeEach(function () {
@@ -33,10 +36,10 @@ module.exports = function() {
                         object[methodName](index, filter);
                     });
 
-                    it('adds 1st first param (array) to 2nd param (object) as property `columnIndex`', function () {
+                    it('adds 1st first param (array `columnIndex`) to 2nd param (object `filter`) as property `columnIndex`', function () {
                         filter.columnIndex.should.equal(index);
                     });
-                    it('adds 2nd param to `filters` array', function () {
+                    it('adds 2nd param (`filter`) to `filters` array', function () {
                         object.filters.indexOf(filter).should.be.greaterThanOrEqual(0);
                     });
                 });
@@ -65,8 +68,7 @@ module.exports = function() {
             });
             describe('there is no indexed data but filtering is active so', function () {
                 it('returns 0 (meaning no hits)', function () {
-                    object.filters = [function () {
-                    }];
+                    object.filters = [function () {}];
                     object.getRowCount().should.equal(0);
                 });
             });
@@ -76,17 +78,5 @@ module.exports = function() {
                 });
             })
         });
-
-        test.method('applyFilters', 0, function () {
-            beforeEach(function () {
-                object.applyFilters();
-            });
-            it('empties `filters`', function () {
-                object.filters.length.should.equal(0);
-            });
-            it('undefs `index`', function () {
-                (typeof object.index).should.equal('undefined');
-            })
-        });
     });
-}
+};

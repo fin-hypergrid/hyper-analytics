@@ -43,17 +43,17 @@ function descending(typeOfData) {
     return stabilize.bind(this, typeOfData === 'number' ? descendingNumbers : descendingAllOthers, true);
 }
 
-function sort(index, getValue, sortType) {
+function sort(index, getValue, direction) {
 
     var compare, i;
 
     // apply defaults
-    if (sortType === undefined) {
-        sortType = 1;
+    if (direction === undefined) {
+        direction = 1;
     }
 
     if (index.length) { // something to do
-        switch (sortType) {
+        switch (direction) {
             case 0:
                 return; // bail: nothing to sort
 
@@ -64,6 +64,9 @@ function sort(index, getValue, sortType) {
             case -1:
                 compare = descending(typeof getValue(0));
                 break;
+
+            default:
+                throw 'Unexpected sort direction value.';
         }
 
         // set up the sort.....
@@ -85,4 +88,4 @@ function sort(index, getValue, sortType) {
 
 }
 
-module.exports = sort;
+exports.sort = sort;

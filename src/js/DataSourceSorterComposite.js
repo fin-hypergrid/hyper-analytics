@@ -10,8 +10,8 @@ var DataSourceSorterComposite = DataSource.extend({
     },
 
     prototype: {
-        sortOn: function(columnIndex, sortType) {
-            this.sorts.push([columnIndex, sortType]);
+        sortOn: function(columnIndex, direction) {
+            this.sorts.push([columnIndex, direction]);
         },
 
         applySorts: function() {

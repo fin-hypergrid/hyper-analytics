@@ -1,7 +1,7 @@
 var test = require('./util/test');
 
 module.exports = function() {
-    describe(test.module('aggregations'), function () {
+    test.module('aggregations', function () {
         object = require('../src/js/aggregations');
 
         var group = {
@@ -86,4 +86,4 @@ module.exports = function() {
             });
         });
     });
-}
+};

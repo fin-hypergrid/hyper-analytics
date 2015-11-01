@@ -11,6 +11,8 @@ function DataSource(data, fields) {
 extendify(DataSource, 'dataSource');
 
 DataSource.prototype = {
+    constructor: DataSource.prototype.constructor,
+
     isNullObject: false,
 
     // Unfiltered functions ignore `index` even when defined:

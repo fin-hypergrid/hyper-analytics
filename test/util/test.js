@@ -1,37 +1,33 @@
-/* global describe, it, beforeEach, afterEach, properties, methods, object */
+/* global describe, it, beforeEach, afterEach, object */
 
-function itIsAnAPI() {
-    it('is an API', function() {
-        // should be an object with methods and/or properties
-        object.should.be.an.Object();
-        properties = methods = 0;
-        for (var key in object) {
-            var isMethod = typeof object[key] === 'function';
-            methods += isMethod;
-            properties += !isMethod;
-        }
-        (methods + properties).should.not.equal(0);
-    });
-}
-
-function testModule(name) {
+function _module(name, tearDown) {
     var blankline = '\n\n',
         header = new Array(19);
+
     header[header.length >> 1] = name + '.js  ';
-    return blankline + header.join('•  ') + blankline + 'has a module "' + name +'" that';
+    header = header.join('•  ');
+
+    describe(blankline + header + blankline + 'has a module "' + name +'" that', tearDown);
 }
 
 function constructorModule(name, tearDown) {
-    testModule(name, function() {
-        var module = require('../src/js/' + name);
+    _module(name, function() {
+        var Constructor = require('../../src/js/' + name);
         it('is a function', function () {
-            module.should.be.a.Function();
+            Constructor.should.be.a.Function();
         });
-        it('is a constructor', function () {
-            module.prototype.constructor.should.equal(module);
+        describe('is a constructor', function () {
+            it('prototype has a `constructor` property (often stepped on by assigning object to prototype)', function() {
+                Constructor.prototype.should.have.property('constructor');
+            });
+            it('prototype\'s `constructor` property properly references the constructor', function() {
+                Constructor.prototype.constructor.should.equal(Constructor);
+            });
         });
         if (tearDown) {
-            tearDown(module);
+            describe('when called as a constructor (with "new")', function() {
+                tearDown(Constructor);
+            });
         }
     });
 }
@@ -49,8 +45,7 @@ function method(name, parms, setup, tearDown) {
         }
 
         it('is defined', function() {
-            --methods;
-            (name in object).should.be.true();
+            object.should.have.property(name);
         });
 
         it('is a method', function() {
@@ -72,7 +67,6 @@ function method(name, parms, setup, tearDown) {
 function property(name, tearDown) {
     describe('has a member `' + name + '` that', function() {
         it('is defined', function() {
-            --properties;
             (name in object).should.be.true();
         });
 
@@ -87,8 +81,7 @@ function property(name, tearDown) {
 }
 
 module.exports = {
-    itIsAnAPI: itIsAnAPI,
-    module: testModule,
+    module: _module,
     constructorModule: constructorModule,
     method: method,
     property: property

@@ -2,7 +2,7 @@ var test = require('./util/test');
 var should = require('should'); // extends `Object` (!) with `.should`; creates `should()`
 
 module.exports = function() {
-    describe(test.module('stableSort'), function() {
+    test.module('stableSort', function() {
         var stableSort = require('../src/js/stableSort');
         it('is a function', function() {
             stableSort.should.be.a.Function();
@@ -144,4 +144,4 @@ module.exports = function() {
             });
         });
     });
-}
+};

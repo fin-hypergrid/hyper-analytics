@@ -1,57 +1,45 @@
 'use strict';
 
-var DataSource = require('./DataSource');
+var DataSourceIndexed = require('./DataSourceIndexed');
 
-var DataSourceFilter = DataSource.extend({
+var DataSourceFilter = DataSourceIndexed.extend({
     initialize: function() {
         this.filters = [];
     },
 
-    prototype: {
-        addFilter: function(columnIndex, filter) {
-            filter.columnIndex = columnIndex;
-            this.filters.push(filter);
-        },
+    add: function(columnIndex, filter) {
+        filter.columnIndex = columnIndex;
+        this.filters.push(filter);
+    },
 
-        clearFilters: function() {
-            this.filters.length = 0;
+    clear: function() {
+        this.filters.length = 0;
+        this.clearIndex();
+    },
+
+    apply: function() {
+        if (!this.filters.length) {
             this.clearIndex();
-        },
-
-        applyFilters: function() {
-            if (!this.filters.length) {
-                this.clearIndex();
-            } else {
-                this.buildIndex(applyFilter);
-            }
-        },
-
-        getRowCount: function() {
-            var result;
-
-            if (this.index && this.index.length) {
-                result = this.index.length; // indexed data -> num hits in index
-            } else if (this.filters.length) {
-                result = 0; // non-indexed data but active filter(s) -> 0 (no hits)
-            } else {
-                result = this.getUnfilteredRowCount(); // non-indexed data with inactive filter(s): all rows
-            }
-
-            return result;
+        } else {
+            this.buildIndex(applyFilter);
         }
     },
 
+    getRowCount: function() {
+        return this.filters.length ? this.index.length : this.dataSource.getRowCount();
+    },
+
     aliases: {
-        setFilter: 'addFilter'
+        set: 'add'
     }
 });
 
 function applyFilter(r, rowObject) {
     var self = this;
-    return this.filters.find(function(filter) {
-        var cellValue = self.getUnfilteredValue(filter.columnIndex, r, true);
-        return filter(cellValue, rowObject, r);
-    });
+    return this.filters.reduce(function(isFiltered, filter) {
+        var cellValue = self.dataSource.getValue(filter.columnIndex, r);
+        return isFiltered && filter(cellValue, rowObject, r);
+    }, true);
 }
 
 module.exports = DataSourceFilter;

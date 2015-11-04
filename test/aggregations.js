@@ -51,39 +51,13 @@ module.exports = function() {
             });
         }
 
-        test.itIsAnAPI();
-
-        describe('has a member `count` that', function () {
-            isMetaMethodThatWhenMetaCalledReturnsResults('count', [5, 5, 5]);
-        });
-        describe('has a member `sum` that', function () {
-            isMetaMethodThatWhenMetaCalledReturnsResults('sum', [35, 180, 265]);
-        });
-        describe('has a member `min` that', function () {
-            isMetaMethodThatWhenMetaCalledReturnsResults('min', [1, 22, 32]);
-        });
-        describe('has a member `max` that', function () {
-            isMetaMethodThatWhenMetaCalledReturnsResults('max', [13, 54, 69]);
-        });
-        describe('has a member `avg` that', function () {
-            isMetaMethodThatWhenMetaCalledReturnsResults('avg', [7, 36, 53]);
-        });
-        describe('has a member `first` that', function () {
-            isMetaMethodThatWhenMetaCalledReturnsResults('first', [4, 25, 66]);
-        });
-        describe('has a member `last` that', function () {
-            isMetaMethodThatWhenMetaCalledReturnsResults('last', [10, 51, 32]);
-        });
-        describe('has a member `stddev` that', function () {
-            isMetaMethodThatWhenMetaCalledReturnsResults('stddev', [4.242640687119285, 13.638181696985855, 16.06237840420901]);
-        });
-        describe('remaining members:', function () {
-            it('no untested properties', function () {
-                properties.should.equal(0);
-            });
-            it('no untested methods', function () {
-                methods.should.equal(0);
-            });
-        });
+        isMetaMethodThatWhenMetaCalledReturnsResults('count', [5, 5, 5]);
+        isMetaMethodThatWhenMetaCalledReturnsResults('sum', [35, 180, 265]);
+        isMetaMethodThatWhenMetaCalledReturnsResults('min', [1, 22, 32]);
+        isMetaMethodThatWhenMetaCalledReturnsResults('max', [13, 54, 69]);
+        isMetaMethodThatWhenMetaCalledReturnsResults('avg', [7, 36, 53]);
+        isMetaMethodThatWhenMetaCalledReturnsResults('first', [4, 25, 66]);
+        isMetaMethodThatWhenMetaCalledReturnsResults('last', [10, 51, 32]);
+        isMetaMethodThatWhenMetaCalledReturnsResults('stddev', [4.242640687119285, 13.638181696985855, 16.06237840420901]);
     });
 };

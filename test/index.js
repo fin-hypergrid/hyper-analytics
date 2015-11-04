@@ -6,14 +6,11 @@ var test = require('./util/test');
 //var sinon = require('sinon');
 //require('should-sinon'); // extends Object.should to make should-like asserts for sinon spies
 
-var moduleNames = [
-    //'aggregations',
-    //'stableSort',
-    //'DataSource',
-    //'DataSourceFilter',
-    'DataSourceSorter',
-];
-
-moduleNames.forEach(function(moduleName) {
-    require('./' + moduleName)();
-});
+require('./aggregations')();
+require('./stableSort')();
+require('./DataSource')();
+require('./DataSourceIndexed')();
+require('./DataSourceFilter')();
+require('./DataSourceGlobalFilter')();
+require('./DataSourceSorter')();
+require('./DataSourceSorterComposite')();

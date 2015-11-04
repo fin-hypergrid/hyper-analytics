@@ -5,7 +5,7 @@ var INDEX_VECTOR = [ 0, 1, 2, 3, 4 ],
     INVERSE_VECTOR = [ 4, 3, 2, 1, 0];
 
 module.exports = function() {
-    test.constructorModule('DataSource', function(DataSource) {
+    test.constructorModule('DataSource', /*'unindexed',*/ function(DataSource) {
         var DATA, DATA_MAX;
         beforeEach(function() {
             DATA = [
@@ -23,179 +23,71 @@ module.exports = function() {
                 fields = ['lastName', 'firstName'];
                 object = new DataSource(DATA, fields);
             });
-            it('has a (private?) property `data` that references the first parameter', function() {
-                object.data.should.equal(DATA);
-            });
-            it('has a (private?) property `fields` that references the second parameter', function() {
-                object.fields.should.equal(fields);
+
+            describe('returns a value that', function() {
+                it('is an object', function() {
+                    object.should.be.an.Object();
+                });
+
+                test.property('data', function() {
+                    it('is set to 1st parameter', function() {
+                        object.data.should.equal(DATA);
+                    });
+                });
+
+                test.property('fields', function() {
+                    it('is set to 2nd parameter', function() {
+                        object.fields.should.equal(fields);
+                    });
+                });
             });
         });
-        describe('with 1 parameter returns a value that', function() {
+        describe('with 1 parameter', function() {
             var altFields = ['inaugurated', 'term-ended', 'lastName', 'firstName'];
 
             beforeEach(function() {
                 object = new DataSource(DATA);
             });
 
-            test.property('data', function() {
-                it('references the first parameter', function() {
-                    object.data.should.equal(DATA);
+            describe('returns an value that', function() {
+                it('is an object', function() {
+                    object.should.be.an.Object();
                 });
-            });
 
-            test.property('fields', function() {
-                it('is a list of all keys in first element of first parameter of constructor that do not begin with double-underscore ("__")', function() {
-                    object.fields.length.should.equal(4);
-                    // making no assumption here about order:
-                    object.fields.indexOf('firstName').should.be.greaterThanOrEqual(0);
-                    object.fields.indexOf('lastName').should.be.greaterThanOrEqual(0);
-                    object.fields.indexOf('inaugurated').should.be.greaterThanOrEqual(0);
-                    object.fields.indexOf('term-ended').should.be.greaterThanOrEqual(0);
-                });
-            });
-
-            test.property('isNullObject', function() {
-                it('is initially set to false', function() {
-                    object.isNullObject.should.equal(false);
-                });
-            });
-
-            describe('HAS UNFILTERED DATA FUNCTIONS', function() {
-                test.method('getUnfilteredRowCount', 0, function() {
-                    describe('without index vector', function() {
-                        it('returns the correct number of rows in the data', function() {
-                            object.getUnfilteredRowCount().should.equal(DATA.length);
-                        });
-                    });
-                    describe('with index vector', function() {
-                        it('returns correct row of data', function() {
-                            object.index = [ 1, 2, 3 ];
-                            for (var i = DATA.length; i--;) {
-                                object.getUnfilteredRowCount().should.equal(DATA.length);
-                            }
-                        });
+                test.property('data', function() {
+                    it('references the first parameter', function() {
+                        object.data.should.equal(DATA);
                     });
                 });
 
-                test.method('getUnfilteredRow', 1, function() {
-                    describe('without index vector', function() {
-                        it('returns correct row of data', function() {
-                            for (var i = DATA.length; i--;) {
-                                object.getUnfilteredRow(i).should.equal(DATA[i]);
-                            }
-                        });
-                    });
-                    describe('with reversed index vector', function() {
-                        it('ignores index and returns correct row of data', function() {
-                            object.index = INVERSE_VECTOR;
-                            for (var i = DATA.length; i--;) {
-                                object.getUnfilteredRow(i).should.equal(DATA[i]);
-                            }
-                        });
+                test.property('fields', function() {
+                    it('is a list of all keys in first element of first parameter (`data`) that do not begin with double-underscore ("__")', function() {
+                        object.fields.length.should.equal(4);
+                        // making no assumption here about order:
+                        object.fields.indexOf('firstName').should.be.greaterThanOrEqual(0);
+                        object.fields.indexOf('lastName').should.be.greaterThanOrEqual(0);
+                        object.fields.indexOf('inaugurated').should.be.greaterThanOrEqual(0);
+                        object.fields.indexOf('term-ended').should.be.greaterThanOrEqual(0);
                     });
                 });
 
-                test.method('getUnfilteredValue', 2, function() {
-                    it('returns `null` for non-existent row', function() {
-                        should(object.getUnfilteredValue(3, 9)).equal(null);
-                    });
-                    describe('without index vector', function() {
-                        it('returns correct data', function() {
-                            object.setFields(altFields);
-                            // spot check one field for each row:
-                            object.getUnfilteredValue(3, 0).should.equal(DATA[0].firstName);
-                            object.getUnfilteredValue(2, 1).should.equal(DATA[1].lastName);
-                            object.getUnfilteredValue(0, 2).should.equal(DATA[2].inaugurated);
-                            object.getUnfilteredValue(1, 3).should.equal(DATA[3]['term-ended']);
-                            object.getUnfilteredValue(3, 4).should.equal(DATA[4].firstName);
-                        });
-                    });
-                    describe('with reversed index vector', function() {
-                        it('ignores index and returns correct data', function() {
-                            object.index = INVERSE_VECTOR;
-                            object.setFields(altFields);
-                            // spot check one field for each row:
-                            object.getUnfilteredValue(3, 0).should.equal(DATA[0].firstName);
-                            object.getUnfilteredValue(2, 1).should.equal(DATA[1].lastName);
-                            object.getUnfilteredValue(0, 2).should.equal(DATA[2].inaugurated);
-                            object.getUnfilteredValue(1, 3).should.equal(DATA[3]['term-ended']);
-                            object.getUnfilteredValue(3, 4).should.equal(DATA[4].firstName);
-                        });
+                test.property('isNullObject', function() {
+                    it('is initially set to false', function() {
+                        object.isNullObject.should.equal(false);
                     });
                 });
 
-                test.method('setUnfilteredValue', 3, function() {
-                    describe('without index vector', function() {
-                        it('sets correct cells', function() {
-                            object.setFields(['lastName', 'firstName']);
-                            object.setUnfilteredValue(0, 3, 'Carter');
-                            object.setUnfilteredValue(1, 3, 'Jimmy');
-                            should(DATA[3]).deepEqual({
-                                firstName: 'Jimmy',
-                                lastName: 'Carter',
-                                __rating: 2,
-                                inaugurated: 1809,
-                                'term-ended': 1817
-                            });
-                        });
-                    });
-                    describe('with reversed index vector', function() {
-                        it('ignores index and sets correct cells', function() {
-                            object.index = INVERSE_VECTOR;
-                            object.setFields(['lastName', 'firstName']);
-                            object.setUnfilteredValue(0, 3, 'Carter');
-                            object.setUnfilteredValue(1, 3, 'Jimmy');
-                            should(DATA[3]).deepEqual({
-                                firstName: 'Jimmy',
-                                lastName: 'Carter',
-                                __rating: 2,
-                                inaugurated: 1809,
-                                'term-ended': 1817
-                            });
-                        });
-                    });
-                });
-            });
-
-            describe('HAS FILTERED DATA FUNCTIONS', function() {
                 test.method('getRowCount', 0, function() {
-                    describe('without index vector', function() {
-                        it('returns the correct number of rows in the data', function() {
-                            object.getRowCount().should.equal(DATA.length);
-                        });
-                    });
-                    describe('with index vector', function() {
-                        it('returns correct row of data', function() {
-                            object.index = [ 1, 2, 3 ];
-                            for (var i = DATA.length; i--;) {
-                                object.getRowCount(i).should.equal(3);
-                            }
-                        });
+                    it('returns the correct number of rows in the data', function() {
+                        object.getRowCount().should.equal(DATA.length);
                     });
                 });
 
                 test.method('getRow', 1, function() {
-                    describe('without index vector', function() {
-                        it('returns correct row of data', function() {
-                            for (var i = DATA.length; i--;) {
-                                object.getRow(i).should.equal(DATA[i]);
-                            }
-                        });
-                    });
-                    describe('with default "identity" index vector', function() {
-                        it('returns correct row of data', function() {
-                            for (var i = DATA.length; i--;) {
-                                object.getRow(i).should.equal(DATA[i]);
-                            }
-                        });
-                    });
-                    describe('with reversed index vector', function() {
-                        it('returns correct row of data', function() {
-                            object.index = INVERSE_VECTOR;
-                            for (var i = DATA.length; i--;) {
-                                object.getRow(i).should.equal(DATA[DATA_MAX - i]);
-                            }
-                        });
+                    it('returns correct row of data', function() {
+                        for (var i = DATA.length; i--;) {
+                            object.getRow(i).should.equal(DATA[i]);
+                        }
                     });
                 });
 
@@ -203,59 +95,28 @@ module.exports = function() {
                     it('returns `null` for non-existent row', function() {
                         should(object.getValue(3, 9)).equal(null);
                     });
-                    describe('without index vector', function() {
-                        it('returns correct data', function() {
-                            object.setFields(altFields);
-                            // spot check one field for each row:
-                            object.getValue(3, 0).should.equal(DATA[0].firstName);
-                            object.getValue(2, 1).should.equal(DATA[1].lastName);
-                            object.getValue(0, 2).should.equal(DATA[2].inaugurated);
-                            object.getValue(1, 3).should.equal(DATA[3]['term-ended']);
-                            object.getValue(3, 4).should.equal(DATA[4].firstName);
-                        });
-                    });
-                    describe('with reversed index vector', function() {
-                        it('returns correct data', function() {
-                            object.index = INVERSE_VECTOR;
-                            object.setFields(altFields);
-                            // spot check one field for each row:
-                            object.getValue(3, 0).should.equal(DATA[DATA_MAX - 0].firstName);
-                            object.getValue(2, 1).should.equal(DATA[DATA_MAX - 1].lastName);
-                            object.getValue(0, 2).should.equal(DATA[DATA_MAX - 2].inaugurated);
-                            object.getValue(1, 3).should.equal(DATA[DATA_MAX - 3]['term-ended']);
-                            object.getValue(3, 4).should.equal(DATA[DATA_MAX - 4].firstName);
-                        });
+                    it('returns correct data', function() {
+                        object.setFields(altFields);
+                        // spot check one field for each row:
+                        object.getValue(3, 0).should.equal(DATA[0].firstName);
+                        object.getValue(2, 1).should.equal(DATA[1].lastName);
+                        object.getValue(0, 2).should.equal(DATA[2].inaugurated);
+                        object.getValue(1, 3).should.equal(DATA[3]['term-ended']);
+                        object.getValue(3, 4).should.equal(DATA[4].firstName);
                     });
                 });
 
                 test.method('setValue', 3, function() {
-                    describe('without index vector', function() {
-                        it('sets correct cells', function() {
-                            object.setFields(['lastName', 'firstName']);
-                            object.setValue(0, 3, 'Carter');
-                            object.setValue(1, 3, 'Jimmy');
-                            should(DATA[3]).deepEqual({
-                                firstName: 'Jimmy',
-                                lastName: 'Carter',
-                                __rating: 2,
-                                inaugurated: 1809,
-                                'term-ended': 1817
-                            });
-                        });
-                    });
-                    describe('with reversed index vector', function() {
-                        it('sets correct cells', function() {
-                            object.index = INVERSE_VECTOR;
-                            object.setFields(['lastName', 'firstName']);
-                            object.setValue(0, 3, 'Carter');
-                            object.setValue(1, 3, 'Jimmy');
-                            should(DATA[DATA_MAX - 3]).deepEqual({
-                                firstName: 'Jimmy',
-                                lastName: 'Carter',
-                                __rating: 4,
-                                inaugurated: 1797,
-                                'term-ended': 1801
-                            });
+                    it('sets correct cells', function() {
+                        object.setFields(['lastName', 'firstName']);
+                        object.setValue(0, 3, 'Carter');
+                        object.setValue(1, 3, 'Jimmy');
+                        should(DATA[3]).deepEqual({
+                            firstName: 'Jimmy',
+                            lastName: 'Carter',
+                            __rating: 2,
+                            inaugurated: 1809,
+                            'term-ended': 1817
                         });
                     });
                 });
@@ -325,45 +186,6 @@ module.exports = function() {
                 describe('with anything other than an array', function() {
                     it('throws an error', function() {
                         object.setHeaders.should.throw();
-                    });
-                });
-            });
-
-            test.method('clearIndex', 0, function() {
-                it('undefines `index`', function () {
-                    object.index = [2, 4];
-                    (!object.index).should.be.false();
-                    object.clearIndex();
-                    (!object.index).should.be.true();
-                });
-            });
-
-            test.method('buildIndex', 1, function() {
-                describe('with no parameters', function() {
-                    it('sets `index` to initial state', function () {
-                        object.buildIndex();
-                        should(object.index).deepEqual(INDEX_VECTOR);
-                    });
-                });
-                describe('with 1st parameter (`predicate`),', function() {
-                    describe('testing how predicate is called,', function() {
-                        it('called with expected parameter values', function () {
-                            var dump = [];
-                            function oddRowsOnly(r, rowObject) {
-                                dump[r] = rowObject;
-                            }
-                            object.buildIndex(oddRowsOnly);
-                            should(dump).deepEqual(DATA);
-                        });
-                    });
-                    describe('testing resultant index,', function() {
-                        it('sets `index` correctly', function () {
-                            function oddRowsOnly(r, rowObject) {
-                                return r & 1;
-                            }
-                            object.buildIndex(oddRowsOnly);
-                            should(object.index).deepEqual([1, 3]);
-                        });
                     });
                 });
             });

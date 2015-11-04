@@ -1,34 +1,32 @@
 'use strict';
 
-var DataSource = require('./DataSource');
+var DataSourceIndexed = require('./DataSourceIndexed');
 var stableSort = require('./stableSort.js');
 
-var DataSourceSorter = DataSource.extend({
+var DataSourceSorter = DataSourceIndexed.extend({
     initialize: function() {
         this.descendingSort = false; // TODO: this does not seem to be in use
     },
 
-    prototype: {
-        sortOn: function(colIdx, direction) {
-            switch (direction) {
-                case 0:
-                    this.clearIndex();
-                    break;
+    sortOn: function(colIdx, direction) {
+        switch (direction) {
+            case 0:
+                this.clearIndex();
+                break;
 
-                case 1:
-                case -1:
-                    this.buildIndex();
-                    var self = this;
-                    stableSort.sort(this.index, getValue, direction);
-                    break;
+            case 1:
+            case -1:
+                this.buildIndex();
+                var self = this; // for use in getValue
+                stableSort.sort(this.index, getValue, direction);
+                break;
 
-                default:
-                    throw 'Unexpected sort direction value.';
-            }
+            default:
+                throw 'Unexpected sort direction value.';
+        }
 
-            function getValue(rowIdx) {
-                return valOrFuncCall(self.getUnfilteredValue(colIdx, rowIdx));
-            }
+        function getValue(rowIdx) {
+            return valOrFuncCall(self.dataSource.getValue(colIdx, rowIdx));
         }
     }
 });

@@ -1,48 +1,18 @@
 'use strict';
 
 var headerify = require('./util/headerify');
-var extendify = require('./util/extendify');
 
 function DataSource(data, fields) {
     this.fields = fields || computeFieldNames(data[0]);
     this.data = data;
 }
 
-extendify(DataSource, 'dataSource');
-
 DataSource.prototype = {
-    constructor: DataSource.prototype.constructor,
+    constructor: DataSource.prototype.constructor, // preserve constructor
 
     isNullObject: false,
 
-    // Unfiltered functions ignore `index` even when defined:
-
-    getUnfilteredRow: function(y) {
-        return this.data[y];
-    },
-
-    getUnfilteredValue: function(x, y) {
-        var row = this.getUnfilteredRow(y);
-        if (!row) {
-            return null;
-        }
-        return row[this.fields[x]];
-    },
-
-    setUnfilteredValue: function(x, y, value) {
-        this.getUnfilteredRow(y)[this.fields[x]] = value;
-    },
-
-    getUnfilteredRowCount: function() {
-        return this.data.length;
-    },
-
-    // Filtered functions respect `index` when defined:
-
     getRow: function(y) {
-        if (this.index) {
-            y = this.index[y];
-        }
         return this.data[y];
     },
 
@@ -59,10 +29,8 @@ DataSource.prototype = {
     },
 
     getRowCount: function() {
-        return (this.index || this.data).length;
+        return this.data.length;
     },
-
-    // Remaining methods do not depend on `index`:
 
     getColumnCount: function() {
         return this.getFields().length;
@@ -99,21 +67,6 @@ DataSource.prototype = {
     getGrandTotals: function() {
         //nothing here
         return;
-    },
-
-    clearIndex: function() {
-        delete this.index;
-    },
-
-    buildIndex: function(predicate) {
-        var rowCount = this.getRowCount(),
-            index = this.index = [];
-
-        for (var r = 0; r < rowCount; r++) {
-            if (!predicate || predicate.call(this, r, this.getUnfilteredRow(r))) {
-                index.push(r);
-            }
-        }
     },
 
     setData: function(arrayOfUniformObjects) {

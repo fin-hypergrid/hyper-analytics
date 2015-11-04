@@ -25,11 +25,11 @@ var cols = {
     order: 9
 };
 
-window.f.addFilter(cols.birthState, function(each) {
+window.f.add(cols.birthState, function(each) {
     return each.startsWith('A');
 });
 
-window.f.addFilter(cols.pets, function(each) {
+window.f.add(cols.pets, function(each) {
     return each > 5;
 });
 

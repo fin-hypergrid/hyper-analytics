@@ -40,8 +40,8 @@ function extendify(Constructor, options) {
  * @param {object} prototype - Object with members to copy to new constructor's prototype. Some have special meanings:
  * * `initialize: function() {...}` - Additional constructor code for new object. Gets passed new object as context + same args as constructor itself. Called on instantiation after similar function in all ancestors called with same signature.
  * * `initializeOwn: function() {...}` - Additional constructor code for new object. Gets passed new object as context + same args as constructor itself. Called on instantiation after (all) the `initialize` function(s).
- * * `extend: true` - Mixes this function into the prototype of the new extended object constructor, essentialy making the object itself extensible.
- * * `extend: 'name'` - Same as above but also mixes in an accessor method with this string as its name.
+ * * `extendable: true` - Mixes this function into the prototype of the new extended object constructor, essentialy making the object itself extensible.
+ * * `extendable: 'name'` - Same as above but also mixes in an accessor method with this string as its name.
  * * `aliases: {...}` - Hash of aliases for prototype members in form `{ alias: 'member', ... }` where `'member'` is the name of an existing member in the prototype. Alternatively, ...
  * * `key: '#xxx'` - Adds an alias `key` with same value as existing member `xxx`.
  */
@@ -63,7 +63,7 @@ function extend(prototypeAdditions) {
                 case 'initializeOwn':
                     // already called above; no need to keep
                     break;
-                case 'extend':
+                case 'extendable':
                     if (typeof value === 'string') {
                         extendify(Constructor, value);
                     } else {

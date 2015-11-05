@@ -6,9 +6,9 @@ require('should-sinon'); // extends Object.should to make should-like asserts fo
 var DataSource = require('../src/js/DataSource');
 
 module.exports = function() {
-    test.constructorModule('DataSourceGlobalFilter', function (DataSourceGlobalFilter) {
+    test.constructorModule('DataSourceGlobalFilter', function(DataSourceGlobalFilter) {
         var DATA;
-        beforeEach(function () {
+        beforeEach(function() {
             DATA = [
                 [4, 25, 66, 95],
                 [1, 22, 63, 82],
@@ -20,41 +20,41 @@ module.exports = function() {
             object = new DataSourceGlobalFilter(dataSource);
         });
 
-        it('descends from DataSourceIndexed', function () {
+        it('descends from `DataSourceIndexed`', function() {
             object.should.be.instanceof(require('../src/js/DataSourceIndexed'));
         });
 
-        test.method('set', 1, function () {
-            it('sets instance var `filter` to 2nd param (`filter`)', function () {
+        test.method('set', 1, function() {
+            it('sets instance var `filter` to 2nd param (`filter`)', function() {
                 var filter = {};
                 object.set(filter);
                 object.filter.should.equal(filter);
             });
         });
 
-        test.method('clear', 0, function () {
-            beforeEach(function () {
+        test.method('clear', 0, function() {
+            beforeEach(function() {
                 object.clear();
             });
-            it('undefines `filter`', function () {
+            it('undefines `filter`', function() {
                 should(object.filter).equal(undefined);
             });
-            it('Calls `clearIndex`', function () {
+            it('Calls `clearIndex`', function() {
                 var spy = sinon.spy(object, 'clearIndex');
                 object.clear();
                 spy.should.be.called();
             })
         });
 
-        test.method('apply', 0, function () {
-            describe('when global filter is not defined', function () {
-                it('calls `clearIndex`', function () {
+        test.method('apply', 0, function() {
+            describe('when global filter is not defined', function() {
+                it('calls `clearIndex`', function() {
                     var spy = sinon.spy(object, 'clearIndex');
                     object.apply();
                     spy.should.be.called();
                 });
             });
-            describe('when global filter is defined, rebuilds the index:', function () {
+            describe('when global filter is defined, rebuilds the index:', function() {
                 var stub, filterStub,
                     ROW_INDEX = 4;
                 beforeEach(function() {
@@ -67,7 +67,7 @@ module.exports = function() {
                     object.setFields([0, 2, 3]); // skip columnIndex === 1
                     object.set(filterStub);
                 });
-                describe('calls `buildIndex`', function () {
+                describe('calls `buildIndex`', function() {
                     it('called exactly once', function() {
                         object.apply();
                         stub.should.be.calledOnce();
@@ -78,25 +78,25 @@ module.exports = function() {
                             object.apply();
                             applyFilter = stub.getCall(0).args[0];
                         });
-                        it('is the only parameter', function () {
+                        it('is the only parameter', function() {
                             stub.getCall(0).args.length.should.equal(1);
                         });
-                        it('is a co-routine', function () {
+                        it('is a co-routine', function() {
                             var arg = applyFilter.should.be.a.Function();
                         });
-                        describe('that', function () {
-                            it('takes 2 parameters', function () {
+                        describe('that', function() {
+                            it('takes 2 parameters', function() {
                                 var arg = applyFilter.length.should.equal(2);
                             });
                             describe('when called for a given row', function() {
-                                describe('applies given `filter` to each column in `object.fields`', function () {
+                                describe('applies given `filter` to each column in `object.fields`', function() {
                                     beforeEach(function() {
                                         applyFilter.call(object, ROW_INDEX, DATA[ROW_INDEX]);
                                     });
                                     it('exactly twice (because 2nd filter stub returns `true`)', function() {
                                         filterStub.calledTwice;
                                     });
-                                    it('with (cell value, row object, row number)', function () {
+                                    it('with (cell value, row object, row number)', function() {
                                         filterStub.getCall(0).calledWith(0, DATA[ROW_INDEX], ROW_INDEX);
                                         filterStub.getCall(1).calledWith(2, DATA[ROW_INDEX], ROW_INDEX);
                                     });
@@ -120,17 +120,17 @@ module.exports = function() {
             });
         });
 
-        test.method('getRowCount', 0, function () {
-            describe('filtering is active so', function () {
-                it('returns number of hits (which may be none)', function () {
-                    object.set(function () {});
+        test.method('getRowCount', 0, function() {
+            describe('filtering is active so', function() {
+                it('returns number of hits (which may be none)', function() {
+                    object.set(function() {});
                     object.index.push(3);
                     object.index.push(4);
                     object.getRowCount().should.equal(2);
                 });
             });
-            describe('filtering is inactive so', function () {
-                it('returns all rows', function () {
+            describe('filtering is inactive so', function() {
+                it('returns all rows', function() {
                     object.getRowCount().should.equal(DATA.length);
                 });
             });

@@ -3,23 +3,20 @@
 var Map = require('./util/Map');
 var DataNodeBase = require('./DataNodeBase');
 
-module.exports = (function() {
+var expandedMap = {
+    true: '▾',
+    false: '▸'
+};
 
-    var ExpandedMap = {
-        true: '▾',
-        false: '▸'
-    };
-    var depthString = '                                                                                ';
+var DataNodeGroup = DataNodeBase.extend({
 
-    function DataNodeGroup(key) {
-        DataNodeBase.call(this, key);
+    extendable: true,
+
+    initialize: function(key) { // eslint-disable-line no-unused-vars
         this.children = new Map();
-    }
+    },
 
-    DataNodeGroup.prototype = Object.create(DataNodeBase.prototype);
-    DataNodeGroup.prototype.constructor = DataNodeGroup;
-
-    DataNodeGroup.prototype.prune = function(depth) {
+    prune: function(depth) {
         this.depth = depth;
         this.children = this.children.values;
         for (var i = 0; i < this.children.length; i++) {
@@ -27,22 +24,20 @@ module.exports = (function() {
             child.prune(this.depth + 1);
         }
         this.data[0] = this.computeDepthString();
-    };
+    },
 
-    DataNodeGroup.prototype.computeDepthString = function() {
-        var icon = ExpandedMap[this.expanded + ''];
-        var string = depthString.substring(0, this.depth * 3) + icon + ' ' + this.label;
-        return string;
-    };
+    computeDepthString: function() {
+        return Array(3 * this.depth + 1).join(' ') + expandedMap[this.expanded] + ' ' + this.label;
+    },
 
-    DataNodeGroup.prototype.getAllRowIndexes = function() {
+    getAllRowIndexes: function() {
         if (this.rowIndexes.length === 0) {
             this.rowIndexes = this.computeAllRowIndexes();
         }
         return this.rowIndexes;
-    };
+    },
 
-    DataNodeGroup.prototype.computeAllRowIndexes = function() {
+    computeAllRowIndexes: function() {
         var result = [];
         for (var i = 0; i < this.children.length; i++) {
             var child = this.children[i];
@@ -50,17 +45,17 @@ module.exports = (function() {
             Array.prototype.splice.apply(result, [result.length, 0].concat(childIndexes));
         }
         return result;
-    };
+    },
 
-    DataNodeGroup.prototype.toggleExpansionState = function(aggregator) { /* aggregator */
+    toggleExpansionState: function(aggregator) { /* aggregator */
         this.expanded = !this.expanded;
         this.data[0] = this.computeDepthString();
         if (this.expanded) {
             this.computeAggregates(aggregator);
         }
-    };
+    },
 
-    DataNodeGroup.prototype.computeAggregates = function(aggregator) {
+    computeAggregates: function(aggregator) {
         this.applyAggregates(aggregator);
         if (!this.expanded) {
             return; // were not being viewed, don't have child nodes do computation;
@@ -68,9 +63,9 @@ module.exports = (function() {
         for (var i = 0; i < this.children.length; i++) {
             this.children[i].computeAggregates(aggregator);
         }
-    };
+    },
 
-    DataNodeGroup.prototype.buildView = function(aggregator) {
+    buildView: function(aggregator) {
         aggregator.view.push(this);
         if (this.expanded) {
             for (var i = 0; i < this.children.length; i++) {
@@ -78,9 +73,9 @@ module.exports = (function() {
                 child.buildView(aggregator);
             }
         }
-    };
+    },
 
-    DataNodeGroup.prototype.computeHeight = function() {
+    computeHeight: function() {
         var height = 1; //I'm 1 high
         if (!this.expanded) {
             this.height = 1;
@@ -91,8 +86,8 @@ module.exports = (function() {
             this.height = height;
         }
         return this.height;
-    };
+    }
 
-    return DataNodeGroup;
+});
 
-})();
+module.exports = DataNodeGroup;

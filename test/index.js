@@ -14,3 +14,8 @@ require('./DataSourceFilter')();
 require('./DataSourceGlobalFilter')();
 require('./DataSourceSorter')();
 require('./DataSourceSorterComposite')();
+require('./DataSourceAggregator')();
+require('./DataNodeBase')();
+require('./DataNodeGroup')();
+require('./DataNodeTree')();
+require('./DataNodeLeaf')();

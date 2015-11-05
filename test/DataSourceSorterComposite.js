@@ -7,9 +7,9 @@ var DataSource = require('../src/js/DataSource');
 var DataSourceSorter = require('../src/js/DataSourceSorter');
 
 module.exports = function() {
-    test.constructorModule('DataSourceSorterComposite', function (DataSourceSorterComposite) {
+    test.constructorModule('DataSourceSorterComposite', function(DataSourceSorterComposite) {
         var dataSource,  DATA;
-        beforeEach(function () {
+        beforeEach(function() {
             DATA = [
                 [10, 21, 766],
                 [11, 35, 463],
@@ -21,7 +21,7 @@ module.exports = function() {
             object = new DataSourceSorterComposite(dataSource);
         });
 
-        it('descends from DataSourceIndexed', function () {
+        it('descends from `DataSourceIndexed`', function() {
             object.should.be.an.instanceof(require('../src/js/DataSourceIndexed'));
         });
 
@@ -29,18 +29,18 @@ module.exports = function() {
             it('is initialized to 1st arg to constructor (by underlying DataSourceIndexed initializer so we don\'t really need to check it here but whatever)', function() {
                 object.dataSource.should.equal(dataSource);
             });
-            it('descends from DataSource', function() {
+            it('descends from `DataSource`', function() {
                 dataSource.should.be.instanceof(DataSource);
             });
         });
 
         test.property('last', true, function() {
-            it('initialized to *private* `dataSource`', function () {
+            it('initialized to *private* `dataSource`', function() {
                 object.last.should.equal(object.dataSource);
             });
         });
 
-        test.property('sorts', true, function () {
+        test.property('sorts', true, function() {
             it('initialized to empty array', function() {
                 object.sorts.should.be.an.Array();
                 object.sorts.length.should.equal(0);
@@ -52,17 +52,17 @@ module.exports = function() {
                 object.sortOn(2, 1);
                 object.sortOn(1, -1);
             });
-            test.method('sortOn', 2, function () {
-                it('builds a list', function () {
+            test.method('sortOn', 2, function() {
+                it('builds a list', function() {
                     should(object.sorts).deepEqual([[2, 1], [1, -1]]);
                 })
             });
-            test.method('clearSorts', 0, function () {
-                it('clears list', function () {
+            test.method('clearSorts', 0, function() {
+                it('clears list', function() {
                     object.clearSorts();
                     object.sorts.length.should.equal(0);
                 });
-                it('resets `last` to `dataSource`', function () {
+                it('resets `last` to `dataSource`', function() {
                     object.last = null; // already set to dataSource on initialization so step on it
                     object.clearSorts();
                     object.last.should.equal(object.dataSource);
@@ -72,7 +72,7 @@ module.exports = function() {
 
         test.method('applySorts', 0, function() {
             describe('when no defined sorts', function() {
-                it('sets *private* `last` to `dataSource`', function () {
+                it('sets *private* `last` to `dataSource`', function() {
                     object.last = null; // already set to dataSource on initialization so step on it
                     object.applySorts();
                     object.last.should.equal(object.dataSource);
@@ -87,7 +87,7 @@ module.exports = function() {
                 });
 
                 test.method('getValue', 2, function() {
-                    it('returns correct data', function () {
+                    it('returns correct data', function() {
                         object.getValue(2,0).should.equal(245);
                         object.getValue(2,1).should.equal(463);
                         object.getValue(2,2).should.equal(542);
@@ -97,7 +97,7 @@ module.exports = function() {
                 });
 
                 test.method('setValue', 3, function() {
-                    it('sets data correctly', function () {
+                    it('sets data correctly', function() {
                         object.setValue(2, 0, 2450);
                         object.dataSource.data[3][2].should.equal(2450);
                         object.getValue(2,0).should.equal(2450);
@@ -110,16 +110,16 @@ module.exports = function() {
                 });
 
                 describe('internally a new sorter is instantiated that', function() {
-                    it('sets *private* `last` to a `DataSourceSorter`', function () {
+                    it('sets *private* `last` to a `DataSourceSorter`', function() {
                         dataSourceSorter.should.be.an.instanceof(DataSourceSorter);
                     });
-                    it('data source is a `DataSource`', function () {
+                    it('data source is a `DataSource`', function() {
                         dataSourceSorter.dataSource.should.be.an.instanceof(DataSource);
                     });
-                    it('data source is `dataSource`', function () {
+                    it('data source is `dataSource`', function() {
                         dataSourceSorter.dataSource.should.equal(object.dataSource);
                     });
-                    it('data source `index` is correctly stable sorted', function () {
+                    it('data source `index` is correctly stable sorted', function() {
                         should(dataSourceSorter.index).deepEqual(EXPECTED_INDEX);
                     });
                 });
@@ -135,7 +135,7 @@ module.exports = function() {
                     object.applySorts();
                 });
 
-                it('`getValue()` returns correct data', function () {
+                it('`getValue()` returns correct data', function() {
                     object.getValue(2,0).should.equal(969);
                     object.getValue(2,1).should.equal(463);
                     object.getValue(2,2).should.equal(766);
@@ -144,7 +144,7 @@ module.exports = function() {
                 });
 
                 test.method('setValue', 3, function() {
-                    it('sets data correctly', function () {
+                    it('sets data correctly', function() {
                         object.setValue(2, 0, 2450);
                         object.dataSource.data[LOW_ORDER_INDEX[HIGH_ORDER_INDEX[0]]][2].should.equal(2450);
                         object.getValue(2,0).should.equal(2450);
@@ -164,22 +164,22 @@ module.exports = function() {
                         lowOrderSort = highOrderSort.dataSource; // this sort was done first
                     });
 
-                    it('sets *private* `last` to a `DataSourceSorter`', function () {
+                    it('sets *private* `last` to a `DataSourceSorter`', function() {
                         highOrderSort.should.be.an.instanceof(DataSourceSorter);
                     });
-                    it('the index is correctly stable sorted', function () {
+                    it('the index is correctly stable sorted', function() {
                         should(highOrderSort.index).deepEqual(HIGH_ORDER_INDEX);
                     });
-                    it('*private* `last`\'s data source is another `DataSourceSorter`', function () {
+                    it('*private* `last`\'s data source is another `DataSourceSorter`', function() {
                         lowOrderSort.should.be.an.instanceof(DataSourceSorter);
                     });
-                    it('the other data source\'s data source is a `DataSource`', function () {
+                    it('the other data source\'s data source is a `DataSource`', function() {
                         lowOrderSort.dataSource.should.be.an.instanceof(DataSource);
                     });
-                    it('the other data source\'s data source is `dataSource`', function () {
+                    it('the other data source\'s data source is `dataSource`', function() {
                         lowOrderSort.dataSource.should.equal(object.dataSource);
                     });
-                    it('the other data source\'s `index` is correctly stable sorted', function () {
+                    it('the other data source\'s `index` is correctly stable sorted', function() {
                         should(lowOrderSort.index).deepEqual(LOW_ORDER_INDEX);
                     });
                 });

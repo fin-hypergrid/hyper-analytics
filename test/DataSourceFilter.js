@@ -6,9 +6,9 @@ require('should-sinon'); // extends Object.should to make should-like asserts fo
 var DataSource = require('../src/js/DataSource');
 
 module.exports = function() {
-    test.constructorModule('DataSourceFilter', function (DataSourceFilter) {
+    test.constructorModule('DataSourceFilter', function(DataSourceFilter) {
         var DATA;
-        beforeEach(function () {
+        beforeEach(function() {
             DATA = [
                 [4, 25, 66],
                 [1, 22, 63],
@@ -20,59 +20,59 @@ module.exports = function() {
             object = new DataSourceFilter(dataSource);
         });
 
-        it('descends from DataSourceIndexed', function () {
+        it('descends from `DataSourceIndexed`', function() {
             object.should.be.instanceof(require('../src/js/DataSourceIndexed'));
         });
 
-        it('initializes `filters` to empty array', function () {
+        it('initializes `filters` to empty array', function() {
             object.filters.should.be.an.Array();
             object.filters.length.should.equal(0);
         });
 
-        describe('HAS TWO SIMILAR METHODS', function () {
+        describe('HAS TWO SIMILAR METHODS', function() {
             [
                 'add',
                 'set'
-            ].forEach(function (methodName) {
-                test.method(methodName, 2, function () {
+            ].forEach(function(methodName) {
+                test.method(methodName, 2, function() {
                     var index, filter;
-                    beforeEach(function () {
+                    beforeEach(function() {
                         index = [];
                         filter = function() {};
                         object[methodName](index, filter);
                     });
 
-                    it('adds 1st first param (`columnIndex`) to 2nd param (object `filter`) as property `columnIndex`', function () {
+                    it('adds 1st first param (`columnIndex`) to 2nd param (object `filter`) as property `columnIndex`', function() {
                         filter.columnIndex.should.equal(index);
                     });
-                    it('adds 2nd param (`filter`) to `filters` array', function () {
+                    it('adds 2nd param (`filter`) to `filters` array', function() {
                         object.filters.indexOf(filter).should.be.greaterThanOrEqual(0);
                     });
                 });
             });
         });
 
-        test.method('clear', 0, function () {
-            it('empties `filters`', function () {
+        test.method('clear', 0, function() {
+            it('empties `filters`', function() {
                 object.clear();
                 object.filters.length.should.equal(0);
             });
-            it('Calls `clearIndex`', function () {
+            it('Calls `clearIndex`', function() {
                 var spy = sinon.spy(object, 'clearIndex');
                 object.clear();
                 spy.should.be.called();
             });
         });
 
-        test.method('apply', 0, function () {
-            describe('when no defined filters', function () {
-                it('calls `clearIndex`', function () {
+        test.method('apply', 0, function() {
+            describe('when no defined filters', function() {
+                it('calls `clearIndex`', function() {
                     var spy = sinon.spy(object, 'clearIndex');
                     object.apply();
                     spy.should.be.called();
                 });
             });
-            describe('when at least 1 defined filter, rebuilds the index:', function () {
+            describe('when at least 1 defined filter, rebuilds the index:', function() {
                 var stub, filterStubA, filterStubB, ROW_INDEX = 2;
                 beforeEach(function() {
                     buildIndexStub = sinon.stub(object, 'buildIndex');
@@ -82,8 +82,8 @@ module.exports = function() {
                     object.add(1, filterStubB);
                     object.apply();
                 });
-                describe('calls `buildIndex`', function () {
-                    it('called exactly once', function () {
+                describe('calls `buildIndex`', function() {
+                    it('called exactly once', function() {
                         buildIndexStub.should.be.calledOnce();
                     });
                     describe('with a single parameter that', function() {
@@ -91,28 +91,28 @@ module.exports = function() {
                         beforeEach(function() {
                             applyFilter = buildIndexStub.getCall(0).args[0];
                         });
-                        it('is the only parameter', function () {
+                        it('is the only parameter', function() {
                             buildIndexStub.getCall(0).args.length.should.equal(1);
                         });
-                        it('is a co-routine', function () {
+                        it('is a co-routine', function() {
                             var arg = applyFilter.should.be.a.Function();
                         });
-                        describe('that', function () {
-                            it('takes 2 parameters', function () {
+                        describe('that', function() {
+                            it('takes 2 parameters', function() {
                                 var arg = applyFilter.length.should.equal(2);
                             });
                             describe('when called for a given row', function() {
-                                it('calls each filter in turn with (cell value, row object, row number)', function () {
+                                it('calls each filter in turn with (cell value, row object, row number)', function() {
                                     applyFilter.call(object, ROW_INDEX, DATA[ROW_INDEX]);
                                     filterStubA.calledWith(4, DATA[ROW_INDEX], ROW_INDEX);
                                     filterStubB.calledWith(1, DATA[ROW_INDEX], ROW_INDEX);
                                 });
                                 describe('returns', function() {
-                                    it('`true` when all filters pass (return truthy)', function () {
+                                    it('`true` when all filters pass (return truthy)', function() {
                                         var results = applyFilter.call(object, 2, DATA[2]);
                                         results.should.be.true();
                                     });
-                                    it('`false` when any filter fails (returns falsy)', function () {
+                                    it('`false` when any filter fails (returns falsy)', function() {
                                         filterStubB.returns(false);
                                         var results = applyFilter.call(object, 2, DATA[2]);
                                         results.should.be.false();
@@ -125,17 +125,17 @@ module.exports = function() {
             });
         });
 
-        test.method('getRowCount', 0, function () {
-            describe('filtering is active so', function () {
-                it('returns number of hits (which may be none)', function () {
-                    object.filters.push(function () {});
+        test.method('getRowCount', 0, function() {
+            describe('filtering is active so', function() {
+                it('returns number of hits (which may be none)', function() {
+                    object.filters.push(function() {});
                     object.index.push(3);
                     object.index.push(4);
                     object.getRowCount().should.equal(2);
                 });
             });
-            describe('filtering is inactive so', function () {
-                it('return all rows', function () {
+            describe('filtering is inactive so', function() {
+                it('return all rows', function() {
                     object.getRowCount().should.equal(DATA.length);
                 });
             })

@@ -7,9 +7,9 @@ var stableSort = require('../src/js/stableSort');
 var DataSource = require('../src/js/DataSource');
 
 module.exports = function() {
-    test.constructorModule('DataSourceSorter', function (DataSourceSorter) {
+    test.constructorModule('DataSourceSorter', function(DataSourceSorter) {
         var DATA;
-        beforeEach(function () {
+        beforeEach(function() {
             DATA = [
                 [4, 25, 66],
                 [1, 22, 63],
@@ -21,26 +21,26 @@ module.exports = function() {
             object = new DataSourceSorter(dataSource);
         });
 
-        it('descends from DataSourceIndexed', function () {
+        it('descends from `DataSourceIndexed`', function() {
             object.should.be.instanceof(require('../src/js/DataSourceIndexed'));
         });
 
         // TODO: descendingSort does not seem to be in use anywhere
         test.property('descendingSort', function() {
-            it('initialized to `false`', function () {
+            it('initialized to `false`', function() {
                 object.descendingSort.should.false();
             });
         });
 
-        test.method('sortOn', 2, function () {
+        test.method('sortOn', 2, function() {
             describe('when 2nd parameter (`direction`) is 0', function() {
-                it('clears the index by calling `clearIndex`', function () {
+                it('clears the index by calling `clearIndex`', function() {
                     var spy = sinon.spy(object, 'clearIndex');
                     object.sortOn(2, 0);
                     spy.should.be.called();
                 });
             });
-            describe('when 2nd parameter (`direction`) is -1 or 1', function () {
+            describe('when 2nd parameter (`direction`) is -1 or 1', function() {
                 var colIdx = 2;
                 describe('calls `stableSort`', function() {
                     var DIRECTION = 1;

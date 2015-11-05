@@ -23,16 +23,16 @@ function constructorModule(name, extendExpectation, tearDown) {
 
     _module(name, function() {
         var Constructor = require('../../src/js/' + name);
-        it('is a function', function () {
+        it('is a function', function() {
             Constructor.should.be.a.Function();
         });
-        describe('is a constructor that', function () {
+        describe('is a constructor that', function() {
             if (extendExpectation) {
-                describe('has an `extend` method that', function() {
+                describe('is "extedable," having been "extendified" with an `extend` method that', function() {
                     it('exists', function() {
                         Constructor.should.have.property('extend');
                     });
-                    it('properly references the `extend` function', function() {
+                    it('references the `extend()` function', function() {
                         Constructor.extend.should.equal(extend);
                     });
                 });
@@ -115,7 +115,7 @@ function property(name, isPrivate, tearDown) {
         });
 
         if (tearDown) {
-            tearDown();
+            tearDown(object[name]);
         }
     })
 }

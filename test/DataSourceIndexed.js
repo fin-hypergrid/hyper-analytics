@@ -29,10 +29,10 @@ module.exports = function() {
             });
 
             test.property('dataSource', function() {
-                it('is initialized to 1st arg to constructor', function() {
+                it('is initialized to 1st arg of constructor', function() {
                     object.dataSource.should.equal(dataSource);
                 });
-                it('descends from DataSource', function() {
+                it('descends from `DataSource`', function() {
                     dataSource.should.be.instanceof(DataSource);
                 });
             });
@@ -149,12 +149,12 @@ module.exports = function() {
             });
 
             test.method('clearIndex', 0, function() {
-                it('maintains same `index` array as originally set by constructor', function () {
+                it('maintains same `index` array as originally set by constructor', function() {
                     var index = object.index;
                     object.clearIndex();
                     object.index.should.equal(index);
                 });
-                it('empties `index` array', function () {
+                it('empties `index` array', function() {
                     object.index = [2, 4];
                     object.index.length.should.not.equal(0);
                     object.clearIndex();
@@ -164,13 +164,13 @@ module.exports = function() {
 
             test.method('buildIndex', 1, function() {
                 describe('with no parameters', function() {
-                    it('sets `index` to initial state', function () {
+                    it('sets `index` to initial state', function() {
                         object.buildIndex();
                         should(object.index).deepEqual(INDEX_VECTOR);
                     });
                 });
             describe('with single parameter (`predicate`),', function() {
-                    it('predicate is called with expected parameters', function () {
+                    it('predicate is called with expected parameters', function() {
                         var dump = [];
                         function predicate(r, rowObject) {
                             dump[r] = rowObject;
@@ -178,7 +178,7 @@ module.exports = function() {
                         object.buildIndex(predicate);
                         should(dump).deepEqual(DATA);
                     });
-                    it('sets `index` correctly using a predicate', function () {
+                    it('sets `index` correctly using a predicate', function() {
                         function oddRowsOnly(r, rowObject) {
                             return r & 1;
                         }

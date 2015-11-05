@@ -1,10 +1,18 @@
 'use strict';
 
-module.exports = (function() {
+var extendify = require('./util/extend').extendify;
 
-    var depthString = '                                                                                ';
+function DataNodeBase(key) {
+    this.initialize(key);
+}
 
-    function DataNodeBase(key) {
+DataNodeBase.prototype = {
+
+    constructor: DataNodeBase.prototype.constructor, // preserve constructor
+
+    isNullObject: false,
+
+    initialize: function(key) {
         this.label = key;
         this.data = [''];
         this.rowIndexes = [];
@@ -12,37 +20,34 @@ module.exports = (function() {
         this.depth = 0;
         this.height = 1;
         this.expanded = false;
-    }
+    },
 
-    DataNodeBase.prototype.isNullObject = false;
-
-    DataNodeBase.prototype.getValue = function(x) {
+    getValue: function(x) {
         return this.data[x];
-    };
+    },
 
-    DataNodeBase.prototype.prune = function(depth) {
+    prune: function(depth) {
         this.depth = depth;
         this.data[0] = this.computeDepthString();
-    };
+    },
 
-    DataNodeBase.prototype.computeDepthString = function() {
-        var string = depthString.substring(0, 2 + (this.depth * 3)) + this.label;
-        return string;
-    };
+    computeDepthString: function() {
+        return Array(3 * this.depth + 3).join(' ') + this.label;
+    },
 
-    DataNodeBase.prototype.computeHeight = function() {
+    computeHeight: function() {
         return 1;
-    };
+    },
 
-    DataNodeBase.prototype.getAllRowIndexes = function() {
+    getAllRowIndexes: function() {
         return this.rowIndexes;
-    };
+    },
 
-    DataNodeBase.prototype.computeAggregates = function(aggregator) {
+    computeAggregates: function(aggregator) {
         this.applyAggregates(aggregator);
-    };
+    },
 
-    DataNodeBase.prototype.applyAggregates = function(aggregator) {
+    applyAggregates: function(aggregator) {
         var hasGroupsOffset = aggregator.hasGroups() ? 1 : 0;
         var indexes = this.getAllRowIndexes();
         if (indexes.length === 0) {
@@ -61,16 +66,18 @@ module.exports = (function() {
         }
 
         this.data = data;
-    };
+    },
 
-    DataNodeBase.prototype.buildView = function(aggregator) {
+    buildView: function(aggregator) {
         aggregator.view.push(this);
-    };
+    },
 
-    DataNodeBase.prototype.toggleExpansionState = function() { /* aggregator */
+    toggleExpansionState: function() { /* aggregator */
         //do nothing by default
-    };
+    }
 
-    return DataNodeBase;
+};
 
-})();
+extendify(DataNodeBase);
+
+module.exports = DataNodeBase;

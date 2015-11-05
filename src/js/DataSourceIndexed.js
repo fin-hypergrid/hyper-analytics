@@ -7,6 +7,7 @@ function DataSourceIndexed(dataSource) {
 }
 
 DataSourceIndexed.prototype = {
+
     constructor: DataSourceIndexed.prototype.constructor, // preserve constructor
 
     isNullObject: false,
@@ -80,6 +81,7 @@ DataSourceIndexed.prototype = {
             }
         }
     }
+
 };
 
 extendify(DataSourceIndexed);

@@ -1,7 +1,7 @@
 var test = require('./util/test');
 
 module.exports = function() {
-    test.module('aggregations', function () {
+    test.module('aggregations', function() {
         object = require('../src/js/aggregations');
 
         var group = {
@@ -12,34 +12,34 @@ module.exports = function() {
                 [13, 54, 35],
                 [10, 51, 32]
             ],
-            getRowCount: function () {
+            getRowCount: function() {
                 return group.rows.length;
             },
-            getValue: function (c, r) {
+            getValue: function(c, r) {
                 return group.rows[r][c];
             }
         };
 
         function isMetaMethodThatWhenMetaCalledReturnsResults(methodName, expectedResults, parms) {
             var method;
-            beforeEach(function () {
+            beforeEach(function() {
                 method = object[methodName];
             });
-            test.method(methodName, 1, function () {
-                describe('returns a value that', function () {
+            test.method(methodName, 1, function() {
+                describe('returns a value that', function() {
                     var func;
-                    beforeEach(function () {
+                    beforeEach(function() {
                         func = method(0);
                     });
-                    it('is a function', function () {
+                    it('is a function', function() {
                         func.should.be.a.Function();
                     });
-                    describe('when called', function () {
-                        it('takes a single parameter', function () {
+                    describe('when called', function() {
+                        it('takes a single parameter', function() {
                             func.length.should.equal(1);
                         });
-                        describe('with a "group" object,', function () {
-                            it('returns group\'s "' + methodName + '"', function () {
+                        describe('with a "group" object,', function() {
+                            it('returns group\'s "' + methodName + '"', function() {
                                 for (var columnIndex = group.rows[0].length; columnIndex--;) {
                                     var func = method(columnIndex);
                                     func(group).should.equal(expectedResults[columnIndex]);

@@ -13,15 +13,14 @@ var headerify = require('./util/headerify');
 // c is a list of constraints,
 
 function DataSourceAggregator(dataSource) {
-    this.tree = new DataNodeTree('Totals');
-    this.indexes = [];
     this.dataSource = dataSource;
+    this.tree = new DataNodeTree('Totals');
+    this.index = [];
     this.aggregates = [];
     this.groupBys = [];
     this.view = [];
     this.sorterInstance = {};
     this.presortGroups = true;
-    this.lastAggregate = {};
     this.setAggregates({});
 }
 
@@ -31,9 +30,9 @@ DataSourceAggregator.prototype = {
     isNullObject: false,
 
     setAggregates: function(aggregations) {
+        var i, props = [];
+
         this.lastAggregate = aggregations;
-        var props = [];
-        var i;
         this.clearAggregations();
         this.headers = [];
 
@@ -170,7 +169,7 @@ DataSourceAggregator.prototype = {
 
     getColumnCount: function() {
         if (!this.viewMakesSense()) {
-            return this.dataSource('getColumnCount');
+            return this.dataSource.getColumnCount();
         }
         return this.getHeaders().length;
     },
@@ -190,7 +189,7 @@ DataSourceAggregator.prototype = {
 
     getHeaders: function() {
         if (!this.viewMakesSense()) {
-            return this.dataSource('getHeaders');
+            return this.dataSource.getHeaders();
         }
         return this.headers; // TODO: Views override dataSource headers with their own headers?
     },
@@ -223,7 +222,7 @@ DataSourceAggregator.prototype = {
     },
 
     setData: function(arrayOfUniformObjects) {
-        this.dataSource('setData', arrayOfUniformObjects);
+        this.dataSource.setData(arrayOfUniformObjects);
         this.apply();
     }
 };

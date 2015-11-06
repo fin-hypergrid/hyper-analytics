@@ -4,8 +4,8 @@ var Map = require('./util/Map');
 var DataNodeBase = require('./DataNodeBase');
 
 var expandedMap = {
-    true: '▾',
-    false: '▸'
+    true: '\u25be', // '▾'
+    false: '\u25b8' // '▸'
 };
 
 var DataNodeGroup = DataNodeBase.extend({
@@ -19,31 +19,31 @@ var DataNodeGroup = DataNodeBase.extend({
     prune: function(depth) {
         this.depth = depth;
         this.children = this.children.values;
-        for (var i = 0; i < this.children.length; i++) {
-            var child = this.children[i];
+        this.children.forEach(function(child) {
             child.prune(this.depth + 1);
-        }
+        });
         this.data[0] = this.computeDepthString();
     },
 
     computeDepthString: function() {
-        return Array(3 * this.depth + 1).join(' ') + expandedMap[this.expanded] + ' ' + this.label;
+        return Array(3 * this.depth + 1).join(' ') +
+            expandedMap[this.expanded] + ' ' +
+            this.label;
     },
 
-    getAllRowIndexes: function() {
-        if (this.rowIndexes.length === 0) {
-            this.rowIndexes = this.computeAllRowIndexes();
+    getIndex: function() {
+        if (this.index.length === 0) {
+            this.index = this.computeIndex();
         }
-        return this.rowIndexes;
+        return this.index;
     },
 
-    computeAllRowIndexes: function() {
+    computeIndex: function() { // TODO: formerly computerAllRowIndexes
         var result = [];
-        for (var i = 0; i < this.children.length; i++) {
-            var child = this.children[i];
-            var childIndexes = child.getAllRowIndexes();
-            Array.prototype.splice.apply(result, [result.length, 0].concat(childIndexes));
-        }
+        result.append = append;
+        this.children.forEach(function(child) {
+            result.append(child.getIndex());
+        });
         return result;
     },
 
@@ -57,37 +57,47 @@ var DataNodeGroup = DataNodeBase.extend({
 
     computeAggregates: function(aggregator) {
         this.applyAggregates(aggregator);
-        if (!this.expanded) {
-            return; // were not being viewed, don't have child nodes do computation;
-        }
-        for (var i = 0; i < this.children.length; i++) {
-            this.children[i].computeAggregates(aggregator);
+        if (this.expanded) {
+            this.children.forEach(function(child) {
+                child.computeAggregates(aggregator);
+            });
         }
     },
 
     buildView: function(aggregator) {
         aggregator.view.push(this);
         if (this.expanded) {
-            for (var i = 0; i < this.children.length; i++) {
-                var child = this.children[i];
+            this.children.forEach(function(child) {
                 child.buildView(aggregator);
-            }
+            });
         }
     },
 
     computeHeight: function() {
-        var height = 1; //I'm 1 high
-        if (!this.expanded) {
-            this.height = 1;
-        } else {
-            for (var i = 0; i < this.children.length; i++) {
-                height = height + this.children[i].computeHeight();
-            }
-            this.height = height;
+        var height = 1;
+
+        if (this.expanded) {
+            this.children.forEach(function(child) {
+                height = height + child.computeHeight();
+            });
         }
-        return this.height;
+
+        return (this.height = height);
     }
 
 });
+
+/**
+ * @summary Array mixin to append another array to end of `this` one.
+ * @desc Appends in place, unlike `this.concat()` which creates a new array.
+ * Uses less memory than concat, important when `appendix` is huge.
+ * > CAUTION: Mutates `this` array!
+ * @param {Array} appendix
+ * @returns {Array} Reference to `this` (for convenience)
+ */
+function append(appendix) {
+    this.splice.bind(this, this.length, 0).apply(this, appendix);
+    return this;
+}
 
 module.exports = DataNodeGroup;

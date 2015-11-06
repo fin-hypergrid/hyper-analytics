@@ -24,67 +24,35 @@ module.exports = function() {
         });
 
         test.method('prune', 1, function() {
-            describe('TESTS', function() {
-                it('NEEDED!', function() {
-
-                });
-            });
+            it('TEST NEEDED!');
         });
 
         test.method('computeDepthString', 0, function() {
-            describe('TESTS', function() {
-                it('NEEDED!', function() {
-
-                });
-            });
+            it('TEST NEEDED!');
         });
 
-        test.method('getAllRowIndexes', 0, function() {
-            describe('TESTS', function() {
-                it('NEEDED!', function() {
-
-                });
-            });
+        test.method('getIndex', 0, function() {
+            it('TEST NEEDED!');
         });
 
-        test.method('computeAllRowIndexes', 0, function() {
-            describe('TESTS', function() {
-                it('NEEDED!', function() {
-
-                });
-            });
+        test.method('computeIndex', 0, function() {
+            it('TEST NEEDED!');
         });
 
         test.method('toggleExpansionState', 1, function() {
-            describe('TESTS', function() {
-                it('NEEDED!', function() {
-
-                });
-            });
+            it('TEST NEEDED!');
         });
 
         test.method('computeAggregates', 1, function() {
-            describe('TESTS', function() {
-                it('NEEDED!', function() {
-
-                });
-            });
+            it('TEST NEEDED!');
         });
 
         test.method('buildView', 1, function() {
-            describe('TESTS', function() {
-                it('NEEDED!', function() {
-
-                });
-            });
+            it('TEST NEEDED!');
         });
 
         test.method('computeHeight', 0, function() {
-            describe('TESTS', function() {
-                it('NEEDED!', function() {
-
-                });
-            });
+            it('TEST NEEDED!');
         });
     });
 };

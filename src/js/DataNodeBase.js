@@ -15,7 +15,7 @@ DataNodeBase.prototype = {
     initialize: function(key) {
         this.label = key;
         this.data = [''];
-        this.rowIndexes = [];
+        this.index = []; // TODO: formerly rowIndex
         this.hasChildren = false;
         this.depth = 0;
         this.height = 1;
@@ -39,37 +39,31 @@ DataNodeBase.prototype = {
         return 1;
     },
 
-    getAllRowIndexes: function() {
-        return this.rowIndexes;
-    },
-
-    computeAggregates: function(aggregator) {
-        this.applyAggregates(aggregator);
+    getIndex: function() { // TODO: formerly getAllRowIndexes
+        return this.index;
     },
 
     applyAggregates: function(aggregator) {
-        var hasGroupsOffset = aggregator.hasGroups() ? 1 : 0;
-        var indexes = this.getAllRowIndexes();
-        if (indexes.length === 0) {
-            return; // no data to rollup on
+        var index = this.getIndex();
+
+        if (index.length) {
+            var groupsOffset = Number(aggregator.hasGroups());
+
+            // redimension the data
+            var data = this.data;
+            data.length = aggregator.aggregates.length + groupsOffset;
+
+            var sorter = aggregator.sorterInstance;
+            sorter.index = index;
+
+            aggregator.aggregates.forEach(function(aggregate, i) {
+                data[i + groupsOffset] = aggregate(sorter);
+            });
         }
-        var aggregates = aggregator.aggregates;
-        var data = this.data;
-        data.length = aggregates.length + hasGroupsOffset;
-
-        var sorter = aggregator.sorterInstance;
-        sorter.indexes = indexes;
-
-        for (var i = 0; i < aggregates.length; i++) {
-            var aggregate = aggregates[i];
-            data[i + hasGroupsOffset] = aggregate(sorter);
-        }
-
-        this.data = data;
     },
 
     buildView: function(aggregator) {
-        aggregator.view.push(this);
+        aggregator.addView(this);
     },
 
     toggleExpansionState: function() { /* aggregator */
@@ -77,6 +71,8 @@ DataNodeBase.prototype = {
     }
 
 };
+
+DataNodeBase.prototype.computeAggregates = DataNodeBase.prototype.applyAggregates;
 
 extendify(DataNodeBase);
 

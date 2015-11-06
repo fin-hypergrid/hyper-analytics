@@ -9,8 +9,8 @@ var DataNodeLeaf = DataNodeBase.extend({
         this.data[0] = this.computeDepthString();
     },
 
-    getAllRowIndexes: function() {
-        return this.rowIndexes;
+    getIndex: function() {
+        return this.index;
     },
 
     computeAggregates: function(aggregator) {
@@ -18,7 +18,7 @@ var DataNodeLeaf = DataNodeBase.extend({
     },
 
     buildView: function(aggregator) {
-        aggregator.view.push(this);
+        aggregator.addView(this);
     },
 
     computeHeight: function() {

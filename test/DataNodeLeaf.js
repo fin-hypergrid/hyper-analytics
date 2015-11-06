@@ -1,7 +1,7 @@
 var test = require('./util/test');
 var should = require('should'); // extends `Object` (!) with `.should`; creates `should()`
-//var sinon = require('sinon');
-//require('should-sinon'); // extends Object.should to make should-like asserts for sinon spies
+var sinon = require('sinon');
+require('should-sinon'); // extends Object.should to make should-like asserts for sinon spies
 
 module.exports = function() {
     test.constructorModule('DataNodeLeaf', function(DataNodeLeaf) {
@@ -16,8 +16,9 @@ module.exports = function() {
         });
 
         test.method('prune', 1, function() {
-            var DEPTH = 3;
+            var DEPTH = 3, spy_computeDepthString;
             beforeEach(function() {
+                spy_computeDepthString = sinon.spy(object, 'computeDepthString');
                 object.prune(DEPTH);
             });
             test.property('depth', function() {
@@ -27,42 +28,59 @@ module.exports = function() {
             });
             test.property('data', function() {
                 describe('has an element [0] that', function() {
-                    it('result of calling `computeDepthString()`', function() {
-                        object.data[0].should.equal(object.computeDepthString());
-                        object.data[0].should.equal('           key');
+                    it('is derived by calling `computeDepthString()` (inherited from DataNodeBase)', function() {
+                        spy_computeDepthString.should.be.called();
+                    });
+                    it('consists of spaces + key', function() {
+                        (new RegExp('^ +' + KEY + '$')).test(object.data[0]).should.be.true();
                     });
                 });
             });
         });
 
-        test.method('getAllRowIndexes', 0, function() {
-            describe('TESTS', function() {
-                it('NEEDED!', function() {
-
+        test.method('getIndex', 0, function() {
+            describe('returns an object that', function() {
+                var value;
+                beforeEach(function() {
+                    value = object.getIndex();
+                });
+                it('is an array', function() {
+                    value.should.be.an.Array();
+                });
+                it('returns `index`', function() {
+                    value.should.equal(object.index);
                 });
             });
         });
 
         test.method('computeAggregates', 1, function() {
-            describe('TESTS', function() {
-                it('NEEDED!', function() {
-
-                });
+            it('calls `applyAggregates` with 1st arg `aggregator`', function() {
+                var aggregator = {};
+                var stub_applyAggregates = sinon.stub(object, 'applyAggregates');
+                object.computeAggregates(aggregator);
+                stub_applyAggregates.should.be.calledWith(aggregator);
             });
         });
 
         test.method('buildView', 1, function() {
-            describe('TESTS', function() {
-                it('NEEDED!', function() {
-
-                });
+            it('adds self to given aggregator\'s view', function() {
+                var aggregator = { addView: sinon.spy() };
+                object.buildView(aggregator);
+                aggregator.addView.should.be.calledWith(object);
             });
         });
 
         test.method('computeHeight', 0, function() {
-            describe('TESTS', function() {
-                it('NEEDED!', function() {
-
+            describe('returns an object that', function() {
+                var value;
+                beforeEach(function() {
+                    value = object.computeHeight();
+                });
+                it('is a number', function() {
+                    value.should.be.a.Number();
+                });
+                it('returns the number `1`', function() {
+                    value.should.equal(1);
                 });
             });
         });

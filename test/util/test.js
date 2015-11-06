@@ -14,21 +14,27 @@ function _module(name, tearDown) {
     describe(blankline + header + blankline + 'has a module "' + name +'" that', tearDown);
 }
 
-function constructorModule(name, extendExpectation, tearDown) {
+function constructorModule(pathname, extendExpectation, tearDown) {
     if (typeof extendExpectation === 'function') {
         // overload: `extend` omitted
         tearDown = extendExpectation;
         extendExpectation = undefined;
     }
 
+    var matches = pathname.match(/(\.)?(.*\/)(.*)/),
+        dflt = constructorModule.defaultPath,
+        path = !matches ? dflt : matches[1] ? matches[2] : dflt + matches[2],
+        name = !matches ? pathname : matches[3],
+        xxx = console.log(path, name),
+        Constructor = require(path + name);
+
     _module(name, function() {
-        var Constructor = require('../../src/js/' + name);
         it('is a function', function() {
             Constructor.should.be.a.Function();
         });
         describe('is a constructor that', function() {
             if (extendExpectation) {
-                describe('is "extedable," having been "extendified" with an `extend` method that', function() {
+                describe('is "extendable," having been "extendified" with an `extend` method that', function() {
                     it('exists', function() {
                         Constructor.should.have.property('extend');
                     });
@@ -63,6 +69,8 @@ function constructorModule(name, extendExpectation, tearDown) {
         }
     });
 }
+
+constructorModule.defaultPath = '../../src/js/';
 
 function method(name, parms, setup, tearDown) {
     if ((!tearDown)) {
@@ -115,14 +123,22 @@ function property(name, isPrivate, tearDown) {
         });
 
         if (tearDown) {
-            tearDown(object[name]);
+            tearDown();
         }
     })
 }
+
+function nullfunc() {}
 
 module.exports = {
     module: _module,
     constructorModule: constructorModule,
     method: method,
-    property: property
+    property: property,
+    skip: {
+        module: nullfunc,
+        constructorModule: nullfunc,
+        method: nullfunc,
+        property: nullfunc
+    }
 };

@@ -5,6 +5,7 @@ var DataNodeTree = require('./DataNodeTree');
 var DataNodeGroup = require('./DataNodeGroup');
 var DataNodeLeaf = require('./DataNodeLeaf');
 var headerify = require('./util/headerify');
+var _ = require('./util/mu');
 
 //?[t,c,b,a]
 // t is a dataSource,
@@ -30,30 +31,14 @@ DataSourceAggregator.prototype = {
     isNullObject: false,
 
     setAggregates: function(aggregations) {
-        var i, props = [];
-
         this.lastAggregate = aggregations;
         this.clearAggregations();
-        this.headers = [];
+        this.headers = this.hasGroups() ? [this.headers.push('Tree')] : [];
 
-        for (var key in aggregations) {
-            props.push([key, aggregations[key]]);
-        }
-
-        // if (props.length === 0) {
-        //     var fields = [].concat(this.dataSource.getFields());
-        //     for (i = 0; i < fields.length; i++) {
-        //         props.push([fields[i], Aggregations.first(i)]); /* jshint ignore:line */
-        //     }
-        // }
-        if (this.hasGroups()) {
-            this.headers.push('Tree');
-        }
-
-        for (i = 0; i < props.length; i++) {
-            var agg = props[i];
-            this.addAggregate(agg[0], agg[1]);
-        }
+        var self = this;
+        _(aggregations).each(function(aggregation, key) {
+            self.addAggregate(key, aggregation);
+        });
     },
 
     addAggregate: function(label, func) {
@@ -62,10 +47,11 @@ DataSourceAggregator.prototype = {
     },
 
     setGroupBys: function(columnIndexArray) {
-        this.groupBys.length = 0;
-        for (var i = 0; i < columnIndexArray.length; i++) {
-            this.groupBys.push(columnIndexArray[i]);
-        }
+        var groupBys = this.groupBys;
+        groupBys.length = 0;
+        columnIndexArray.forEach(function(columnIndex) {
+            groupBys.push(columnIndex);
+        });
         this.setAggregates(this.lastAggregate);
     },
 
@@ -74,11 +60,11 @@ DataSourceAggregator.prototype = {
     },
 
     hasGroups: function() {
-        return this.groupBys.length > 0;
+        return !!this.groupBys.length;
     },
 
     hasAggregates: function() {
-        return this.aggregates.length > 0;
+        return !!this.aggregates.length;
     },
 
     apply: function() {
@@ -95,49 +81,42 @@ DataSourceAggregator.prototype = {
     },
 
     buildGroupTree: function() {
-        var c, r, g, value, createFunc;
-        var createBranch = function(key, map) {
-            value = new DataNodeGroup(key);
-            map.set(key, value);
-            return value;
-        };
-        var createLeaf = function(key, map) {
-            value = new DataNodeLeaf(key);
-            map.set(key, value);
-            return value;
-        };
-        var groupBys = this.groupBys;
-        var source = this.dataSource;
-        var rowCount = source.getRowCount();
+        var groupBys = this.groupBys,
+            leafDepth = groupBys.length - 1,
+            source = this.dataSource,
+            rowCount = source.getRowCount(),
+            tree = this.tree = new DataNodeTree('Totals');
 
-        // lets sort our data first....
+        // first sort data
         if (this.presortGroups) {
-            for (c = 0; c < groupBys.length; c++) {
-                g = groupBys[groupBys.length - c - 1];
+            groupBys.reverse().forEach(function(groupBy) {
                 source = new DataSourceSorter(source);
-                source.sortOn(g);
-            }
+                source.sortOn(groupBy);
+            });
         }
 
-        var tree = this.tree = new DataNodeTree('Totals');
-        var path = tree;
-        var leafDepth = groupBys.length - 1;
-        for (r = 0; r < rowCount; r++) {
-            for (c = 0; c < groupBys.length; c++) {
-                g = groupBys[c];
-                value = source.getValue(g, r);
+        for (var r = 0; r < rowCount; r++) {
+            var path = tree;
 
-                //test that I'm not a leaf
-                createFunc = (c === leafDepth) ? createLeaf : createBranch;
-                path = path.children.getIfAbsent(value, createFunc);
-            }
-            path.rowIndexes.push(r);
-            path = tree;
+            groupBys.forEach(function(g, c) { // eslint-disable-line no-loop-func
+                var key = source.getValue(g, r),
+                    terminalNode = (c === leafDepth),
+                    Constructor = terminalNode ? DataNodeLeaf : DataNodeGroup,
+                    ifAbsentFunc = createNode.bind(Constructor);
+                path = path.children.getIfAbsent(key, ifAbsentFunc);
+            });
+
+            path.index.push(r);
         }
+
         this.sorterInstance = new DataSourceSorter(source);
         tree.prune();
-        this.tree.computeAggregates(this);
+        tree.computeAggregates(this);
         this.buildView();
+    },
+
+    addView: function(dataNode) {
+        this.view.push(dataNode);
     },
 
     buildView: function() {
@@ -226,5 +205,11 @@ DataSourceAggregator.prototype = {
         this.apply();
     }
 };
+
+function createNode(DataNodeConstructor, key, map) {
+    var value = new DataNodeConstructor(key);
+    map.set(key, value);
+    return value;
+}
 
 module.exports = DataSourceAggregator;

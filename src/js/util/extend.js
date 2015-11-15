@@ -1,22 +1,6 @@
 'use strict';
 
-var _ = require('./mu');
-
-/** @summary Mix `extend` into your object.
- * @param {function} Constructor
- * @param {string} [accessorName]
- */
-function extendify(Constructor, options) {
-    // add the extender as a property of the function (not the prototype!)
-    Constructor.extend = extend;
-
-    if (options) {
-        if (options.accessor) {
-            // add base class access as a property of the prototype
-            Constructor.prototype[options.accessor] = accessor;
-        }
-    }
-}
+var _ = require('object-iterators');
 
 /** @summary Extends an existing constructor into a new constructor.
  *
@@ -28,22 +12,26 @@ function extendify(Constructor, options) {
  *
  * Provide a constructor as the context and any prototype additions you require in the first argument.
  *
- * For example, if you wish to extend from `YourObject` with prototype additions in an object `prototype`, usage is:
+ * For example, if you wish to extend `BaseConstructor` to a new constructor with prototype overrides and/or additions, usage is:
  * ```javascript
- * extend.call(YourObject, prototype);`
+ * extend.call(BaseConstructor, prototypeAdditions);`
  * ```
- * or if mixed into your object (see `extend: true` below), call it this way:
+ * More elegantly, you can mix it in:
  * ```javascript
- * yourObject.extend(prototype);
+ * BaseConstructor.extend = extend
  * ```
+ * and call it like this:
+ * ```javascript
+ * var ExtendedConstructor = BaseConstructor.extend(prototypeAdditions);
+ * ```
+ * To make `ExtendedConstructor` itself extensible, give it too an `extend` property as above, or simply include the special property `extendable: true` (see below) in the prototype additions, which attaches the `extend` property to the constructor for you.
  *
  * @param {object} prototype - Object with members to copy to new constructor's prototype. Some have special meanings:
  * * `initialize: function() {...}` - Additional constructor code for new object. Gets passed new object as context + same args as constructor itself. Called on instantiation after similar function in all ancestors called with same signature.
  * * `initializeOwn: function() {...}` - Additional constructor code for new object. Gets passed new object as context + same args as constructor itself. Called on instantiation after (all) the `initialize` function(s).
- * * `extendable: true` - Mixes this function into the prototype of the new extended object constructor, essentialy making the object itself extensible.
- * * `extendable: 'name'` - Same as above but also mixes in an accessor method with this string as its name.
- * * `aliases: {...}` - Hash of aliases for prototype members in form `{ alias: 'member', ... }` where `'member'` is the name of an existing member in the prototype. Alternatively, ...
- * * `key: '#xxx'` - Adds an alias `key` with same value as existing member `xxx`.
+ * * `extendable: true` - Adds this function (`extend()`) as a property `.extend()` of the new extended object constructor, essentially making the object constructor itself easily "extensible" (i.e, able to create new constructors that inherit form this constructor). (Alternatively, even without doing this, you can always extend from any constructor by calling `extend.call(ConstructorToInheritFrom, {...})`.) (Not added to prototype.)
+ * * `aliases: {...}` - Hash of aliases for prototype members in form `{ key: 'member', ... }` where `key` is the name of an alieas and `'member'` is the name of an existing member in the prototype. Each such key is added to the prototype as a reference to the named member. (The `aliases` object itself is *not* added to prototype.) Alternatively:
+ * * `key: '#xxx'` - Adds an alias `key` with same value as existing member `xxx`. Simpler though subtler.
  */
 function extend(prototypeAdditions) {
     function Constructor() {
@@ -57,18 +45,16 @@ function extend(prototypeAdditions) {
     var prototype = Constructor.prototype = Object.create(this.prototype);
     prototype.constructor = Constructor;
 
+    prototype.super = this.prototype;
+
     if (prototypeAdditions) {
         _(prototypeAdditions).each(function(value, key) {
             switch (key) {
                 case 'initializeOwn':
-                    // already called above; no need to keep
+                    // already called above; not needed in prototype
                     break;
                 case 'extendable':
-                    if (typeof value === 'string') {
-                        extendify(Constructor, value);
-                    } else {
-                        extendify(Constructor);
-                    }
+                    Constructor.extend = extend;
                     break;
                 case 'aliases':
                     _(prototypeAdditions.aliases).each(makeAlias);
@@ -111,26 +97,5 @@ function initializePrototypeChain() {
         }
     }
 }
-/** @summary Method to access other members on the same prototype on which it is defined.
- * @returns Value of named non-method member; or result of calling named method.
- * @desc If member is a function, instead of returning it, the function is called with all the remaining arguments, and the result is returned.
- * @param memberName
- * @param {...*} args
- */
-function accessor(memberName) {
-    var result = this[memberName];
-
-    if (typeof result === 'function') {
-        var remainingArgs = Array.prototype.slice(arguments, 1);
-        result = result.apply(this, remainingArgs);
-    }
-
-    return result;
-}
-extend.testing = { // Testing interface - exposed for testing purposes only
-    accessor: accessor
-};
-
-extend.extendify = extendify; // exposed for making extendable constructors which were not created with `yada.extend({extend:true})`
 
 module.exports = extend;

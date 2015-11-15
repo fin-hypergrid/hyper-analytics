@@ -53,15 +53,6 @@ module.exports = function() {
             });
         });
 
-        test.method('computeAggregates', 1, function() {
-            it('calls `applyAggregates` with 1st arg `aggregator`', function() {
-                var aggregator = {};
-                var stub_applyAggregates = sinon.stub(object, 'applyAggregates');
-                object.computeAggregates(aggregator);
-                stub_applyAggregates.should.be.calledWith(aggregator);
-            });
-        });
-
         test.method('buildView', 1, function() {
             it('adds self to given aggregator\'s view', function() {
                 var aggregator = { addView: sinon.spy() };

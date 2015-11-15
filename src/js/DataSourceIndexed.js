@@ -1,6 +1,6 @@
 'use strict';
 
-var extendify = require('./util/extend').extendify;
+var extend = require('./util/extend');
 
 function DataSourceIndexed(dataSource) {
     this.initialize(dataSource);
@@ -84,6 +84,6 @@ DataSourceIndexed.prototype = {
 
 };
 
-extendify(DataSourceIndexed);
+DataSourceIndexed.extend = extend;
 
 module.exports = DataSourceIndexed;

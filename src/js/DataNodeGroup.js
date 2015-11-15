@@ -1,6 +1,6 @@
 'use strict';
 
-var Map = require('./util/Map');
+var Map = require('./util/Mappy');
 var DataNodeBase = require('./DataNodeBase');
 
 var expandedMap = {
@@ -18,15 +18,15 @@ var DataNodeGroup = DataNodeBase.extend({
 
     prune: function(depth) {
         this.depth = depth;
-        this.children = this.children.values;
+        this.children = this.children.values; // TODO: why?
         this.children.forEach(function(child) {
-            child.prune(this.depth + 1);
+            child.prune(depth + 1);
         });
         this.data[0] = this.computeDepthString();
     },
 
     computeDepthString: function() {
-        return Array(3 * this.depth + 1).join(' ') +
+        return Array(this.depth + 1).join(this.INDENT) +
             expandedMap[this.expanded] + ' ' +
             this.label;
     },
@@ -56,7 +56,7 @@ var DataNodeGroup = DataNodeBase.extend({
     },
 
     computeAggregates: function(aggregator) {
-        this.applyAggregates(aggregator);
+        this.super.computeAggregates.call(aggregator);
         if (this.expanded) {
             this.children.forEach(function(child) {
                 child.computeAggregates(aggregator);

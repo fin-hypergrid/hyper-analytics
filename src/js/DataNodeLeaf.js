@@ -13,10 +13,6 @@ var DataNodeLeaf = DataNodeBase.extend({
         return this.index;
     },
 
-    computeAggregates: function(aggregator) {
-        this.applyAggregates(aggregator);
-    },
-
     buildView: function(aggregator) {
         aggregator.addView(this);
     },

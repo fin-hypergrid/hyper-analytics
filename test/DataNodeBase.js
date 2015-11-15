@@ -130,13 +130,13 @@ module.exports = function() {
                 });
             });
 
-            test.method('computeAggregates', 1, function() {
-                it('is an alias for `applyAggregates`', function() {
-                    object.computeAggregates.should.equal(object.applyAggregates);
-                });
-            });
+            //test.method('applyAggregates', 1, function() {
+            //    it('is an alias for `computeAggregates`', function() {
+            //        object.applyAggregates.should.equal(object.applyAggregates);
+            //    });
+            //});
 
-            test.method('applyAggregates', 1, function() {
+            test.method('computeAggregates', 1, function() {
                 it('TEST NEEDED!');
             });
 

@@ -164,7 +164,7 @@ module.exports = function() {
             });
 
             test.method('forEach', 1, function() {
-                it('calls a iteratee function with 3 args', function() {
+                it('calls an iteratee function with 3 args', function() {
                     var stub_iteratee = sinon.stub();
                     object.set(ALT_KEY, ALT_VALUE);
                     object.map(stub_iteratee);

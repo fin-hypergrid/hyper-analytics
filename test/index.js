@@ -7,7 +7,7 @@ var test = require('./util/test');
 //require('should-sinon'); // extends Object.should to make should-like asserts for sinon spies
 
 //require('./aggregations')();
-require('./map')();
+//require('./map')();
 //require('./stableSort')();
 //require('./DataSource')();
 //require('./DataSourceIndexed')();
@@ -17,6 +17,6 @@ require('./map')();
 //require('./DataSourceSorterComposite')();
 //require('./DataSourceAggregator')();
 //require('./DataNodeBase')();
-//require('./DataNodeGroup')();
+require('./DataNodeGroup')();
 //require('./DataNodeTree')();
 //require('./DataNodeLeaf')();

@@ -3,7 +3,7 @@
 function Mappy() {
     this.keys = [];
     this.data = {};
-    this.values = []; // TODO: Does not appear to be of any use
+    this.values = [];
 }
 
 Mappy.prototype = {
@@ -14,7 +14,7 @@ Mappy.prototype = {
         var hashCode = hash(key);
         if (!(hashCode in this.data)) {
             this.keys.push(key);
-            this.values.push(value); // TODO: why not updated when key exists along with this.data which is updated
+            this.values.push(value);
         }
         this.data[hashCode] = value;
     },
@@ -38,6 +38,7 @@ Mappy.prototype = {
 
     clear: function() {
         this.keys.length = 0;
+        // TODO: Is there a reason why this.values is not being truncated here as well?
         this.data = {};
     },
 
@@ -46,7 +47,7 @@ Mappy.prototype = {
         if (this.data[hashCode] !== undefined) {
             var index = betterIndexOf(this.keys, key);
             this.keys.splice(index, 1);
-            this.values.splice(index, 1); // TODO: questionable worth
+            this.values.splice(index, 1);
             delete this.data[hashCode];
         }
     },

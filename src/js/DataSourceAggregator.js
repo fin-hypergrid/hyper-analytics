@@ -1,11 +1,12 @@
 'use strict';
 
+var _ = require('.object-iterators');
+
 var DataSourceSorter = require('./DataSourceSorter');
 var DataNodeTree = require('./DataNodeTree');
 var DataNodeGroup = require('./DataNodeGroup');
 var DataNodeLeaf = require('./DataNodeLeaf');
 var headerify = require('./util/headerify');
-var _ = require('./util/mu');
 
 //?[t,c,b,a]
 // t is a dataSource,

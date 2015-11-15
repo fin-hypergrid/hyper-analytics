@@ -1,10 +1,12 @@
 'use strict';
 
-var extendify = require('./util/extend').extendify;
+var extend = require('./util/extend');
 
 function DataNodeBase(key) {
     this.initialize(key);
 }
+
+DataNodeBase.extend = extend;
 
 DataNodeBase.prototype = {
 
@@ -12,11 +14,13 @@ DataNodeBase.prototype = {
 
     isNullObject: false,
 
+    INDENT: '   ', // 3 spaces
+
     initialize: function(key) {
         this.label = key;
-        this.data = [''];
+        this.data = ['']; // TODO: Why is this first element needed?
         this.index = []; // TODO: formerly rowIndex
-        this.hasChildren = false;
+        this.hasChildren = false; // TODO: Where/how is this used?
         this.depth = 0;
         this.height = 1;
         this.expanded = false;
@@ -32,7 +36,7 @@ DataNodeBase.prototype = {
     },
 
     computeDepthString: function() {
-        return Array(3 * this.depth + 3).join(' ') + this.label;
+        return Array(this.depth + 1).join(this.INDENT) + '  ' + this.label;
     },
 
     computeHeight: function() {
@@ -43,7 +47,7 @@ DataNodeBase.prototype = {
         return this.index;
     },
 
-    applyAggregates: function(aggregator) {
+    computeAggregates: function(aggregator) {
         var index = this.getIndex();
 
         if (index.length) {
@@ -51,13 +55,13 @@ DataNodeBase.prototype = {
 
             // redimension the data
             var data = this.data;
-            data.length = aggregator.aggregates.length + groupsOffset;
+            data.length = groupsOffset + aggregator.aggregates.length;
 
             var sorter = aggregator.sorterInstance;
             sorter.index = index;
 
             aggregator.aggregates.forEach(function(aggregate, i) {
-                data[i + groupsOffset] = aggregate(sorter);
+                data[groupsOffset + i] = aggregate(sorter);
             });
         }
     },
@@ -72,8 +76,6 @@ DataNodeBase.prototype = {
 
 };
 
-DataNodeBase.prototype.computeAggregates = DataNodeBase.prototype.applyAggregates;
-
-extendify(DataNodeBase);
+//DataNodeBase.prototype.applyAggregates = DataNodeBase.prototype.computeAggregates;
 
 module.exports = DataNodeBase;

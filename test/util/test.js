@@ -14,11 +14,11 @@ function _module(name, tearDown) {
     describe(blankline + header + blankline + 'has a module "' + name +'" that', tearDown);
 }
 
-function constructorModule(pathname, extendExpectation, tearDown) {
-    if (typeof extendExpectation === 'function') {
-        // overload: `extend` omitted
-        tearDown = extendExpectation;
-        extendExpectation = undefined;
+function constructorModule(pathname, extended, tearDown) {
+    if (typeof extended === 'function') {
+        // overload: `extended` omitted
+        tearDown = extended;
+        extended = undefined;
     }
 
     var matches = pathname.match(/(\.)?(.*\/)(.*)/),
@@ -33,8 +33,8 @@ function constructorModule(pathname, extendExpectation, tearDown) {
             Constructor.should.be.a.Function();
         });
         describe('is a constructor that', function() {
-            if (extendExpectation) {
-                describe('is "extendable," having been "extendified" with an `extend` method that', function() {
+            if (extended) {
+                describe('has an `extend` method that', function() {
                     it('exists', function() {
                         Constructor.should.have.property('extend');
                     });
@@ -43,24 +43,16 @@ function constructorModule(pathname, extendExpectation, tearDown) {
                     });
                 });
             }
-            describe('has a prototype `constructor` property (often stepped on when prototype set to an object) that', function() {
-                it('exists', function() {
-                    Constructor.prototype.should.have.property('constructor');
-                });
-                it('properly references the constructor', function() {
-                    Constructor.prototype.constructor.should.equal(Constructor);
+            describe('has a prototype that', function() {
+                describe('has a `constructor` property that', function() {
+                    it('exists', function() {
+                        Constructor.prototype.should.have.property('constructor');
+                    });
+                    it('properly references the constructor', function() {
+                        Constructor.prototype.constructor.should.equal(Constructor);
+                    });
                 });
             });
-            if (typeof extendExpectation === 'string') {
-                describe('has a prototype `' + extendExpectation + '` method that', function() {
-                    it('exists', function() {
-                        Constructor.prototype.should.have.property(extendExpectation);
-                    });
-                    it('properly references the `extend.accessor` function', function() {
-                        Constructor.prototype[extendExpectation].should.equal(extend.testing.accessor);
-                    });
-                });
-            }
         });
         if (tearDown) {
             describe('when called as a constructor (with "new")', function() {

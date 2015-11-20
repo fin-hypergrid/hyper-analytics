@@ -7,7 +7,8 @@ var gulp        = require('gulp'),
     exec        = require('child_process').exec,
     path        = require('path');
 
-var srcDir   = './src/',
+var name     = 'hyper-analytics',
+    srcDir   = './src/',
     testDir  = './test/',
     jsDir    = srcDir + 'js/',
     jsFiles  = '**/*.js',
@@ -27,6 +28,7 @@ gulp.task('test', test);
 gulp.task('doc', doc);
 gulp.task('beautify', beautify);
 gulp.task('browserify', browserify);
+gulp.task('browserifyMin', browserifyMin);
 gulp.task('browserSyncLaunchServer', browserSyncLaunchServer);
 
 gulp.task('build', function(callback) {
@@ -35,8 +37,9 @@ gulp.task('build', function(callback) {
         'lint',
         'test',
         'doc',
-        'beautify',
+        //'beautify',
         'browserify',
+        'browserifyMin',
         callback
     );
 });
@@ -72,16 +75,30 @@ function beautify() {
 }
 
 function browserify() {
-    return gulp.src(js.dir + 'main.js')
+    return gulp.src(buildDir + name + '.browserify.js')
         .pipe($$.browserify({
-            insertGlobals : true,
+            //insertGlobals : true,
             debug : true
         }))
         //.pipe($$.sourcemaps.init({loadMaps: true}))
         // Add transformation tasks to the pipeline here:
-        //.pipe(uglify())
         //.on('error', $$.gutil.log)
         //.pipe($$.sourcemaps.write('./'))
+        .on('error', $$.util.log)
+        .pipe($$.rename(name + '.js'))
+        .pipe(gulp.dest(buildDir));
+}
+
+function browserifyMin() {
+    return gulp.src(buildDir + name + '.browserify.js')
+        .pipe($$.browserify())
+        //.pipe($$.sourcemaps.init({loadMaps: true}))
+        // Add transformation tasks to the pipeline here:
+        .pipe($$.uglify())
+        //.on('error', $$.gutil.log)
+        //.pipe($$.sourcemaps.write('./'))
+        .on('error', $$.util.log)
+        .pipe($$.rename(name + '.min.js'))
         .pipe(gulp.dest(buildDir));
 }
 

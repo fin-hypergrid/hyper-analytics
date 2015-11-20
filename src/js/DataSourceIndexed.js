@@ -1,14 +1,8 @@
 'use strict';
 
-var extend = require('./util/extend');
+var Base = require('extend-me').Base;
 
-function DataSourceIndexed(dataSource) {
-    this.initialize(dataSource);
-}
-
-DataSourceIndexed.prototype = {
-
-    constructor: DataSourceIndexed.prototype.constructor, // preserve constructor
+var DataSourceIndexed = Base.extend('DataSourceIndexed', {
 
     isNullObject: false,
 
@@ -57,6 +51,10 @@ DataSourceIndexed.prototype = {
         return this.dataSource.setHeaders(headers);
     },
 
+    getHeaders: function() {
+        return this.dataSource.getHeaders();
+    },
+
     getGrandTotals: function() {
         return this.dataSource.getGrandTotals();
     },
@@ -80,10 +78,10 @@ DataSourceIndexed.prototype = {
                 index.push(r);
             }
         }
+
+        return index;
     }
 
-};
-
-DataSourceIndexed.extend = extend;
+});
 
 module.exports = DataSourceIndexed;

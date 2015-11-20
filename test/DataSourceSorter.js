@@ -3,7 +3,7 @@ var should = require('should'); // extends `Object` (!) with `.should`; creates 
 var sinon = require('sinon');
 require('should-sinon'); // extends Object.should to make should-like asserts for sinon spies
 
-var stableSort = require('../src/js/stableSort');
+var stableSort = require('../src/js/util/stableSort');
 var DataSource = require('../src/js/DataSource');
 
 module.exports = function() {

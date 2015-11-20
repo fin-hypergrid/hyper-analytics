@@ -52,23 +52,23 @@ module.exports = function() {
             });
         });
 
-        test.method('clear', 0, function() {
+        test.method('clearAll', 0, function() {
             it('empties `filters`', function() {
-                object.clear();
+                object.clearAll();
                 object.filters.length.should.equal(0);
             });
             it('Calls `clearIndex`', function() {
                 var spy = sinon.spy(object, 'clearIndex');
-                object.clear();
+                object.clearAll();
                 spy.should.be.called();
             });
         });
 
-        test.method('apply', 0, function() {
+        test.method('applyAll', 0, function() {
             describe('when no defined filters', function() {
                 it('calls `clearIndex`', function() {
                     var spy = sinon.spy(object, 'clearIndex');
-                    object.apply();
+                    object.applyAll();
                     spy.should.be.called();
                 });
             });
@@ -80,7 +80,7 @@ module.exports = function() {
                     filterStubB = sinon.stub(); filterStubB.returns(true);
                     object.add(4, filterStubA);
                     object.add(1, filterStubB);
-                    object.apply();
+                    object.applyAll();
                 });
                 describe('calls `buildIndex`', function() {
                     it('called exactly once', function() {

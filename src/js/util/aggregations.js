@@ -49,7 +49,7 @@ function stddev(columnIndex, group) {
 }
 
 module.exports = {
-    count: function(columnIndex) { // eslint-disable-line no-unused-vars
+    count: function(columnIndex) {
         return count;
     },
     sum: function(columnIndex) {

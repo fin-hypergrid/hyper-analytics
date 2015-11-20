@@ -38,14 +38,14 @@ window.a.addGroupBy(cols.last_name);
 window.a.addGroupBy(cols.pets);
 window.a.addGroupBy(cols.residenceState);
 
-window.a.addAggregate('total', analytics.aggregations.sum(cols.pets));
-window.a.addAggregate('count', analytics.aggregations.count());
-window.a.addAggregate('minumum', analytics.aggregations.min(cols.pets));
-window.a.addAggregate('maximum', analytics.aggregations.max(cols.pets));
-window.a.addAggregate('average', analytics.aggregations.avg(cols.pets));
-window.a.addAggregate('first', analytics.aggregations.first(cols.birthState));
-window.a.addAggregate('last', analytics.aggregations.last(cols.birthState));
-window.a.addAggregate('standard_deviation', analytics.aggregations.stddev(cols.pets));
+window.a.addAggregate('total', analytics.util.aggregations.sum(cols.pets));
+window.a.addAggregate('count', analytics.util.aggregations.count());
+window.a.addAggregate('minumum', analytics.util.aggregations.min(cols.pets));
+window.a.addAggregate('maximum', analytics.util.aggregations.max(cols.pets));
+window.a.addAggregate('average', analytics.util.aggregations.avg(cols.pets));
+window.a.addAggregate('first', analytics.util.aggregations.first(cols.birthState));
+window.a.addAggregate('last', analytics.util.aggregations.last(cols.birthState));
+window.a.addAggregate('standard_deviation', analytics.util.aggregations.stddev(cols.pets));
 
 var start = Date.now();
 window.a.build();

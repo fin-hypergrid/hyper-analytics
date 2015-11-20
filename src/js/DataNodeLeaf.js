@@ -2,7 +2,7 @@
 
 var DataNodeBase = require('./DataNodeBase');
 
-var DataNodeLeaf = DataNodeBase.extend({
+var DataNodeLeaf = DataNodeBase.extend('DataNodeLeaf', {
 
     prune: function(depth) {
         this.depth = depth;

@@ -1,6 +1,6 @@
 .DS_Store
 .idea
-node_modules
+build/hyper-analytics.js
+build/hyper-analytics.min.js
 doc
-build
-index.js
+node_modules

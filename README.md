@@ -1,2 +1,2 @@
-# finanalytics
-Openfin Analytic - Data transformations on arrays of congruent JavaScript objects.
+# hyperAnalytics
+Data transformations on arrays of congruent JavaScript objects.

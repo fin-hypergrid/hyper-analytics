@@ -1,6 +1,6 @@
 'use strict';
 
-var _ = require('.object-iterators');
+var _ = require('object-iterators');
 
 var DataSourceSorter = require('./DataSourceSorter');
 var DataNodeTree = require('./DataNodeTree');
@@ -10,8 +10,8 @@ var headerify = require('./util/headerify');
 
 //?[t,c,b,a]
 // t is a dataSource,
-// a is a dicitionary of aggregates,  columnName:function
-// b is a dicitionary of groupbys, columnName:sourceColumnName
+// a is a dictionary of aggregates,  columnName:function
+// b is a dictionary of groupbys, columnName:sourceColumnName
 // c is a list of constraints,
 
 function DataSourceAggregator(dataSource) {
@@ -19,10 +19,12 @@ function DataSourceAggregator(dataSource) {
     this.tree = new DataNodeTree('Totals');
     this.index = [];
     this.aggregates = [];
+    this.headers = [];
     this.groupBys = [];
     this.view = [];
     this.sorterInstance = {};
     this.presortGroups = true;
+    this.lastAggregate = {};
     this.setAggregates({});
 }
 
@@ -34,7 +36,11 @@ DataSourceAggregator.prototype = {
     setAggregates: function(aggregations) {
         this.lastAggregate = aggregations;
         this.clearAggregations();
-        this.headers = this.hasGroups() ? [this.headers.push('Tree')] : [];
+        this.headers.length = 0;
+
+        if (this.hasGroups()) {
+            this.headers.push('Tree');
+        }
 
         var self = this;
         _(aggregations).each(function(aggregation, key) {
@@ -78,7 +84,7 @@ DataSourceAggregator.prototype = {
 
     clearAggregations: function() {
         this.aggregates.length = 0;
-        delete this.headers;
+        this.headers.length = 0;
     },
 
     buildGroupTree: function() {
@@ -103,7 +109,7 @@ DataSourceAggregator.prototype = {
                 var key = source.getValue(g, r),
                     terminalNode = (c === leafDepth),
                     Constructor = terminalNode ? DataNodeLeaf : DataNodeGroup,
-                    ifAbsentFunc = createNode.bind(Constructor);
+                    ifAbsentFunc = createNode.bind(this, Constructor);
                 path = path.children.getIfAbsent(key, ifAbsentFunc);
             });
 
@@ -156,7 +162,7 @@ DataSourceAggregator.prototype = {
 
     getRowCount: function() {
         if (!this.viewMakesSense()) {
-            return this.dataSource.getdRowCount();
+            return this.dataSource.getRowCount();
         }
         return this.view.length; //header column
     },

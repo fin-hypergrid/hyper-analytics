@@ -57,6 +57,8 @@ function sort(index, getValue, direction) {
             case 0:
                 return; // bail: nothing to sort
 
+            case undefined: // eslint-disable-line no-fallthrough
+                direction = 1;
             case 1:
                 compare = ascending(typeof getValue(0));
                 break;
@@ -64,9 +66,6 @@ function sort(index, getValue, direction) {
             case -1:
                 compare = descending(typeof getValue(0));
                 break;
-
-            default:
-                throw 'Unexpected sort direction value.';
         }
 
         // set up the sort.....

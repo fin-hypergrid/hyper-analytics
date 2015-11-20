@@ -2,9 +2,9 @@
 
 var DataNodeGroup = require('./DataNodeGroup');
 
-var DataNodeTree = DataNodeGroup.extend({
+var DataNodeTree = DataNodeGroup.extend('DataNodeTree', {
 
-    initialize: function(key) { // eslint-disable-line no-unused-vars
+    initialize: function(key) {
         this.height = 0;
         this.expanded = true;
     },

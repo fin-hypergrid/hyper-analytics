@@ -2,7 +2,8 @@
 
 var DataSourceIndexed = require('./DataSourceIndexed');
 
-var DataSourceFilter = DataSourceIndexed.extend({
+var DataSourceFilter = DataSourceIndexed.extend('DataSourceFilter', {
+
     initialize: function() {
         this.filters = [];
     },
@@ -12,12 +13,12 @@ var DataSourceFilter = DataSourceIndexed.extend({
         this.filters.push(filter);
     },
 
-    clear: function() {
+    clearAll: function() {
         this.filters.length = 0;
         this.clearIndex();
     },
 
-    apply: function() {
+    applyAll: function() {
         if (!this.filters.length) {
             this.clearIndex();
         } else {
@@ -34,7 +35,7 @@ var DataSourceFilter = DataSourceIndexed.extend({
     }
 });
 
-function applyFilter(r, rowObject) {
+function applyFilter(r, rowObject) { // called in context from .buildIndex()
     var self = this;
     return this.filters.reduce(function(isFiltered, filter) {
         var cellValue = self.dataSource.getValue(filter.columnIndex, r);

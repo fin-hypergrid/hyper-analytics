@@ -8,11 +8,11 @@ var expandedMap = {
     false: '\u25b8' // '▸'
 };
 
-var DataNodeGroup = DataNodeBase.extend({
+var DataNodeGroup = DataNodeBase.extend('DataNodeGroup', {
 
     extendable: true,
 
-    initialize: function(key) { // eslint-disable-line no-unused-vars
+    initialize: function(key) {
         this.children = new Map();
     },
 
@@ -56,7 +56,7 @@ var DataNodeGroup = DataNodeBase.extend({
     },
 
     computeAggregates: function(aggregator) {
-        this.super.computeAggregates.call(aggregator);
+        DataNodeBase.prototype.computeAggregates.call(this, aggregator); // call base class's version
         if (this.expanded) {
             this.children.forEach(function(child) {
                 child.computeAggregates(aggregator);

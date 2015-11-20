@@ -1,6 +1,6 @@
 /* global describe, it, beforeEach, afterEach, object */
 
-var extend = require('../../src/js/util/extend');
+var extend = require('extend-me');
 
 require('should'); // extends `Object` (!) with `.should`; creates `should()`
 

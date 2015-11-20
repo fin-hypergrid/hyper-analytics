@@ -3,7 +3,7 @@
 var DataSourceIndexed = require('./DataSourceIndexed');
 var DataSourceSorter = require('./DataSourceSorter');
 
-var DataSourceSorterComposite = DataSourceIndexed.extend({
+var DataSourceSorterComposite = DataSourceIndexed.extend('DataSourceSorterComposite', {
     initialize: function() {
         this.sorts = [];
         this.last = this.dataSource;

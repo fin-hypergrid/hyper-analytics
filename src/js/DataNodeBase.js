@@ -1,16 +1,8 @@
 'use strict';
 
-var extend = require('./util/extend');
+var Base = require('extend-me').Base;
 
-function DataNodeBase(key) {
-    this.initialize(key);
-}
-
-DataNodeBase.extend = extend;
-
-DataNodeBase.prototype = {
-
-    constructor: DataNodeBase.prototype.constructor, // preserve constructor
+var DataNodeBase = Base.extend('DataNodeBase', {
 
     isNullObject: false,
 
@@ -74,7 +66,7 @@ DataNodeBase.prototype = {
         //do nothing by default
     }
 
-};
+});
 
 //DataNodeBase.prototype.applyAggregates = DataNodeBase.prototype.computeAggregates;
 

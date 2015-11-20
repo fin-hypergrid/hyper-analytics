@@ -26,14 +26,15 @@ module.exports = function() {
         test.method('computeDepthString', 0, function() {
             object.depth = 0;
             /(   ){0}(▾|▸) key/.test(object.computeDepthString()).should.be.true();
+
             object.depth = 1;
             /(   ){1}(▾|▸) key/.test(object.computeDepthString()).should.be.true();
+
             object.depth = 2;
             /(   ){2}(▾|▸) key/.test(object.computeDepthString()).should.be.true();
         });
 
         describe('with 3 child nodes are added,', function() {
-            //function NodeMock(key) {}
             var children, DEPTH;
             function NodeMock() {}
             NodeMock.prototype.prune = sinon.stub();

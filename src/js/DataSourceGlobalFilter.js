@@ -2,7 +2,8 @@
 
 var DataSourceIndexed = require('./DataSourceIndexed');
 
-var DataSourceGlobalFilter = DataSourceIndexed.extend({
+var DataSourceGlobalFilter = DataSourceIndexed.extend('DataSourceGlobalFilter', {
+
     set: function(filter) {
         this.filter = filter;
     },
@@ -25,7 +26,7 @@ var DataSourceGlobalFilter = DataSourceIndexed.extend({
     }
 });
 
-function applyFilter(r, rowObject) {
+function applyFilter(r, rowObject) { // called in context from .buildIndex()
     var self = this;
     return this.getFields().find(function(columnIndex) {
         var cellValue = self.dataSource.getValue(columnIndex, r);

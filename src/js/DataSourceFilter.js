@@ -38,14 +38,16 @@ var DataSourceFilter = DataSourceIndexed.extend('DataSourceFilter', {
 function applyFilters(r, rowObject) { // called in context from .buildIndex()
     var self = this;
 
-    return this.filters.reduce(function(isFiltered, filter) {
-        return isFiltered && filter(self.dataSource.getValue(filter.columnIndex, r), rowObject, r);
-    }, true);
-
-    // above can be replaced with following when ES6's Array.prototype.find universally available:
-    //return !this.filters.find(function(filter) {
-    //    return !filter(self.dataSource.getValue(filter.columnIndex, r), rowObject, r);
-    //});
+    if (Array.prototype.find) {
+        // double negative here means "no filter fails" (i.e., row passes all filters)
+        return !this.filters.find(function(filter) {
+            return !filter(self.dataSource.getValue(filter.columnIndex, r), rowObject, r);
+        });
+    } else {
+        return this.filters.reduce(function(isFiltered, filter) {
+            return isFiltered && filter(self.dataSource.getValue(filter.columnIndex, r), rowObject, r);
+        }, true);
+    }
 }
 
 module.exports = DataSourceFilter;

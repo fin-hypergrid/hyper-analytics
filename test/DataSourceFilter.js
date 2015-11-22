@@ -73,7 +73,7 @@ module.exports = function() {
                 });
             });
             describe('when at least 1 defined filter, rebuilds the index:', function() {
-                var stub, filterStubA, filterStubB, ROW_INDEX = 2;
+                var buildIndexStub, filterStubA, filterStubB, ROW_INDEX = 2;
                 beforeEach(function() {
                     buildIndexStub = sinon.stub(object, 'buildIndex');
                     filterStubA = sinon.stub(); filterStubA.returns(true);
@@ -87,34 +87,34 @@ module.exports = function() {
                         buildIndexStub.should.be.calledOnce();
                     });
                     describe('with a single parameter that', function() {
-                        var applyFilter;
+                        var applyFilters;
                         beforeEach(function() {
-                            applyFilter = buildIndexStub.getCall(0).args[0];
+                            applyFilters = buildIndexStub.getCall(0).args[0];
                         });
                         it('is the only parameter', function() {
                             buildIndexStub.getCall(0).args.length.should.equal(1);
                         });
                         it('is a co-routine', function() {
-                            var arg = applyFilter.should.be.a.Function();
+                            var arg = applyFilters.should.be.a.Function();
                         });
                         describe('that', function() {
                             it('takes 2 parameters', function() {
-                                var arg = applyFilter.length.should.equal(2);
+                                var arg = applyFilters.length.should.equal(2);
                             });
                             describe('when called for a given row', function() {
                                 it('calls each filter in turn with (cell value, row object, row number)', function() {
-                                    applyFilter.call(object, ROW_INDEX, DATA[ROW_INDEX]);
+                                    applyFilters.call(object, ROW_INDEX, DATA[ROW_INDEX]);
                                     filterStubA.calledWith(4, DATA[ROW_INDEX], ROW_INDEX);
                                     filterStubB.calledWith(1, DATA[ROW_INDEX], ROW_INDEX);
                                 });
                                 describe('returns', function() {
                                     it('`true` when all filters pass (return truthy)', function() {
-                                        var results = applyFilter.call(object, 2, DATA[2]);
+                                        var results = applyFilters.call(object, 2, DATA[2]);
                                         results.should.be.true();
                                     });
                                     it('`false` when any filter fails (returns falsy)', function() {
                                         filterStubB.returns(false);
-                                        var results = applyFilter.call(object, 2, DATA[2]);
+                                        var results = applyFilters.call(object, 2, DATA[2]);
                                         results.should.be.false();
                                     });
                                 });

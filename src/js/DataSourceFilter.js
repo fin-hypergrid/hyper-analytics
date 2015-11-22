@@ -22,7 +22,7 @@ var DataSourceFilter = DataSourceIndexed.extend('DataSourceFilter', {
         if (!this.filters.length) {
             this.clearIndex();
         } else {
-            this.buildIndex(applyFilter);
+            this.buildIndex(applyFilters);
         }
     },
 
@@ -35,12 +35,17 @@ var DataSourceFilter = DataSourceIndexed.extend('DataSourceFilter', {
     }
 });
 
-function applyFilter(r, rowObject) { // called in context from .buildIndex()
+function applyFilters(r, rowObject) { // called in context from .buildIndex()
     var self = this;
+
     return this.filters.reduce(function(isFiltered, filter) {
-        var cellValue = self.dataSource.getValue(filter.columnIndex, r);
-        return isFiltered && filter(cellValue, rowObject, r);
+        return isFiltered && filter(self.dataSource.getValue(filter.columnIndex, r), rowObject, r);
     }, true);
+
+    // above can be replaced with following when ES6's Array.prototype.find universally available:
+    //return !this.filters.find(function(filter) {
+    //    return !filter(self.dataSource.getValue(filter.columnIndex, r), rowObject, r);
+    //});
 }
 
 module.exports = DataSourceFilter;

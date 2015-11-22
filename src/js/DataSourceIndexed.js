@@ -68,13 +68,13 @@ var DataSourceIndexed = Base.extend('DataSourceIndexed', {
     },
 
     buildIndex: function(predicate) {
-        var rowCount = this.getRowCount(),
+        var rowCount = this.dataSource.getRowCount(),
             index = this.index;
 
         index.length = 0;
 
         for (var r = 0; r < rowCount; r++) {
-            if (!predicate || predicate.call(this, r, this.dataSource.data[r])) {
+            if (!predicate || predicate.call(this, r, this.dataSource.getRow(r))) {
                 index.push(r);
             }
         }

@@ -46,11 +46,15 @@ module.exports = function() {
             })
         });
 
-        test.method('apply', 0, function() {
+        test.method('apply', 1, function() {
+            var visibleColumns;
+            beforeEach(function() {
+                visibleColumns = [{ index: 1 }, { index: 3 }];
+            });
             describe('when global filter is not defined', function() {
                 it('calls `clearIndex`', function() {
                     var spy = sinon.spy(object, 'clearIndex');
-                    object.apply();
+                    object.apply(visibleColumns);
                     spy.should.be.called();
                 });
             });
@@ -69,13 +73,13 @@ module.exports = function() {
                 });
                 describe('calls `buildIndex`', function() {
                     it('called exactly once', function() {
-                        object.apply();
+                        object.apply(visibleColumns);
                         stub.should.be.calledOnce();
                     });
                     describe('with a single parameter that', function() {
                         var applyFilter;
                         beforeEach(function() {
-                            object.apply();
+                            object.apply(visibleColumns);
                             applyFilter = stub.getCall(0).args[0];
                         });
                         it('is the only parameter', function() {
@@ -106,11 +110,11 @@ module.exports = function() {
                                 it('`false` when filter falsy for all columns', function() {
                                     filterStub.onCall(1).returns(false);
                                     filterStub.onCall(2).returns(false);
-                                    object.apply();
+                                    object.apply(visibleColumns);
                                     stub.returns(false);
                                 });
                                 it('`true` when filter when returns truthy for any column', function() {
-                                    object.apply();
+                                    object.apply(visibleColumns);
                                     stub.returns(true);
                                 });
                             });

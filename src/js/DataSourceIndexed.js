@@ -43,10 +43,6 @@ var DataSourceIndexed = Base.extend('DataSourceIndexed', {
         return this.dataSource.setFields(fields);
     },
 
-    getDefaultHeaders: function() {
-        return this.dataSource.getFields();
-    },
-
     setHeaders: function(headers) {
         return this.dataSource.setHeaders(headers);
     },
@@ -71,7 +67,7 @@ var DataSourceIndexed = Base.extend('DataSourceIndexed', {
         var rowCount = this.dataSource.getRowCount(),
             index = this.index;
 
-        index.length = 0;
+        this.clearIndex();
 
         for (var r = 0; r < rowCount; r++) {
             if (!predicate || predicate.call(this, r, this.dataSource.getRow(r))) {

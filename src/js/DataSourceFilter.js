@@ -38,16 +38,10 @@ var DataSourceFilter = DataSourceIndexed.extend('DataSourceFilter', {
 function applyFilters(r, rowObject) { // called in context from .buildIndex()
     var self = this;
 
-    if (Array.prototype.find) {
-        // double negative here means "no filter fails" (i.e., row passes all filters)
-        return !this.filters.find(function(filter) {
-            return !filter(self.dataSource.getValue(filter.columnIndex, r), rowObject, r);
-        });
-    } else {
-        return this.filters.reduce(function(isFiltered, filter) {
-            return isFiltered && filter(self.dataSource.getValue(filter.columnIndex, r), rowObject, r);
-        }, true);
-    }
+    // double negative here means "no filter fails" (i.e., row passes all filters)
+    return !this.filters.find(function(filter) {
+        return !filter(self.dataSource.getValue(filter.columnIndex, r), rowObject, r);
+    });
 }
 
 module.exports = DataSourceFilter;

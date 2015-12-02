@@ -42,8 +42,7 @@ DataSource.prototype = {
 
     getHeaders: function() {
         return (
-            this.headers = this.headers ||
-            this.getDefaultHeaders().map(function(each) {
+            this.headers = this.headers || this.getDefaultHeaders().map(function(each) {
                 return headerify(each);
             })
         );

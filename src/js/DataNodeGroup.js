@@ -4,8 +4,8 @@ var Map = require('./util/Mappy');
 var DataNodeBase = require('./DataNodeBase');
 
 var expandedMap = {
-    true: '\u25be', // '▾'
-    false: '\u25b8' // '▸'
+    true: '\u25bc', // BLACK DOWN-POINTING TRIANGLE aka '▼'
+    false: '\u25b6' // BLACK RIGHT-POINTING TRIANGLE aka '▶'
 };
 
 var DataNodeGroup = DataNodeBase.extend('DataNodeGroup', {

@@ -13,10 +13,14 @@ var DataSourceGlobalFilter = DataSourceIndexed.extend('DataSourceGlobalFilter', 
         this.clearIndex();
     },
 
-    apply: function() {
+    apply: function(visibleColumns) {
         if (!this.filter) {
             this.clearIndex();
         } else {
+            var visibleColumnMap = this.visibleColumnMap = [];
+            visibleColumns.forEach(function(column) {
+                visibleColumnMap.push(column.index);
+            });
             this.buildIndex(applyFilter);
         }
     },
@@ -28,7 +32,7 @@ var DataSourceGlobalFilter = DataSourceIndexed.extend('DataSourceGlobalFilter', 
 
 function applyFilter(r, rowObject) { // called in context from .buildIndex()
     var self = this;
-    return this.getFields().find(function(columnIndex) {
+    return this.visibleColumnMap.find(function(columnIndex, mapIndex) {
         var cellValue = self.dataSource.getValue(columnIndex, r);
         return self.filter(cellValue, rowObject, r);
     });

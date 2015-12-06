@@ -1,30 +1,85 @@
 'use strict';
 
-var _ = require('object-iterators');
-
 var DataSourceSorter = require('./DataSourceSorter');
 var DataNodeTree = require('./DataNodeTree');
 var DataNodeGroup = require('./DataNodeGroup');
 var DataNodeLeaf = require('./DataNodeLeaf');
 var headerify = require('./util/headerify');
 
-//?[t,c,b,a]
-// t is a dataSource,
-// a is a dictionary of aggregates,  columnName:function
-// b is a dictionary of groupbys, columnName:sourceColumnName
-// c is a list of constraints,
-
+/**
+ * @constructor
+ * @param {DataSource} dataSource
+ */
 function DataSourceAggregator(dataSource) {
+
+    /**
+     * @memberOf DataSourceAggregator.prototype
+     * @type {DataSource}
+     */
     this.dataSource = dataSource;
+
+    /**
+     * @memberOf DataSourceAggregator.prototype
+     * @type {DataNodeTree}
+     */
     this.tree = new DataNodeTree('Totals');
+
+    /**
+     * @memberOf DataSourceAggregator.prototype
+     * @type {number[]}
+     * @default []
+     */
     this.index = [];
+
+    /**
+     * @memberOf DataSourceAggregator.prototype
+     * @type {Array}
+     * @default []
+     */
     this.aggregates = [];
+
+    /**
+     * @memberOf DataSourceAggregator.prototype
+     * @type {string[]}
+     * @default []
+     */
     this.headers = [];
+
+    /**
+     * @memberOf DataSourceAggregator.prototype
+     * @type {Array}
+     * @default []
+     */
     this.groupBys = [];
+
+    /**
+     * @memberOf DataSourceAggregator.prototype
+     * @type {Array}
+     * @default []
+     */
     this.view = [];
+
+    /**
+     * @memberOf DataSourceAggregator.prototype
+     * @type {object}
+     * @default {}
+     */
     this.sorterInstance = {};
+
+    /**
+     * @memberOf DataSourceAggregator.prototype
+     * @type {boolean}
+     * @default true
+     */
     this.presortGroups = true;
+
+    /**
+     * @memberOf DataSourceAggregator.prototype
+     * @type {object}
+     * @default {}
+     */
     this.lastAggregate = {};
+
     this.setAggregates({});
 }
 
@@ -33,6 +88,10 @@ DataSourceAggregator.prototype = {
 
     isNullObject: false,
 
+    /**
+     * @memberOf DataSourceAggregator.prototype
+     * @param aggregations
+     */
     setAggregates: function(aggregations) {
         this.lastAggregate = aggregations;
         this.clearAggregations();
@@ -43,16 +102,25 @@ DataSourceAggregator.prototype = {
         }
 
         var self = this;
-        _(aggregations).each(function(aggregation, key) {
-            self.addAggregate(key, aggregation);
+        Object.getOwnPropertyNames(aggregations).forEach(function(key) {
+            self.addAggregate(key, aggregations[key]);
         });
     },
 
+    /**
+     * @memberOf DataSourceAggregator.prototype
+     * @param label
+     * @param func
+     */
     addAggregate: function(label, func) {
         this.headers.push(headerify(label));
         this.aggregates.push(func);
     },
 
+    /**
+     * @memberOf DataSourceAggregator.prototype
+     * @param columnIndexArray
+     */
     setGroupBys: function(columnIndexArray) {
         var groupBys = this.groupBys;
         groupBys.length = 0;
@@ -62,31 +130,55 @@ DataSourceAggregator.prototype = {
         this.setAggregates(this.lastAggregate);
     },
 
+    /**
+     * @memberOf DataSourceAggregator.prototype
+     * @param index
+     */
     addGroupBy: function(index) {
         this.groupBys.push(index);
     },
 
+    /**
+     * @memberOf DataSourceAggregator.prototype
+     * @returns {boolean}
+     */
     hasGroups: function() {
         return !!this.groupBys.length;
     },
 
+    /**
+     * @memberOf DataSourceAggregator.prototype
+     * @returns {boolean}
+     */
     hasAggregates: function() {
         return !!this.aggregates.length;
     },
 
+    /**
+     * @memberOf DataSourceAggregator.prototype
+     */
     apply: function() {
         this.buildGroupTree();
     },
 
+    /**
+     * @memberOf DataSourceAggregator.prototype
+     */
     clearGroups: function() {
         this.groupBys.length = 0;
     },
 
+    /**
+     * @memberOf DataSourceAggregator.prototype
+     */
     clearAggregations: function() {
         this.aggregates.length = 0;
         this.headers.length = 0;
     },
 
+    /**
+     * @memberOf DataSourceAggregator.prototype
+     */
     buildGroupTree: function() {
         var groupBys = this.groupBys,
             leafDepth = groupBys.length - 1,
@@ -122,37 +214,64 @@ DataSourceAggregator.prototype = {
         this.buildView();
     },
 
+    /**
+     * @memberOf DataSourceAggregator.prototype
+     * @param dataNode
+     */
     addView: function(dataNode) {
         this.view.push(dataNode);
     },
 
+    /**
+     * @memberOf DataSourceAggregator.prototype
+     */
     buildView: function() {
         this.view.length = 0;
         this.tree.computeHeight();
         this.tree.buildView(this);
     },
 
+    /**
+     * @memberOf DataSourceAggregator.prototype
+     * @returns {*|boolean}
+     */
     viewMakesSense: function() {
         return this.hasAggregates();
     },
 
+    /**
+     * @memberOf DataSourceAggregator.prototype
+     * @param x
+     * @param y
+     * @returns {*}
+     */
     getValue: function(x, y) {
         if (!this.viewMakesSense()) {
             return this.dataSource.getValue(x, y);
         }
+
         var row = this.view[y];
-        if (!row) {
-            return null;
-        }
-        return row.getValue(x); // TODO: what kind of object is row... ? should it be unfiltred?
+
+        return row ? row.getValue(x) : null; // TODO: what kind of object is row... ? should it be unfiltred?
     },
 
+    /**
+     * @memberOf DataSourceAggregator.prototype
+     * @param x
+     * @param y
+     * @param value
+     * @returns {*}
+     */
     setValue: function(x, y, value) {
         if (!this.viewMakesSense()) {
             return this.dataSource.setValue(x, y, value);
         }
     },
 
+    /**
+     * @memberOf DataSourceAggregator.prototype
+     * @returns {*}
+     */
     getColumnCount: function() {
         if (!this.viewMakesSense()) {
             return this.dataSource.getColumnCount();
@@ -160,6 +279,10 @@ DataSourceAggregator.prototype = {
         return this.getHeaders().length;
     },
 
+    /**
+     * @memberOf DataSourceAggregator.prototype
+     * @returns {*}
+     */
     getRowCount: function() {
         if (!this.viewMakesSense()) {
             return this.dataSource.getRowCount();
@@ -167,12 +290,20 @@ DataSourceAggregator.prototype = {
         return this.view.length; //header column
     },
 
+    /**
+     * @memberOf DataSourceAggregator.prototype
+     * @param y
+     */
     click: function(y) {
         var group = this.view[y];
         group.toggleExpansionState(this);
         this.buildView();
     },
 
+    /**
+     * @memberOf DataSourceAggregator.prototype
+     * @returns {*}
+     */
     getHeaders: function() {
         if (!this.viewMakesSense()) {
             return this.dataSource.getHeaders();
@@ -180,23 +311,45 @@ DataSourceAggregator.prototype = {
         return this.headers; // TODO: Views override dataSource headers with their own headers?
     },
 
+    /**
+     * @memberOf DataSourceAggregator.prototype
+     * @param headers
+     */
     setHeaders: function(headers) {
         this.dataSource.setHeaders(headers);
     },
 
+    /**
+     * @memberOf DataSourceAggregator.prototype
+     * @returns {*|number[]}
+     */
     getFields: function() {
         return this.dataSource.getFields();
     },
 
+    /**
+     * @memberOf DataSourceAggregator.prototype
+     * @param fields
+     * @returns {*}
+     */
     setFields: function(fields) {
         return this.dataSource.setFields(fields);
     },
 
+    /**
+     * @memberOf DataSourceAggregator.prototype
+     * @returns {object[]}
+     */
     getGrandTotals: function() {
         var view = this.tree;
         return [view.data];
     },
 
+    /**
+     * @memberOf DataSourceAggregator.prototype
+     * @param y
+     * @returns {*}
+     */
     getRow: function(y) {
         if (!this.viewMakesSense()) {
             return this.dataSource.getRow(y);
@@ -207,12 +360,23 @@ DataSourceAggregator.prototype = {
         return rollups ? rollups : this.tree;
     },
 
+    /**
+     * @memberOf DataSourceAggregator.prototype
+     * @param arrayOfUniformObjects
+     */
     setData: function(arrayOfUniformObjects) {
         this.dataSource.setData(arrayOfUniformObjects);
         this.apply();
     }
 };
 
+/**
+ * @private
+ * @param DataNodeConstructor
+ * @param key
+ * @param map
+ * @returns {DataNodeBase}
+ */
 function createNode(DataNodeConstructor, key, map) {
     var value = new DataNodeConstructor(key);
     map.set(key, value);

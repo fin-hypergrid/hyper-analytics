@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
 org="openfin"
-module="hyper-analytics"
 
 # set variable repo to current directory name (without path)
 repo=${PWD##*/}
@@ -26,12 +25,8 @@ git rm -rf -q .
 # copy the doc directory from the workspace
 cp -R ../../$repo/doc/* . >/dev/null
 
-# copy $module.js and $module.min.js from $repo/build to the cdn directory
-cp ../../$repo/build/$module.js . >/dev/null
-cp ../../$repo/build/$module.min.js . >/dev/null
-
-# copy the demo
-# cp ../../$repo/demo.html . >>/dev/null
+# copy $repo/build to the cdn directory
+cp ../../$repo/build/* . >/dev/null
 
 # send it up
 git add . >/dev/null

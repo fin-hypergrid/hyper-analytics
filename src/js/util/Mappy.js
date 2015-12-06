@@ -1,5 +1,8 @@
 'use strict';
 
+/**
+ * @constructor
+ */
 function Mappy() {
     this.keys = [];
     this.data = {};
@@ -10,6 +13,9 @@ Mappy.prototype = {
 
     constructor: Mappy.prototype.constructor, // preserve constructor
 
+    /**
+     * @memberOf Mappy.prototype
+     */
     set: function(key, value) {
         var hashCode = hash(key);
         if (!(hashCode in this.data)) {
@@ -19,11 +25,22 @@ Mappy.prototype = {
         this.data[hashCode] = value;
     },
 
+    /**
+     * @memberOf Mappy.prototype
+     * @param key
+     * @returns {*}
+     */
     get: function(key) {
         var hashCode = hash(key);
         return this.data[hashCode];
     },
 
+    /**
+     * @memberOf Mappy.prototype
+     * @param key
+     * @param ifAbsentFunc
+     * @returns {*}
+     */
     getIfAbsent: function(key, ifAbsentFunc) {
         var value = this.get(key);
         if (value === undefined) {
@@ -36,12 +53,19 @@ Mappy.prototype = {
         return this.keys.length;
     },
 
+    /**
+     * @memberOf Mappy.prototype
+     */
     clear: function() {
         this.keys.length = 0;
         // TODO: Is there a reason why this.values is not being truncated here as well?
         this.data = {};
     },
 
+    /**
+     * @memberOf Mappy.prototype
+     * @param key
+     */
     delete: function(key) {
         var hashCode = hash(key);
         if (this.data[hashCode] !== undefined) {
@@ -52,6 +76,10 @@ Mappy.prototype = {
         }
     },
 
+    /**
+     * @memberOf Mappy.prototype
+     * @param func
+     */
     forEach: function(func) {
         var keys = this.keys,
             self = this;
@@ -61,6 +89,11 @@ Mappy.prototype = {
         });
     },
 
+    /**
+     * @memberOf Mappy.prototype
+     * @param func
+     * @returns {Mappy}
+     */
     map: function(func) {
         var keys = this.keys,
             newMap = new Mappy(),
@@ -73,6 +106,10 @@ Mappy.prototype = {
         return newMap;
     },
 
+    /**
+     * @memberOf Mappy.prototype
+     * @returns {Mappy}
+     */
     copy: function() {
         var keys = this.keys,
             newMap = new Mappy(),

@@ -2,67 +2,142 @@
 
 var Base = require('extend-me').Base;
 
+/**
+ * @constructor
+ */
 var DataSourceIndexed = Base.extend('DataSourceIndexed', {
 
+    /**
+     *
+     */
     isNullObject: false,
 
+    /**
+     * @memberOf DataSourceIndexed.prototype
+     * @param dataSource
+     */
     initialize: function(dataSource) {
         this.dataSource = dataSource;
         this.index = [];
     },
 
+    /**
+     * @memberOf DataSourceIndexed.prototype
+     * @param y
+     * @returns {*}
+     */
     transposeY: function(y) {
         return this.index.length ? this.index[y] : y;
     },
 
+    /**
+     * @memberOf DataSourceIndexed.prototype
+     * @param y
+     * @returns {object}
+     */
     getRow: function(y) {
         return this.dataSource.getRow(this.transposeY(y));
     },
 
+    /**
+     * @memberOf DataSourceIndexed.prototype
+     * @param x
+     * @param y
+     * @returns {*|Mixed}
+     */
     getValue: function(x, y) {
         return this.dataSource.getValue(x, this.transposeY(y));
     },
 
+    /**
+     * @memberOf DataSourceIndexed.prototype
+     * @param {number} x
+     * @param {number} y
+     * @param {*} value
+     */
     setValue: function(x, y, value) {
         this.dataSource.setValue(x, this.transposeY(y), value);
     },
 
+    /**
+     * @memberOf DataSourceIndexed.prototype
+     * @returns {Number|*}
+     */
     getRowCount: function() {
         return this.index.length || this.dataSource.getRowCount();
     },
 
+    /**
+     *
+     * @returns {*}
+     */
     getColumnCount: function() {
         return this.dataSource.getColumnCount();
     },
 
+    /**
+     * @memberOf DataSourceIndexed.prototype
+     * @returns {*}
+     */
     getFields: function() {
         return this.dataSource.getFields();
     },
 
+    /**
+     * @memberOf DataSourceIndexed.prototype
+     * @param fields
+     * @returns {*}
+     */
     setFields: function(fields) {
         return this.dataSource.setFields(fields);
     },
 
+    /**
+     * @memberOf DataSourceIndexed.prototype
+     * @param {string[]} headers
+     * @returns {string[]}
+     */
     setHeaders: function(headers) {
         return this.dataSource.setHeaders(headers);
     },
 
+    /**
+     *
+     * @returns {string[]}
+     */
     getHeaders: function() {
         return this.dataSource.getHeaders();
     },
 
+    /**
+     * @memberOf DataSourceIndexed.prototype
+     * @returns {*}
+     */
     getGrandTotals: function() {
         return this.dataSource.getGrandTotals();
     },
 
+    /**
+     * @memberOf DataSourceIndexed.prototype
+     * @param {object[]} arrayOfUniformObjects
+     * @returns {object[]}
+     */
     setData: function(arrayOfUniformObjects) {
         return this.dataSource.setData(arrayOfUniformObjects);
     },
 
+    /**
+     * @memberOf DataSourceIndexed.prototype
+     */
     clearIndex: function() {
         this.index.length = 0;
     },
 
+    /**
+     * @memberOf DataSourceIndexed.prototype
+     * @param predicate
+     * @returns {number[]}
+     */
     buildIndex: function(predicate) {
         var rowCount = this.dataSource.getRowCount(),
             index = this.index;

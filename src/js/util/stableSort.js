@@ -1,5 +1,18 @@
 'use strict';
 
+/**
+ * @module stableSort
+ */
+
+/**
+ * @private
+ * @memberOf stableSort
+ * @param {function} comparator
+ * @param {boolean} descending
+ * @param {Array} arr1
+ * @param {Array} arr2
+ * @returns {function}
+ */
 function stabilize(comparator, descending, arr1, arr2) { // eslint-disable-line no-shadow
     var x = arr1[0];
     var y = arr2[0];
@@ -19,30 +32,76 @@ function stabilize(comparator, descending, arr1, arr2) { // eslint-disable-line 
     return comparator(x, y);
 }
 
+/**
+ * @private
+ * @memberOf stableSort
+ * @param x
+ * @param y
+ * @returns {number}
+ */
 function ascendingNumbers(x, y) {
     return x - y;
 }
 
+/**
+ * @private
+ * @memberOf stableSort
+ * @param x
+ * @param y
+ * @returns {number}
+ */
 function descendingNumbers(x, y) {
     return y - x;
 }
 
+/**
+ * @private
+ * @memberOf stableSort
+ * @param x
+ * @param y
+ * @returns {number}
+ */
 function ascendingAllOthers(x, y) {
     return x < y ? -1 : 1;
 }
 
+/**
+ * @private
+ * @memberOf stableSort
+ * @param x
+ * @param y
+ * @returns {number}
+ */
 function descendingAllOthers(x, y) {
     return y < x ? -1 : 1;
 }
 
+/**
+ * @private
+ * @memberOf stableSort
+ * @param typeOfData
+ * @returns {function(this:ascending)}
+ */
 function ascending(typeOfData) {
     return stabilize.bind(this, typeOfData === 'number' ? ascendingNumbers : ascendingAllOthers, false);
 }
 
+/**
+ * @private
+ * @memberOf stableSort
+ * @param typeOfData
+ * @returns {function(this:descending)}
+ */
 function descending(typeOfData) {
     return stabilize.bind(this, typeOfData === 'number' ? descendingNumbers : descendingAllOthers, true);
 }
 
+/**
+ * @memberOf stableSort
+ * @param {number} index
+ * @param {function} getValue
+ * @param {number} [direction=1]
+ */
 function sort(index, getValue, direction) {
 
     var compare, i;

@@ -27,9 +27,11 @@ gulp.task('lint', lint);
 gulp.task('test', test);
 gulp.task('doc', doc);
 gulp.task('beautify', beautify);
-gulp.task('browserify', browserify);
-gulp.task('browserifyMin', browserifyMin);
-gulp.task('browserSyncLaunchServer', browserSyncLaunchServer);
+gulp.task('browserify', function(callback) {
+    browserify();
+    browserifyMin();
+    callback();
+});
 
 gulp.task('build', function(callback) {
     clearBashScreen();
@@ -39,19 +41,15 @@ gulp.task('build', function(callback) {
         'doc',
         //'beautify',
         'browserify',
-        'browserifyMin',
         callback
     );
 });
 
 gulp.task('watch', function () {
     gulp.watch([srcDir + '**', testDir + '**'], ['build'])
-        .on('change', function(event) {
-            browserSync.reload();
-        });
 });
 
-gulp.task('default', ['build', 'watch'], browserSyncLaunchServer);
+gulp.task('default', ['build', 'watch']);
 
 //  //  //  //  //  //  //  //  //  //  //  //
 
@@ -75,28 +73,25 @@ function beautify() {
 }
 
 function browserify() {
-    return gulp.src(buildDir + name + '.browserify.js')
-        .pipe($$.browserify({
-            //insertGlobals : true,
-            debug : true
-        }))
-        //.pipe($$.sourcemaps.init({loadMaps: true}))
-        // Add transformation tasks to the pipeline here:
-        //.on('error', $$.gutil.log)
-        //.pipe($$.sourcemaps.write('./'))
+    return gulp.src(srcDir + 'index.js')
+        .pipe($$.replace(
+            'module.exports =',
+            'window.hyperAnalytics ='
+        ))
+        .pipe($$.browserify({  debug: true }))
         .on('error', $$.util.log)
         .pipe($$.rename(name + '.js'))
         .pipe(gulp.dest(buildDir));
 }
 
 function browserifyMin() {
-    return gulp.src(buildDir + name + '.browserify.js')
+    return gulp.src(srcDir + 'index.js')
+        .pipe($$.replace(
+            'module.exports =',
+            'window.hyperAnalytics ='
+        ))
         .pipe($$.browserify())
-        //.pipe($$.sourcemaps.init({loadMaps: true}))
-        // Add transformation tasks to the pipeline here:
         .pipe($$.uglify())
-        //.on('error', $$.gutil.log)
-        //.pipe($$.sourcemaps.write('./'))
         .on('error', $$.util.log)
         .pipe($$.rename(name + '.min.js'))
         .pipe(gulp.dest(buildDir));
@@ -107,19 +102,6 @@ function doc(cb) {
         console.log(stdout);
         console.log(stderr);
         cb(err);
-    });
-}
-
-function browserSyncLaunchServer() {
-    browserSync.init({
-        server: {
-            // Serve up our build folder
-            baseDir: buildDir,
-            routes: {
-                "/bower_components": "bower_components"
-            }
-        },
-        port: 5000
     });
 }
 

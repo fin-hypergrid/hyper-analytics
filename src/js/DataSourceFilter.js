@@ -2,6 +2,10 @@
 
 var DataSourceIndexed = require('./DataSourceIndexed');
 
+/**
+ * @constructor
+ * @extends DataSourceIndexed
+ */
 var DataSourceFilter = DataSourceIndexed.extend('DataSourceFilter', {
 
     initialize: function() {

@@ -3,11 +3,28 @@
 var DataSourceIndexed = require('./DataSourceIndexed');
 var stableSort = require('./util/stableSort');
 
+/**
+ * @constructor
+ * @extends DataSourceIndexed
+ */
 var DataSourceSorter = DataSourceIndexed.extend('DataSourceSorter', {
+
+    /**
+     * @memberOf DataSourceSorter.prototype
+     */
     initialize: function() {
+        /**
+         * @memberOf DataSourceSorter.prototype
+         * @type {boolean}
+         */
         this.descendingSort = false; // TODO: this does not seem to be in use
     },
 
+    /**
+     * @memberOf DataSourceSorter.prototype
+     * @param {number} colIdx
+     * @param {number} [direction=1]
+     */
     sortOn: function(colIdx, direction) {
         switch (direction) {
             case 0:
@@ -28,6 +45,11 @@ var DataSourceSorter = DataSourceIndexed.extend('DataSourceSorter', {
     }
 });
 
+/**
+ * @private
+ * @param {*|function} valOrFunc
+ * @returns {*}
+ */
 function valOrFuncCall(valOrFunc) {
     return typeof valOrFunc === 'function' ? valOrFunc() : valOrFunc;
 }

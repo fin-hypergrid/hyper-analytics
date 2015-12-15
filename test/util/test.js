@@ -93,6 +93,8 @@ function method(name, parms, setup, tearDown) {
             });
             if (tearDown) {
                 tearDown();
+            } else {
+                it('TEST NEEDED!');
             }
         });
     })

@@ -1,5 +1,91 @@
 'use strict';
 
+/**
+ * @module aggregations
+ */
+
+/**
+ * @typedef {function} aggregationFunction
+ * @summary A bound function.
+ * @desc An aggregation function bound to the `columnIndex` value supplied to one of the above factory functions.
+ * @param {object} group
+ * @returns {*} Aggregated value.
+ */
+
+module.exports = {
+    /**
+     * @instance
+     * @param {number} columnIndex
+     * @returns {aggregationFunction} Bound function.
+     */
+    count: function(columnIndex) {
+        return count;
+    },
+
+    /**
+     * @instance
+     * @param {number} columnIndex
+     * @returns {aggregationFunction} Bound function.
+     */
+    sum: function(columnIndex) {
+        return sum.bind(this, columnIndex);
+    },
+
+    /**
+     * @instance
+     * @param {number} columnIndex
+     * @returns {aggregationFunction} Bound function.
+     */
+    min: function(columnIndex) {
+        return minmax.bind(this, columnIndex, Math.min, Infinity);
+    },
+
+    /**
+     * @instance
+     * @param {number} columnIndex
+     * @returns {aggregationFunction} Bound function.
+     */
+    max: function(columnIndex) {
+        return minmax.bind(this, columnIndex, Math.max, -Infinity);
+    },
+
+    /**
+     * @instance
+     * @param {number} columnIndex
+     * @returns {aggregationFunction} Bound function.
+     */
+    avg: function(columnIndex) {
+        return avg.bind(this, columnIndex);
+    },
+
+    /**
+     * @instance
+     * @param {number} columnIndex
+     * @returns {aggregationFunction} Bound function.
+     */
+    first: function(columnIndex) {
+        return first.bind(this, columnIndex);
+    },
+
+    /**
+     * @instance
+     * @param {number} columnIndex
+     * @returns {aggregationFunction} Bound function.
+     */
+    last: function(columnIndex) {
+        return last.bind(this, columnIndex);
+    },
+
+    /**
+     * @instance
+     * @param {number} columnIndex
+     * @returns {aggregationFunction} Bound function.
+     */
+    stddev: function(columnIndex) {
+        return stddev.bind(this, columnIndex);
+    }
+};
+
 function count(group) {
     return group.getRowCount();
 }
@@ -47,30 +133,3 @@ function stddev(columnIndex, group) {
 
     return Math.sqrt(variance / rows);
 }
-
-module.exports = {
-    count: function(columnIndex) {
-        return count;
-    },
-    sum: function(columnIndex) {
-        return sum.bind(this, columnIndex);
-    },
-    min: function(columnIndex) {
-        return minmax.bind(this, columnIndex, Math.min, Infinity);
-    },
-    max: function(columnIndex) {
-        return minmax.bind(this, columnIndex, Math.max, -Infinity);
-    },
-    avg: function(columnIndex) {
-        return avg.bind(this, columnIndex);
-    },
-    first: function(columnIndex) {
-        return first.bind(this, columnIndex);
-    },
-    last: function(columnIndex) {
-        return last.bind(this, columnIndex);
-    },
-    stddev: function(columnIndex) {
-        return stddev.bind(this, columnIndex);
-    }
-};

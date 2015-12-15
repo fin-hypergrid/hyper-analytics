@@ -30,16 +30,10 @@ module.exports = function() {
             });
         });
 
-        test.method('prune', 0, function() {
-            it('TEST NEEDED!');
-        });
+        test.method('toArray', 0);
 
-        test.method('buildView', 1, function() {
-            it('TEST NEEDED!');
-        });
+        test.method('buildView', 1);
 
-        test.method('computeHeight', 0, function() {
-            it('TEST NEEDED!');
-        });
+        test.method('computeHeight', 0);
     });
 };

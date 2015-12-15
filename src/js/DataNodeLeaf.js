@@ -12,7 +12,7 @@ var DataNodeLeaf = DataNodeBase.extend('DataNodeLeaf', {
      * @memberOf DataNodeLeaf.prototype
      * @param depth
      */
-    prune: function(depth) {
+    toArray: function(depth) {
         this.depth = depth;
         this.data[0] = this.computeDepthString();
     },

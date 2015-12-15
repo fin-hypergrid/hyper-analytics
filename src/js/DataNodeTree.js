@@ -21,10 +21,10 @@ var DataNodeTree = DataNodeGroup.extend('DataNodeTree', {
     /**
      * @memberOf DataNodeGroup.prototype
      */
-    prune: function() {
+    toArray: function() {
         this.children = this.children.values;
         this.children.forEach(function(child) {
-            child.prune(0);
+            child.toArray(0);
         });
     },
 

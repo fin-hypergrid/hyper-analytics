@@ -30,20 +30,13 @@ module.exports = function() {
                 });
             });
 
-            test.property('values', function() {
-                it('is initialized to an empty array', function() {
-                    object.values.should.be.an.Array();
-                    object.values.length.should.equal(0);
-                });
-            });
-
-            test.method('getIfAbsent', 2, function() {
-                it('returns value from `ifAbsentFunc()`', function() {
+            test.method('getIfUndefined', 2, function() {
+                it('returns value from `ifUndefinedFunc()`', function() {
                     var KEY = 'abc', VALUE = 789;
-                    function ifAbsentFunc(key, context) {
+                    function ifUndefinedFunc(key, context) {
                         return VALUE;
                     };
-                    object.getIfAbsent(KEY, ifAbsentFunc).should.equal(VALUE);
+                    object.getIfUndefined(KEY, ifUndefinedFunc).should.equal(VALUE);
                 });
             });
         });
@@ -101,21 +94,21 @@ module.exports = function() {
                 })
             });
 
-            test.method('getIfAbsent', 2, function() {
+            test.method('getIfUndefined', 2, function() {
                 var called;
-                function ifAbsentFunc(key, context) {
+                function ifUndefinedFunc(key, context) {
                     called = true;
                     return 789;
                 }
                 beforeEach(function() {
                     called = false;
                 });
-                it('ignores `ifAbsentFunc`', function() {
-                    object.getIfAbsent(KEY, ifAbsentFunc);
+                it('ignores `ifUndefinedFunc`', function() {
+                    object.getIfUndefined(KEY, ifUndefinedFunc);
                     called.should.be.false();
                 });
                 it('returns value from `data`', function() {
-                    object.getIfAbsent(KEY, ifAbsentFunc).should.equal(VALUE);
+                    object.getIfUndefined(KEY, ifUndefinedFunc).should.equal(VALUE);
                 });
             });
 

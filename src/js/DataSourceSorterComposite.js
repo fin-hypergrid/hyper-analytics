@@ -33,6 +33,15 @@ var DataSourceSorterComposite = DataSourceIndexed.extend('DataSourceSorterCompos
 
     /**
      * @memberOf DataSourceSorterComposite.prototype
+     * @param {number} y
+     * @returns {Object}
+     */
+    getRow: function(y) {
+        return this.last.getRow(y);
+    },
+
+    /**
+     * @memberOf DataSourceSorterComposite.prototype
      * @param columnIndex
      * @param direction
      */
@@ -64,8 +73,8 @@ var DataSourceSorterComposite = DataSourceIndexed.extend('DataSourceSorterCompos
 
     /**
      * @memberOf DataSourceSorterComposite.prototype
-     * @param x
-     * @param y
+     * @param {number} x
+     * @param {number} y
      * @returns {*}
      */
     getValue: function(x, y) {
@@ -74,9 +83,9 @@ var DataSourceSorterComposite = DataSourceIndexed.extend('DataSourceSorterCompos
 
     /**
      * @memberOf DataSourceSorterComposite.prototype
-     * @param x
-     * @param y
-     * @param value
+     * @param {number} x
+     * @param {number} y
+     * @param {*} value
      */
     setValue: function(x, y, value) {
         this.last.setValue(x, y, value);

@@ -7,7 +7,7 @@ var test = require('./util/test');
 //require('should-sinon'); // extends Object.should to make should-like asserts for sinon spies
 
 require('./aggregations')();
-require('./map')();
+require('./Mappy')();
 require('./stableSort')();
 require('./DataSource')();
 require('./DataSourceIndexed')();

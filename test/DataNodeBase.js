@@ -102,9 +102,9 @@ module.exports = function() {
                 });
             });
 
-            test.method('prune', 1, function() {
+            test.method('toArray', 1, function() {
                 beforeEach(function() {
-                    object.prune(3);
+                    object.toArray(3);
                 });
                 it('sets the depth', function() {
                     object.depth.should.equal(3);
@@ -136,9 +136,7 @@ module.exports = function() {
             //    });
             //});
 
-            test.method('computeAggregates', 1, function() {
-                it('TEST NEEDED!');
-            });
+            test.method('computeAggregates', 1);
 
             test.method('buildView', 1, function() {
                 it('adds self to given aggregator\'s view', function() {

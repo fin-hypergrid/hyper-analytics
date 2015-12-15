@@ -29,11 +29,11 @@ var DataNodeGroup = DataNodeBase.extend('DataNodeGroup', {
      * @memberOf DataNodeGroup.prototype
      * @param depth
      */
-    prune: function(depth) {
+    toArray: function(depth) {
         this.depth = depth;
-        this.children = this.children.values; // TODO: why?
+        this.children = this.children.values;
         this.children.forEach(function(child) {
-            child.prune(depth + 1);
+            child.toArray(depth + 1);
         });
         this.data[0] = this.computeDepthString();
     },

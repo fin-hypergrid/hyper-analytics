@@ -1,12 +1,13 @@
 'use strict';
 
 /**
+ * Note that {@link module:stableSort#sort|sort()} is the only exposed method.
  * @module stableSort
  */
 
 /**
  * @private
- * @memberOf stableSort
+ * @instance
  * @param {function} comparator
  * @param {boolean} descending
  * @param {Array} arr1
@@ -34,7 +35,7 @@ function stabilize(comparator, descending, arr1, arr2) { // eslint-disable-line 
 
 /**
  * @private
- * @memberOf stableSort
+ * @instance
  * @param x
  * @param y
  * @returns {number}
@@ -45,7 +46,7 @@ function ascendingNumbers(x, y) {
 
 /**
  * @private
- * @memberOf stableSort
+ * @instance
  * @param x
  * @param y
  * @returns {number}
@@ -56,7 +57,7 @@ function descendingNumbers(x, y) {
 
 /**
  * @private
- * @memberOf stableSort
+ * @instance
  * @param x
  * @param y
  * @returns {number}
@@ -67,7 +68,7 @@ function ascendingAllOthers(x, y) {
 
 /**
  * @private
- * @memberOf stableSort
+ * @instance
  * @param x
  * @param y
  * @returns {number}
@@ -78,7 +79,7 @@ function descendingAllOthers(x, y) {
 
 /**
  * @private
- * @memberOf stableSort
+ * @instance
  * @param typeOfData
  * @returns {function(this:ascending)}
  */
@@ -88,7 +89,7 @@ function ascending(typeOfData) {
 
 /**
  * @private
- * @memberOf stableSort
+ * @instance
  * @param typeOfData
  * @returns {function(this:descending)}
  */
@@ -97,7 +98,7 @@ function descending(typeOfData) {
 }
 
 /**
- * @memberOf stableSort
+ * @instance
  * @param {number} index
  * @param {function} getValue
  * @param {number} [direction=1]

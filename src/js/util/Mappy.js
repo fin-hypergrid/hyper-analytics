@@ -15,6 +15,8 @@ Mappy.prototype = {
 
     /**
      * @memberOf Mappy.prototype
+     * @param key
+     * @param value
      */
     set: function(key, value) {
         var hashCode = hash(key);
@@ -36,15 +38,17 @@ Mappy.prototype = {
     },
 
     /**
+     *
      * @memberOf Mappy.prototype
      * @param key
-     * @param ifAbsentFunc
+     * @param {function} ifUndefinedFunc - Value getter when value is otherwise undefined.
      * @returns {*}
      */
-    getIfAbsent: function(key, ifAbsentFunc) {
+    getIfUndefined: function(key, ifUndefinedFunc) {
         var value = this.get(key);
         if (value === undefined) {
-            value = ifAbsentFunc(key, this);
+            value = ifUndefinedFunc(key);
+            this.set(key, value);
         }
         return value;
     },
@@ -58,7 +62,7 @@ Mappy.prototype = {
      */
     clear: function() {
         this.keys.length = 0;
-        // TODO: Is there a reason why this.values is not being truncated here as well?
+        this.values.length = 0;
         this.data = {};
     },
 
@@ -78,29 +82,36 @@ Mappy.prototype = {
 
     /**
      * @memberOf Mappy.prototype
-     * @param func
+     * @param {function} iteratee
      */
-    forEach: function(func) {
-        var keys = this.keys,
-            self = this;
-        keys.forEach(function(key) {
-            var value = self.get(key);
-            func(value, key, self);
-        });
+    forEach: function(iteratee) {
+        if (typeof iteratee === 'function') {
+            var keys = this.keys,
+                self = this;
+            keys.forEach(function(key) {
+                var value = self.get(key);
+                iteratee(value, key, self);
+            });
+        }
     },
 
     /**
      * @memberOf Mappy.prototype
-     * @param func
+     * @param {function} iteratee
      * @returns {Mappy}
      */
-    map: function(func) {
+    map: function(iteratee) {
         var keys = this.keys,
             newMap = new Mappy(),
             self = this;
+
+        if (!(typeof iteratee === 'function')) {
+            iteratee = reflection;
+        }
+
         keys.forEach(function(key) {
             var value = self.get(key),
-                transformed = func(value, key, self);
+                transformed = iteratee(value, key, self);
             newMap.set(key, transformed);
         });
         return newMap;
@@ -137,24 +148,33 @@ function hash(key) {
             return OID_PREFIX + typeOf + '_' + key;
 
         case 'undefined':
-            return OID_PREFIX + 'undefined';
+            return 'UNDEFINED';
 
         case 'object':
-            // TODO: what about handling null (special case of object)?
+            if (key === null) {
+                return 'NULL';
+            }
+            // fall through when not null:
         case 'function':
-            return (key.___finhash = key.___finhash || OID_PREFIX + counter++); // eslint-disable-line
+            return (key.___finhash = key.___finhash || OID_PREFIX + counter++); // eslint-disable-line no-underscore-dangle
     }
 }
 
 // Object.is polyfill, courtesy of @WebReflection
 var is = Object.is || function(a, b) {
-    return a === b ? a !== 0 || 1 / a == 1 / b : a != a && b != b; // eslint-disable-line
+    return a === b ? a !== 0 || 1 / a == 1 / b : a != a && b != b; // eslint-disable-line eqeqeq
 };
+
+function reflection(val) {
+    return val;
+}
 
 // More reliable indexOf, courtesy of @WebReflection
 function betterIndexOf(arr, value) {
-    if (value != value || value === 0) { // eslint-disable-line
-        for (var i = arr.length; i-- && !is(arr[i], value);) { // eslint-disable-line
+    if (value != value || value === 0) { // eslint-disable-line eqeqeq
+        var i = arr.length;
+        while (i-- && !is(arr[i], value)) {
+            // eslint-disable-line no-empty
         }
     } else {
         i = [].indexOf.call(arr, value);

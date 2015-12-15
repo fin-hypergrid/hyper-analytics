@@ -15,11 +15,11 @@ module.exports = function() {
             object.should.be.an.instanceof(require('../src/js/DataNodeBase'));
         });
 
-        test.method('prune', 1, function() {
+        test.method('toArray', 1, function() {
             var DEPTH = 3, spy_computeDepthString;
             beforeEach(function() {
                 spy_computeDepthString = sinon.spy(object, 'computeDepthString');
-                object.prune(DEPTH);
+                object.toArray(DEPTH);
             });
             test.property('depth', function() {
                 it('is initialized to 1st arg of constructor', function() {

@@ -101,10 +101,9 @@ DataSourceAggregator.prototype = {
             this.headers.push('Tree');
         }
 
-        var self = this;
-        Object.getOwnPropertyNames(aggregations).forEach(function(key) {
-            self.addAggregate(key, aggregations[key]);
-        });
+        for (var key in aggregations) {
+            this.addAggregate(key, aggregations[key]);
+        }
     },
 
     /**
@@ -199,17 +198,15 @@ DataSourceAggregator.prototype = {
 
             groupBys.forEach(function(g, c) { // eslint-disable-line no-loop-func
                 var key = source.getValue(g, r),
-                    terminalNode = (c === leafDepth),
-                    Constructor = terminalNode ? DataNodeLeaf : DataNodeGroup,
-                    ifAbsentFunc = createNode.bind(this, Constructor);
-                path = path.children.getIfAbsent(key, ifAbsentFunc);
+                    factoryDataNode = (c === leafDepth) ? factoryDataNodeLeaf : factoryDataNodeGroup;
+                path = path.children.getIfUndefined(key, factoryDataNode);
             });
 
             path.index.push(r);
         }
 
         this.sorterInstance = new DataSourceSorter(source);
-        tree.prune();
+        tree.toArray();
         tree.computeAggregates(this);
         this.buildView();
     },
@@ -370,17 +367,12 @@ DataSourceAggregator.prototype = {
     }
 };
 
-/**
- * @private
- * @param DataNodeConstructor
- * @param key
- * @param map
- * @returns {DataNodeBase}
- */
-function createNode(DataNodeConstructor, key, map) {
-    var value = new DataNodeConstructor(key);
-    map.set(key, value);
-    return value;
+function factoryDataNodeLeaf(key) {
+    return new DataNodeLeaf(key);
+}
+
+function factoryDataNodeGroup(key) {
+    return new DataNodeGroup(key);
 }
 
 module.exports = DataSourceAggregator;

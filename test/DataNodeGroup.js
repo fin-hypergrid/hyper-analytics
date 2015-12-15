@@ -25,19 +25,19 @@ module.exports = function() {
 
         test.method('computeDepthString', 0, function() {
             object.depth = 0;
-            /(   ){0}(▾|▸) key/.test(object.computeDepthString()).should.be.true();
+            /(   ){0}(▼|▶) key/.test(object.computeDepthString()).should.be.true();
 
             object.depth = 1;
-            /(   ){1}(▾|▸) key/.test(object.computeDepthString()).should.be.true();
+            /(   ){1}(▼|▶) key/.test(object.computeDepthString()).should.be.true();
 
             object.depth = 2;
-            /(   ){2}(▾|▸) key/.test(object.computeDepthString()).should.be.true();
+            /(   ){2}(▼|▶) key/.test(object.computeDepthString()).should.be.true();
         });
 
         describe('with 3 child nodes are added,', function() {
             var children, DEPTH;
             function NodeMock() {}
-            NodeMock.prototype.prune = sinon.stub();
+            NodeMock.prototype.toArray = sinon.stub();
             beforeEach(function() {
                 children = [];
                 object.children.set('Amy', children[0] = new NodeMock('amy'));
@@ -45,19 +45,19 @@ module.exports = function() {
                 object.children.set('Ann', children[2] = new NodeMock('ann'));
             });
 
-            test.method('prune', 1, function() {
+            test.method('toArray', 1, function() {
                 beforeEach(function() {
                     DEPTH = 2;
-                    object.prune(DEPTH);
+                    object.toArray(DEPTH);
                 });
                 it('sets `depth` to value of 1st arg', function() {
                     object.depth.should.equal(DEPTH);
                 });
-                it('calls `prune` with depth + 1 on each child', function() {
+                it('calls `toArray` with depth + 1 on each child', function() {
                     DEPTH += 1;
-                    with (NodeMock.prototype.prune.getCall(0)) { calledWith(DEPTH); calledOn(children[0]); }
-                    with (NodeMock.prototype.prune.getCall(1)) { calledWith(DEPTH); calledOn(children[1]); }
-                    with (NodeMock.prototype.prune.getCall(2)) { calledWith(DEPTH); calledOn(children[2]); }
+                    with (NodeMock.prototype.toArray.getCall(0)) { calledWith(DEPTH); calledOn(children[0]); }
+                    with (NodeMock.prototype.toArray.getCall(1)) { calledWith(DEPTH); calledOn(children[1]); }
+                    with (NodeMock.prototype.toArray.getCall(2)) { calledWith(DEPTH); calledOn(children[2]); }
                 });
                 it('sets `data[0]` to result of calling `computeDepthString()`', function() {
                     object.data[0].should.equal(object.computeDepthString());
@@ -65,28 +65,16 @@ module.exports = function() {
             });
         });
 
-        test.method('getIndex', 0, function() {
-            it('TEST NEEDED!');
-        });
+        test.method('getIndex', 0);
 
-        test.method('computeIndex', 0, function() {
-            it('TEST NEEDED!');
-        });
+        test.method('computeIndex', 0);
 
-        test.method('toggleExpansionState', 1, function() {
-            it('TEST NEEDED!');
-        });
+        test.method('toggleExpansionState', 1);
 
-        test.method('computeAggregates', 1, function() {
-            it('TEST NEEDED!');
-        });
+        test.method('computeAggregates', 1);
 
-        test.method('buildView', 1, function() {
-            it('TEST NEEDED!');
-        });
+        test.method('buildView', 1);
 
-        test.method('computeHeight', 0, function() {
-            it('TEST NEEDED!');
-        });
+        test.method('computeHeight', 0);
     });
 };

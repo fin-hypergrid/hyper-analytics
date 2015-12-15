@@ -96,101 +96,53 @@ module.exports = function() {
                 });
             });
 
-            test.method('setAggregates', 1, function() {
-                it('TEST NEEDED!');
-            });
+            test.method('setAggregates', 1);
 
-            test.method('addAggregate', 2, function() {
-                it('TEST NEEDED!');
-            });
+            test.method('addAggregate', 2);
 
-            test.method('setGroupBys', 1, function() {
-                it('TEST NEEDED!');
-            });
+            test.method('setGroupBys', 1);
 
-            test.method('addGroupBy', 1, function() {
-                it('TEST NEEDED!');
-            });
+            test.method('addGroupBy', 1);
 
-            test.method('hasGroups', 0, function() {
-                it('TEST NEEDED!');
-            });
+            test.method('hasGroups', 0);
 
-            test.method('hasAggregates', 0, function() {
-                it('TEST NEEDED!');
-            });
+            test.method('hasAggregates', 0);
 
-            test.method('apply', 0, function() {
-                it('TEST NEEDED!');
-            });
+            test.method('apply', 0);
 
-            test.method('clearGroups', 0, function() {
-                it('TEST NEEDED!');
-            });
+            test.method('clearGroups', 0);
 
-            test.method('clearAggregations', 0, function() {
-                it('TEST NEEDED!');
-            });
+            test.method('clearAggregations', 0);
 
-            test.method('buildGroupTree', 0, function() {
-                it('TEST NEEDED!');
-            });
+            test.method('buildGroupTree', 0);
 
-            test.method('buildView', 0, function() {
-                it('TEST NEEDED!');
-            });
+            test.method('buildView', 0);
 
-            test.method('viewMakesSense', 0, function() {
-                it('TEST NEEDED!');
-            });
+            test.method('viewMakesSense', 0);
 
-            test.method('getValue', 2, function() {
-                it('TEST NEEDED!');
-            });
+            test.method('getValue', 2);
 
-            test.method('setValue', 3, function() {
-                it('TEST NEEDED!');
-            });
+            test.method('setValue', 3);
 
-            test.method('getColumnCount', 0, function() {
-                it('TEST NEEDED!');
-            });
+            test.method('getColumnCount', 0);
 
-            test.method('getRowCount', 0, function() {
-                it('TEST NEEDED!');
-            });
+            test.method('getRowCount', 0);
 
-            test.method('click', 1, function() {
-                it('TEST NEEDED!');
-            });
+            test.method('click', 1);
 
-            test.method('getHeaders', 0, function() {
-                it('TEST NEEDED!');
-            });
+            test.method('getHeaders', 0);
 
-            test.method('setHeaders', 1, function() {
-                it('TEST NEEDED!');
-            });
+            test.method('setHeaders', 1);
 
-            test.method('getFields', 0, function() {
-                it('TEST NEEDED!');
-            });
+            test.method('getFields', 0);
 
-            test.method('setFields', 1, function() {
-                it('TEST NEEDED!');
-            });
+            test.method('setFields', 1);
 
-            test.method('getGrandTotals', 0, function() {
-                it('TEST NEEDED!');
-            });
+            test.method('getGrandTotals', 0);
 
-            test.method('getRow', 1, function() {
-                it('TEST NEEDED!');
-            });
+            test.method('getRow', 1);
 
-            test.method('setData', 1, function() {
-                it('TEST NEEDED!');
-            });
+            test.method('setData', 1);
         });
     });
 }

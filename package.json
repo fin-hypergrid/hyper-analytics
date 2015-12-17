@@ -1,12 +1,11 @@
 {
   "name": "hyper-analytics",
-  "version": "0.9.9",
+  "version": "0.9.11",
   "description": "Data transformations on arrays of congruent JavaScript objects.",
   "repository": {
     "type": "git",
     "url": "git://github.com/openfin/hyper-analytics.git"
   },
-  "main": "src/index.js",
   "scripts": {
     "test": "gulp test"
   },

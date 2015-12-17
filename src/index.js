@@ -8,6 +8,8 @@ module.exports = {
     DataSourceGlobalFilter: require('./js/DataSourceGlobalFilter'),
     DataSourceAggregator: require('./js/DataSourceAggregator'),
     util: {
-        aggregations: require('./js/util/aggregations')
+        aggregations: require('./js/util/aggregations'),
+        aggregations: require('./js/util/Mappy'),
+        aggregations: require('./js/util/stableSort')
     }
 };

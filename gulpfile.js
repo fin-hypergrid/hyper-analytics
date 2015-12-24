@@ -8,18 +8,10 @@ var gulp        = require('gulp'),
     path        = require('path');
 
 var name     = 'hyper-analytics',
+    global   = 'hyperAnalytics',
     srcDir   = './src/',
     testDir  = './test/',
-    jsDir    = srcDir + 'js/',
-    jsFiles  = '**/*.js',
     buildDir = './build/';
-
-//var isBuilding = false;
-
-var js = {
-    dir   : jsDir,
-    files : jsDir + jsFiles
-};
 
 //  //  //  //  //  //  //  //  //  //  //  //
 
@@ -54,7 +46,7 @@ gulp.task('default', ['build', 'watch']);
 //  //  //  //  //  //  //  //  //  //  //  //
 
 function lint() {
-    return gulp.src(js.files)
+    return gulp.src(srcDir + '**/*.js')
         .pipe($$.excludeGitignore())
         .pipe($$.eslint())
         .pipe($$.eslint.format())
@@ -67,16 +59,16 @@ function test(cb) {
 }
 
 function beautify() {
-    return gulp.src(js.files)
+    return gulp.src(srcDir + '**/*.js')
         .pipe($$.beautify()) //apparent bug: presence of a .jsbeautifyrc file seems to force all options to their defaults (except space_after_anon_function which is forced to true) so I deleted the file. Any needed options can be included here.
-        .pipe(gulp.dest(js.dir));
+        .pipe(gulp.dest(srcDir));
 }
 
 function browserify() {
     return gulp.src(srcDir + 'index.js')
         .pipe($$.replace(
             'module.exports =',
-            'window.hyperAnalytics ='
+            'window.' + global + ' ='
         ))
         .pipe($$.browserify({  debug: true }))
         .on('error', $$.util.log)
@@ -88,7 +80,7 @@ function browserifyMin() {
     return gulp.src(srcDir + 'index.js')
         .pipe($$.replace(
             'module.exports =',
-            'window.hyperAnalytics ='
+            'window.' + global + ' ='
         ))
         .pipe($$.browserify())
         .pipe($$.uglify())

@@ -9,7 +9,7 @@ module.exports = {
     DataSourceAggregator: require('./js/DataSourceAggregator'),
     util: {
         aggregations: require('./js/util/aggregations'),
-        aggregations: require('./js/util/Mappy'),
-        aggregations: require('./js/util/stableSort')
+        Mappy: require('./js/util/Mappy'),
+        stableSort: require('./js/util/stableSort')
     }
 };

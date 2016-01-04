@@ -39,13 +39,20 @@ var DataSourceFilter = DataSourceIndexed.extend('DataSourceFilter', {
     }
 });
 
+/**
+ * @private
+ * @type filterPredicate
+ */
 function applyFilters(r, rowObject) { // called in context from .buildIndex()
-    var self = this;
+    var i = this.filters.length;
 
-    // double negative here means "no filter fails" (i.e., row passes all filters)
-    return !this.filters.find(function(filter) {
-        return !filter(self.dataSource.getValue(filter.columnIndex, r), rowObject, r);
-    });
+    while (i--) {
+        if (!this.filters[i](this.dataSource.getValue(this.filters[i].columnIndex, r), rowObject, r)) {
+            return false;  // a column filter failed: row is disqualified
+        }
+    }
+
+    return true; // no column filter failed: row is qualified
 }
 
 module.exports = DataSourceFilter;

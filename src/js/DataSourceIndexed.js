@@ -135,7 +135,7 @@ var DataSourceIndexed = Base.extend('DataSourceIndexed', {
 
     /**
      * @memberOf DataSourceIndexed.prototype
-     * @param predicate
+     * @param {filterPredicate} predicate
      * @returns {number[]}
      */
     buildIndex: function(predicate) {
@@ -154,5 +154,12 @@ var DataSourceIndexed = Base.extend('DataSourceIndexed', {
     }
 
 });
+
+/** @typedef {function} filterPredicate
+ * @summary Applies filter to given row.
+ * @param {nubmer} r - Row index of row data within rows array `this.dataSource.data[]`.
+ * @param {object} rowObject - Row data; element of `this.dataSource.data[]`.
+ * @returns {boolean} Row qualifies (passes through filter).
+ */
 
 module.exports = DataSourceIndexed;

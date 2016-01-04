@@ -65,16 +65,20 @@ var DataSourceGlobalFilter = DataSourceIndexed.extend('DataSourceGlobalFilter', 
 });
 
 /**
- * *private
- * @param {nubmer} r
- * @param {object} rowObject
+ * @private
+ * @type filterPredicate
  */
 function applyFilter(r, rowObject) { // called in context from .buildIndex()
-    var self = this;
-    return this.visibleColumnMap.find(function(columnIndex, mapIndex) {
-        var cellValue = self.dataSource.getValue(columnIndex, r);
-        return self.filter(cellValue, rowObject, r);
-    });
+    var map = this.visibleColumnMap,
+        i = map.length;
+
+    while (i--) {
+        if (this.filter(this.dataSource.getValue(map[i], r), rowObject, r)) {
+            return true; // any column filter succeeds: row is qualified
+        }
+    }
+
+    return false; // all column filters failed: row disqualified
 }
 
 module.exports = DataSourceGlobalFilter;

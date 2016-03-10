@@ -25,10 +25,18 @@ module.exports = function() {
         });
 
         test.method('set', 1, function() {
-            it('sets instance var `filter` to 2nd param (`filter`)', function() {
+            it('sets instance var `filter` to param (`filter`)', function() {
                 var filter = {};
                 object.set(filter);
                 object.filter.should.equal(filter);
+            });
+        });
+
+        test.method('get', 1, function() {
+            it('returns instance var `filter`', function() {
+                object.filter = {};
+                var filter = object.get(filter);
+                filter.should.equal(object.filter);
             });
         });
 
@@ -46,15 +54,11 @@ module.exports = function() {
             })
         });
 
-        test.method('apply', 1, function() {
-            var visibleColumns;
-            beforeEach(function() {
-                visibleColumns = [{ index: 1 }, { index: 3 }];
-            });
+        test.method('apply', 0, function() {
             describe('when global filter is not defined', function() {
                 it('calls `clearIndex`', function() {
                     var spy = sinon.spy(object, 'clearIndex');
-                    object.apply(visibleColumns);
+                    object.apply();
                     spy.should.be.called();
                 });
             });
@@ -63,23 +67,24 @@ module.exports = function() {
                     ROW_INDEX = 4;
                 beforeEach(function() {
                     stub = sinon.stub(object, 'buildIndex');
+
                     filterStub = sinon.stub();
                     filterStub.onCall(0).returns(false);
                     filterStub.onCall(1).returns(true); // stop filtering at 2nd column (columnIndex === 2 as per setFields below)
                     filterStub.onCall(2).returns(true);
 
                     object.setFields([0, 2, 3]); // skip columnIndex === 1
-                    object.set(filterStub);
+                    object.set({ test: filterStub });
                 });
                 describe('calls `buildIndex`', function() {
                     it('called exactly once', function() {
-                        object.apply(visibleColumns);
+                        object.apply();
                         stub.should.be.calledOnce();
                     });
                     describe('with a single parameter that', function() {
                         var applyFilter;
                         beforeEach(function() {
-                            object.apply(visibleColumns);
+                            object.apply();
                             applyFilter = stub.getCall(0).args[0];
                         });
                         it('is the only parameter', function() {
@@ -95,14 +100,15 @@ module.exports = function() {
                             describe('when called for a given row', function() {
                                 describe('applies given `filter` to each column in `object.fields`', function() {
                                     beforeEach(function() {
-                                        applyFilter.call(object, ROW_INDEX, DATA[ROW_INDEX]);
+                                        applyFilter.call(object, 2, DATA[2]);
+                                        applyFilter.call(object, 3, DATA[3]);
                                     });
                                     it('exactly twice (because 2nd filter stub returns `true`)', function() {
-                                        filterStub.calledTwice;
+                                        filterStub.should.be.calledTwice();
                                     });
-                                    it('with (cell value, row object, row number)', function() {
-                                        filterStub.getCall(0).calledWith(0, DATA[ROW_INDEX], ROW_INDEX);
-                                        filterStub.getCall(1).calledWith(2, DATA[ROW_INDEX], ROW_INDEX);
+                                    it('with (row object)', function() {
+                                        filterStub.getCall(0).calledWith(DATA[2]);
+                                        filterStub.getCall(1).calledWith(DATA[3]);
                                     });
                                 });
                             });
@@ -110,11 +116,11 @@ module.exports = function() {
                                 it('`false` when filter falsy for all columns', function() {
                                     filterStub.onCall(1).returns(false);
                                     filterStub.onCall(2).returns(false);
-                                    object.apply(visibleColumns);
+                                    object.apply();
                                     stub.returns(false);
                                 });
                                 it('`true` when filter when returns truthy for any column', function() {
-                                    object.apply(visibleColumns);
+                                    object.apply();
                                     stub.returns(true);
                                 });
                             });

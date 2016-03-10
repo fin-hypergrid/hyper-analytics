@@ -28,6 +28,10 @@ var DataSourceGlobalFilter = DataSourceIndexed.extend('DataSourceGlobalFilter', 
         this.filter = filter;
     },
 
+    get: function(filter) {
+        return this.filter;
+    },
+
     /**
      *
      * @memberOf DataSourceGlobalFilter.prototype
@@ -40,17 +44,14 @@ var DataSourceGlobalFilter = DataSourceIndexed.extend('DataSourceGlobalFilter', 
     /**
      *
      * @memberOf DataSourceGlobalFilter.prototype
-     * @param {object} visibleColumns
      */
-    apply: function(visibleColumns) {
+    apply: function() {
         if (!this.filter) {
             this.clearIndex();
         } else {
-            var visibleColumnMap = this.visibleColumnMap = [];
-            visibleColumns.forEach(function(column) {
-                visibleColumnMap.push(column.index);
+            this.buildIndex(function applyFilter(r, rowObject) {
+                return this.filter.test(rowObject);
             });
-            this.buildIndex(applyFilter);
         }
     },
 
@@ -63,22 +64,5 @@ var DataSourceGlobalFilter = DataSourceIndexed.extend('DataSourceGlobalFilter', 
         return this.filter ? this.index.length : this.dataSource.getRowCount();
     }
 });
-
-/**
- * @private
- * @type filterPredicate
- */
-function applyFilter(r, rowObject) { // called in context from .buildIndex()
-    var map = this.visibleColumnMap,
-        i = map.length;
-
-    while (i--) {
-        if (this.filter(this.dataSource.getValue(map[i], r), rowObject, r)) {
-            return true; // any column filter succeeds: row is qualified
-        }
-    }
-
-    return false; // all column filters failed: row disqualified
-}
 
 module.exports = DataSourceGlobalFilter;

@@ -11,7 +11,6 @@ require('./Mappy')();
 require('./stableSort')();
 require('./DataSource')();
 require('./DataSourceIndexed')();
-require('./DataSourceFilter')();
 require('./DataSourceGlobalFilter')();
 require('./DataSourceSorter')();
 require('./DataSourceSorterComposite')();

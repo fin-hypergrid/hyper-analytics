@@ -25,10 +25,26 @@ module.exports = function() {
         });
 
         test.method('set', 1, function() {
-            it('sets instance var `filter` to param (`filter`)', function() {
-                var filter = {};
+            var filter;
+            beforeEach(function() {
+                filter = {};
                 object.set(filter);
-                object.filter.should.equal(filter);
+            });
+            describe('has an overload where 1 parameter is given that', function() {
+                it('sets instance var `filter` to param (`filter`)', function() {
+                    object.filter.should.equal(filter);
+                });
+            });
+            describe('has an overload where no parameters are given', function() {
+                it('undefines `filter`', function() {
+                    object.set();
+                    should(object.filter).equal(undefined);
+                });
+                it('calls `clearIndex`', function() {
+                    var spy = sinon.spy(object, 'clearIndex');
+                    object.set();
+                    spy.should.be.called();
+                });
             });
         });
 
@@ -38,20 +54,6 @@ module.exports = function() {
                 var filter = object.get(filter);
                 filter.should.equal(object.filter);
             });
-        });
-
-        test.method('clear', 0, function() {
-            beforeEach(function() {
-                object.clear();
-            });
-            it('undefines `filter`', function() {
-                should(object.filter).equal(undefined);
-            });
-            it('Calls `clearIndex`', function() {
-                var spy = sinon.spy(object, 'clearIndex');
-                object.clear();
-                spy.should.be.called();
-            })
         });
 
         test.method('apply', 0, function() {

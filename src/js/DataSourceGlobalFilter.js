@@ -18,27 +18,23 @@ var DataSourceGlobalFilter = DataSourceIndexed.extend('DataSourceGlobalFilter', 
     /**
      *
      * @memberOf DataSourceGlobalFilter.prototype
-     * @param filter
+     * @param {object} [filter] - If undefined, deletes filter.
      */
     set: function(filter) {
-        /**
-         * @type {filterFunction}
-         * @memberOf DataSourceGlobalFilter.prototype
-         */
-        this.filter = filter;
+        if (!this.filter) {
+            /**
+             * @type {filterFunction}
+             * @memberOf DataSourceGlobalFilter.prototype
+             */
+            this.filter = filter;
+        } else {
+            delete this.filter;
+            this.clearIndex();
+        }
     },
 
     get: function(filter) {
         return this.filter;
-    },
-
-    /**
-     *
-     * @memberOf DataSourceGlobalFilter.prototype
-     */
-    clear: function() {
-        delete this.filter;
-        this.clearIndex();
     },
 
     /**

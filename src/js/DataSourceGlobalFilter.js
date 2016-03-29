@@ -21,7 +21,7 @@ var DataSourceGlobalFilter = DataSourceIndexed.extend('DataSourceGlobalFilter', 
      * @param {object} [filter] - If undefined, deletes filter.
      */
     set: function(filter) {
-        if (!this.filter) {
+        if (filter) {
             /**
              * @type {filterFunction}
              * @memberOf DataSourceGlobalFilter.prototype
@@ -29,7 +29,6 @@ var DataSourceGlobalFilter = DataSourceIndexed.extend('DataSourceGlobalFilter', 
             this.filter = filter;
         } else {
             delete this.filter;
-            this.clearIndex();
         }
     },
 

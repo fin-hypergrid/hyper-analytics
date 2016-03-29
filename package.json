@@ -1,6 +1,6 @@
 {
   "name": "hyper-analytics",
-  "version": "0.10.2",
+  "version": "0.10.3",
   "description": "Data transformations on arrays of congruent JavaScript objects.",
   "repository": {
     "type": "git",
@@ -9,7 +9,7 @@
   "scripts": {
     "test": "gulp test"
   },
-  "author": "SWirts",
+  "author": "SWirts, JEiten",
   "license": "MIT",
   "devDependencies": {
     "browser-sync": "^2.10.1",

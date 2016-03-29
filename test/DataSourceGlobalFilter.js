@@ -40,11 +40,6 @@ module.exports = function() {
                     object.set();
                     should(object.filter).equal(undefined);
                 });
-                it('calls `clearIndex`', function() {
-                    var spy = sinon.spy(object, 'clearIndex');
-                    object.set();
-                    spy.should.be.called();
-                });
             });
         });
 

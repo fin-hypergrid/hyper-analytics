@@ -188,15 +188,15 @@ var DataSourceAggregator = Base.extend('', {
      * @memberOf DataSourceAggregator.prototype
      */
     buildGroupTree: function() {
-        var groupBys = this.groupBys.reverse(),
-            leafDepth = groupBys.length - 1,
+        var reversedGroupBys = this.groupBys.slice(0).reverse(),
+            leafDepth = this.groupBys.length - 1,
             source = this.dataSource,
             rowCount = source.getRowCount(),
             tree = this.tree = new DataNodeTree('Totals');
 
         // first sort data
         if (this.presortGroups) {
-            groupBys.reverse().forEach(function(groupBy) {
+            reversedGroupBys.forEach(function(groupBy) {
                 source = new DataSourceSorter(source);
                 source.sortOn(groupBy);
             });
@@ -205,7 +205,7 @@ var DataSourceAggregator = Base.extend('', {
         for (var r = 0; r < rowCount; r++) {
             var path = tree;
 
-            groupBys.forEach(function(g, c) { // eslint-disable-line no-loop-func
+            this.groupBys.forEach(function(g, c) { // eslint-disable-line no-loop-func
                 var key = source.getValue(g, r),
                     factoryDataNode = (c === leafDepth) ? factoryDataNodeLeaf : factoryDataNodeGroup;
                 path = path.children.getIfUndefined(key, factoryDataNode);

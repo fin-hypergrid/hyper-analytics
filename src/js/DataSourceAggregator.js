@@ -40,13 +40,6 @@ function DataSourceAggregator(dataSource) {
 
     /**
      * @memberOf DataSourceAggregator.prototype
-     * @type {string[]}
-     * @default []
-     */
-    this.headers = [];
-
-    /**
-     * @memberOf DataSourceAggregator.prototype
      * @type {Array}
      * @default []
      */
@@ -95,24 +88,42 @@ DataSourceAggregator.prototype = {
     setAggregates: function(aggregations) {
         this.lastAggregate = aggregations;
         this.clearAggregations();
-        this.headers.length = 0;
-
-        if (this.hasGroups()) {
-            this.headers.push('Tree');
-        }
 
         for (var key in aggregations) {
             this.addAggregate(key, aggregations[key]);
         }
+
     },
 
+    getFields: function() {
+        if (!this.viewMakesSense()) {
+            return this.dataSource.getFields();
+        }
+        var fields = this.getHeaders().map(function(e) {
+            return e.toLowerCase().split(' ').join('_');
+        });
+        return fields;
+    },
+
+    getHeaders: function() {
+        if (!this.viewMakesSense()) {
+            return this.dataSource.getHeaders();
+        }
+        var headers = this.aggregates.map(function(e) {
+            return e.header;
+        });
+        if (this.hasGroups()) {
+            headers.unshift('Tree');
+        }
+        return headers;
+    },
     /**
      * @memberOf DataSourceAggregator.prototype
      * @param label
      * @param func
      */
     addAggregate: function(label, func) {
-        this.headers.push(headerify(label));
+        func.header = headerify(label);
         this.aggregates.push(func);
     },
 
@@ -172,14 +183,13 @@ DataSourceAggregator.prototype = {
      */
     clearAggregations: function() {
         this.aggregates.length = 0;
-        this.headers.length = 0;
     },
 
     /**
      * @memberOf DataSourceAggregator.prototype
      */
     buildGroupTree: function() {
-        var groupBys = this.groupBys,
+        var groupBys = this.groupBys.reverse(),
             leafDepth = groupBys.length - 1,
             source = this.dataSource,
             rowCount = source.getRowCount(),
@@ -233,7 +243,7 @@ DataSourceAggregator.prototype = {
      * @returns {*|boolean}
      */
     viewMakesSense: function() {
-        return this.hasAggregates();
+        return this.hasAggregates() && this.hasGroups();
     },
 
     /**
@@ -293,19 +303,10 @@ DataSourceAggregator.prototype = {
      */
     click: function(y) {
         var group = this.view[y];
-        group.toggleExpansionState(this);
-        this.buildView();
-    },
-
-    /**
-     * @memberOf DataSourceAggregator.prototype
-     * @returns {*}
-     */
-    getHeaders: function() {
-        if (!this.viewMakesSense()) {
-            return this.dataSource.getHeaders();
+        if (group) {
+            group.toggleExpansionState(this);
         }
-        return this.headers; // TODO: Views override dataSource headers with their own headers?
+        this.buildView();
     },
 
     /**
@@ -314,14 +315,6 @@ DataSourceAggregator.prototype = {
      */
     setHeaders: function(headers) {
         this.dataSource.setHeaders(headers);
-    },
-
-    /**
-     * @memberOf DataSourceAggregator.prototype
-     * @returns {*|number[]}
-     */
-    getFields: function() {
-        return this.dataSource.getFields();
     },
 
     /**
@@ -364,6 +357,35 @@ DataSourceAggregator.prototype = {
     setData: function(arrayOfUniformObjects) {
         this.dataSource.setData(arrayOfUniformObjects);
         this.apply();
+    },
+
+    replaceIndent: '____________________________________________________',
+
+    fixIndentForTableDisplay: function(string) {
+        var count = string.search(/\S/);
+        var end = string.substring(count);
+        var result = this.replaceIndent.substring(0, count) + end;
+        return result;
+    },
+
+    dump: function(max) {
+        max = Math.min(this.getRowCount(), max || Math.max(100, this.getRowCount()));
+        var data = [];
+        var fields = this.getHeaders();
+        var cCount = this.getColumnCount();
+        var viewMakesSense = this.viewMakesSense;
+        for (var r = 0; r < max; r++) {
+            var row = {};
+            for (var c = 0; c < cCount; c++) {
+                var val = this.getValue(c, r);
+                if (c === 0 && viewMakesSense) {
+                    val = this.fixIndentForTableDisplay(val);
+                }
+                row[fields[c]] = val;
+            }
+            data[r] = row;
+        }
+        console.table(data);
     }
 };
 

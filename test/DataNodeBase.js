@@ -79,6 +79,9 @@ module.exports = function() {
                 });
             });
 
+            // testing for empty characters is a bad test, we need to be able
+            // to change this.INDENT to other characters....
+            
             test.method('computeDepthString', 0, function() {
                 var value;
                 describe('returns a value that', function() {

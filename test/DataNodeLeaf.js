@@ -26,6 +26,10 @@ module.exports = function() {
                     object.depth.should.equal(DEPTH);
                 });
             });
+
+            // testing for empty characters is a bad test, we need to be able
+            // to change this.INDENT to other characters....
+            
             test.property('data', function() {
                 describe('has an element [0] that', function() {
                     it('is derived by calling `computeDepthString()` (inherited from DataNodeBase)', function() {

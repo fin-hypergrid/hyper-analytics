@@ -119,7 +119,7 @@ function sort(index, getValue, direction) {
 
             case undefined: // eslint-disable-line no-fallthrough
                 direction = 1;
-            case 1:
+            case 1:  // eslint-disable-line no-fallthrough
                 compare = ascending(typeof getValue(0));
                 break;
 

@@ -10,6 +10,7 @@ module.exports = {
         aggregations: require('./js/util/aggregations'),
         Mappy: require('./js/util/Mappy'),
         stableSort: require('./js/util/stableSort'),
-        headerify: require('./js/util/headerify')
+        headerify: require('./js/util/headerify'),
+        generateSampleData: require('./generateSampleData.js')
     }
 };

@@ -43,9 +43,10 @@ var DataNodeGroup = DataNodeBase.extend('DataNodeGroup', {
      * @returns {string}
      */
     computeDepthString: function() {
-        return Array(this.depth + 1).join(this.INDENT) +
+        var string = Array(this.depth + 1).join(this.INDENT) +
             expandedMap[this.expanded] + ' ' +
             this.label;
+        return string;
     },
 
     /**

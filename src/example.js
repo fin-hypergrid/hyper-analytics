@@ -1,15 +1,16 @@
 /* eslint-env node, browser */
 'use strict';
 
-var analytics = require('./analytics.js');
-var sampleData = require('./sampledata.js');
+// require('./index.js');
+var analytics = hyperAnalytics;//eslint-disable-line no-undef
+var sampleData = analytics.util.generateSampleData(1000);
 
 if (!window.fin) {
     window.fin = {};
 }
 
 window.d = new analytics.JSDataSource(sampleData);
-window.f = new analytics.DataSourceFilter(window.d);
+window.f = new analytics.DataSourceGlobalFilter(window.d);
 window.a = new analytics.DataSourceAggregator(window.f);
 
 var cols = {
@@ -25,18 +26,20 @@ var cols = {
     order: 9
 };
 
-window.f.add(cols.birthState, function(each) {
-    return each.startsWith('A');
-});
+// window.f.add(cols.birthState, function(each) {
+//     return each.startsWith('A');
+// });
 
-window.f.add(cols.pets, function(each) {
-    return each > 5;
-});
+// window.f.add(cols.pets, function(each) {
+//     return each > 5;
+// });
 
-window.a.addGroupBy(cols.birthState);
 window.a.addGroupBy(cols.last_name);
-window.a.addGroupBy(cols.pets);
-window.a.addGroupBy(cols.residenceState);
+window.a.addGroupBy(cols.first_name);
+window.a.addGroupBy(cols.birthState);
+// window.a.addGroupBy(cols.pets);
+// window.a.addGroupBy(cols.residenceState);
+//window.a.setGroupBys([cols.last_name, cols.first_name]);
 
 window.a.addAggregate('total', analytics.util.aggregations.sum(cols.pets));
 window.a.addAggregate('count', analytics.util.aggregations.count());
@@ -47,24 +50,14 @@ window.a.addAggregate('first', analytics.util.aggregations.first(cols.birthState
 window.a.addAggregate('last', analytics.util.aggregations.last(cols.birthState));
 window.a.addAggregate('standard_deviation', analytics.util.aggregations.stddev(cols.pets));
 
+//perform a click and dump the table out to the console
+
 var start = Date.now();
-window.a.build();
+window.a.apply();
 console.log(Date.now() - start);
 
-//perform a click and dump the table out to the console
-window.click = function(y) {
-    window.a.click(y);
-    console.clear();
-    for (var r = 0; r < window.a.getRowCount(); r++) {
-        var row = r + ' ';
-        for (var c = 0; c < window.a.getColumnCount(); c++) {
-            row = row + window.a.getValue(c, r) + '     ';
-        }
-        console.log(row);
-    }
-};
-
 //lets try a few clicks
-window.click(0);
-window.click(1);
-window.click(2);
+window.a.click(3);
+window.a.click(5);
+
+window.a.dump(100);

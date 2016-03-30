@@ -1,5 +1,6 @@
 'use strict';
 
+var Base = require('./Base');
 var headerify = require('./util/headerify');
 
 /**
@@ -7,20 +8,18 @@ var headerify = require('./util/headerify');
  * @param {object[]} data
  * @param {string[]} fields
  */
-function DataSource(data, fields) {
-    /**
-     * @type {string[]}
-     */
-    this.fields = fields || computeFieldNames(data[0]);
+var DataSource = Base.extend('DataSource', {
+    initialize: function(data, fields) {
+        /**
+         * @type {string[]}
+         */
+        this.fields = fields || computeFieldNames(data[0]);
 
-    /**
-     * @type {object[]}
-     */
-    this.data = data;
-}
-
-DataSource.prototype = {
-    constructor: DataSource.prototype.constructor, // preserve constructor
+        /**
+         * @type {object[]}
+         */
+        this.data = data;
+    },
 
     isNullObject: false,
 
@@ -133,37 +132,8 @@ DataSource.prototype = {
      */
     setData: function(arrayOfUniformObjects) {
         this.data = arrayOfUniformObjects;
-    },
-
-    replaceIndent: '____________________________________________________',
-
-    fixIndentForTableDisplay: function(string) {
-        var count = string.search(/\S/);
-        var end = string.substring(count);
-        var result = this.replaceIndent.substring(0, count) + end;
-        return result;
-    },
-
-    dump: function(max) {
-        max = Math.min(this.getRowCount(), max || Math.max(100, this.getRowCount()));
-        var data = [];
-        var fields = this.getHeaders();
-        var cCount = this.getColumnCount();
-        var viewMakesSense = this.viewMakesSense;
-        for (var r = 0; r < max; r++) {
-            var row = {};
-            for (var c = 0; c < cCount; c++) {
-                var val = this.getValue(c, r);
-                if (c === 0 && viewMakesSense) {
-                    val = this.fixIndentForTableDisplay(val);
-                }
-                row[fields[c]] = val;
-            }
-            data[r] = row;
-        }
-        console.table(data);
     }
-};
+});
 
 function error(methodName, message) {
     throw new Error('DataSource.' + methodName + ': ' + message);

@@ -1,5 +1,6 @@
 'use strict';
 
+var Base = require('./Base');
 var DataSourceSorter = require('./DataSourceSorter');
 var DataNodeTree = require('./DataNodeTree');
 var DataNodeGroup = require('./DataNodeGroup');
@@ -10,74 +11,72 @@ var headerify = require('./util/headerify');
  * @constructor
  * @param {DataSource} dataSource
  */
-function DataSourceAggregator(dataSource) {
+var DataSourceAggregator = Base.extend('', {
+    initialize: function(dataSource) {
 
-    /**
-     * @memberOf DataSourceAggregator.prototype
-     * @type {DataSource}
-     */
-    this.dataSource = dataSource;
+        /**
+         * @memberOf DataSourceAggregator.prototype
+         * @type {DataSource}
+         */
+        this.dataSource = dataSource;
 
-    /**
-     * @memberOf DataSourceAggregator.prototype
-     * @type {DataNodeTree}
-     */
-    this.tree = new DataNodeTree('Totals');
+        /**
+         * @memberOf DataSourceAggregator.prototype
+         * @type {DataNodeTree}
+         */
+        this.tree = new DataNodeTree('Totals');
 
-    /**
-     * @memberOf DataSourceAggregator.prototype
-     * @type {number[]}
-     * @default []
-     */
-    this.index = [];
+        /**
+         * @memberOf DataSourceAggregator.prototype
+         * @type {number[]}
+         * @default []
+         */
+        this.index = [];
 
-    /**
-     * @memberOf DataSourceAggregator.prototype
-     * @type {Array}
-     * @default []
-     */
-    this.aggregates = [];
+        /**
+         * @memberOf DataSourceAggregator.prototype
+         * @type {Array}
+         * @default []
+         */
+        this.aggregates = [];
 
-    /**
-     * @memberOf DataSourceAggregator.prototype
-     * @type {Array}
-     * @default []
-     */
-    this.groupBys = [];
+        /**
+         * @memberOf DataSourceAggregator.prototype
+         * @type {Array}
+         * @default []
+         */
+        this.groupBys = [];
 
-    /**
-     * @memberOf DataSourceAggregator.prototype
-     * @type {Array}
-     * @default []
-     */
-    this.view = [];
+        /**
+         * @memberOf DataSourceAggregator.prototype
+         * @type {Array}
+         * @default []
+         */
+        this.view = [];
 
-    /**
-     * @memberOf DataSourceAggregator.prototype
-     * @type {object}
-     * @default {}
-     */
-    this.sorterInstance = {};
+        /**
+         * @memberOf DataSourceAggregator.prototype
+         * @type {object}
+         * @default {}
+         */
+        this.sorterInstance = {};
 
-    /**
-     * @memberOf DataSourceAggregator.prototype
-     * @type {boolean}
-     * @default true
-     */
-    this.presortGroups = true;
+        /**
+         * @memberOf DataSourceAggregator.prototype
+         * @type {boolean}
+         * @default true
+         */
+        this.presortGroups = true;
 
-    /**
-     * @memberOf DataSourceAggregator.prototype
-     * @type {object}
-     * @default {}
-     */
-    this.lastAggregate = {};
+        /**
+         * @memberOf DataSourceAggregator.prototype
+         * @type {object}
+         * @default {}
+         */
+        this.lastAggregate = {};
 
-    this.setAggregates({});
-}
-
-DataSourceAggregator.prototype = {
-    constructor: DataSourceAggregator.prototype.constructor, // preserve constructor
+        this.setAggregates({});
+    },
 
     isNullObject: false,
 
@@ -357,37 +356,8 @@ DataSourceAggregator.prototype = {
     setData: function(arrayOfUniformObjects) {
         this.dataSource.setData(arrayOfUniformObjects);
         this.apply();
-    },
-
-    replaceIndent: '____________________________________________________',
-
-    fixIndentForTableDisplay: function(string) {
-        var count = string.search(/\S/);
-        var end = string.substring(count);
-        var result = this.replaceIndent.substring(0, count) + end;
-        return result;
-    },
-
-    dump: function(max) {
-        max = Math.min(this.getRowCount(), max || Math.max(100, this.getRowCount()));
-        var data = [];
-        var fields = this.getHeaders();
-        var cCount = this.getColumnCount();
-        var viewMakesSense = this.viewMakesSense;
-        for (var r = 0; r < max; r++) {
-            var row = {};
-            for (var c = 0; c < cCount; c++) {
-                var val = this.getValue(c, r);
-                if (c === 0 && viewMakesSense) {
-                    val = this.fixIndentForTableDisplay(val);
-                }
-                row[fields[c]] = val;
-            }
-            data[r] = row;
-        }
-        console.table(data);
     }
-};
+});
 
 function factoryDataNodeLeaf(key) {
     return new DataNodeLeaf(key);

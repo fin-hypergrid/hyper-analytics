@@ -48,7 +48,7 @@ var DataNodeGroupSorter = Base.extend('DataNodeGroupSorter', {
      */
     clearSorts: function() {
         this.sorts.length = 0;
-        this.applySorts();
+        this.dataSource.buildView();
     },
 
     sortGroup: function(group) {

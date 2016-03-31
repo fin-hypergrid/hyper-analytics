@@ -3,6 +3,12 @@
 function Base() {}
 Base.extend = require('extend-me');
 
+Base.prototype.click = function(y) {
+    if (this.dataSource) {
+        this.dataSource.click(y);
+    }
+};
+
 Base.prototype.replaceIndent = '____________________________________________________';
 
 Base.prototype.fixIndentForTableDisplay = function(string) {

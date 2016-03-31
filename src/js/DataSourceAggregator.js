@@ -356,6 +356,12 @@ var DataSourceAggregator = Base.extend('', {
     setData: function(arrayOfUniformObjects) {
         this.dataSource.setData(arrayOfUniformObjects);
         this.apply();
+    },
+
+    sortGroups: function(groupSorter) {
+        this.tree.clearGroupSorts();
+        this.tree.sortWith(groupSorter);
+        this.buildView();
     }
 });
 

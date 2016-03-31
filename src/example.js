@@ -12,6 +12,7 @@ if (!window.fin) {
 window.d = new analytics.JSDataSource(sampleData);
 window.f = new analytics.DataSourceGlobalFilter(window.d);
 window.a = new analytics.DataSourceAggregator(window.f);
+window.s = new analytics.DataNodeGroupSorter(window.a);
 
 var cols = {
     last_name: 0,
@@ -60,4 +61,13 @@ console.log(Date.now() - start);
 window.a.click(3);
 window.a.click(5);
 
+window.a.dump(100);
+
+window.s.sortOn(3, 1);
+window.s.sortOn(8, 1);
+window.s.applySorts();
+
+window.a.dump(100);
+
+window.s.clearSorts();
 window.a.dump(100);

@@ -39,6 +39,14 @@ var DataNodeLeaf = DataNodeBase.extend('DataNodeLeaf', {
      */
     computeHeight: function() {
         return 1;
+    },
+
+    sortWith: function(sorter) {
+      // do nothing we have no children to sort
+    },
+
+    clearGroupSorts: function() {
+      // do nothing we have no children to sort
     }
 
 });

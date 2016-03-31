@@ -145,8 +145,10 @@ var DataNodeBase = Base.extend('DataNodeBase', {
      */
     toggleExpansionState: function() { /* aggregator */
         //do nothing by default
-    }
+    },
 
+    sortGroups: function(groupSorter) {
+    }
 });
 
 //DataNodeBase.prototype.applyAggregates = DataNodeBase.prototype.computeAggregates;

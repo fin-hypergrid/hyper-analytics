@@ -125,6 +125,25 @@ var DataNodeGroup = DataNodeBase.extend('DataNodeGroup', {
         }
 
         return (this.height = height);
+    },
+
+    sortWith: function(sorter) {
+        if (this.expanded) {
+            sorter.sortGroup(this);
+            this.children.forEach(function(child) {
+                child.sortWith(sorter);
+            });
+        }
+    },
+    clearGroupSorts: function() {
+        if (this.originalOrder) {
+            for (var i = 0; i < this.originalOrder.length; i++) {
+                this.children[i] = this.originalOrder[i];
+            }
+        }
+        this.children.forEach(function(child) {
+            child.clearGroupSorts();
+        });
     }
 
 });

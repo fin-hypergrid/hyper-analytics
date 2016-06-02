@@ -11,7 +11,7 @@ var headerify = require('./util/headerify');
  * @constructor
  * @param {DataSource} dataSource
  */
-var DataSourceAggregator = Base.extend('', {
+var DataSourceAggregator = Base.extend('DataSourceAggregator', {
     initialize: function(dataSource) {
 
         /**
@@ -243,6 +243,10 @@ var DataSourceAggregator = Base.extend('', {
      */
     viewMakesSense: function() {
         return this.hasAggregates() && this.hasGroups();
+    },
+
+    getIndex: function(y) {
+        return this.viewMakesSense() ? y : this.dataSource.getIndex(y);
     },
 
     /**

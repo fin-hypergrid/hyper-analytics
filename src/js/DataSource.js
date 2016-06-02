@@ -23,6 +23,10 @@ var DataSource = Base.extend('DataSource', {
 
     isNullObject: false,
 
+    getIndex: function(y) {
+        return y;
+    },
+
     /**
      * @memberOf DataSource.prototype
      * @param y

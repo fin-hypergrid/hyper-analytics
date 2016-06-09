@@ -23,7 +23,7 @@ var DataSource = Base.extend('DataSource', {
 
     isNullObject: false,
 
-    getIndex: function(y) {
+    getDataIndex: function(y) {
         return y;
     },
 

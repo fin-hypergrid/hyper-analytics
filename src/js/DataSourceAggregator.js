@@ -245,8 +245,8 @@ var DataSourceAggregator = Base.extend('DataSourceAggregator', {
         return this.hasAggregates() && this.hasGroups();
     },
 
-    getIndex: function(y) {
-        return this.viewMakesSense() ? y : this.dataSource.getIndex(y);
+    getDataIndex: function(y) {
+        return this.viewMakesSense() ? y : this.dataSource.getDataIndex(y);
     },
 
     /**

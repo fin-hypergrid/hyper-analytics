@@ -30,6 +30,10 @@ var DataSourceIndexed = Base.extend('DataSourceIndexed', {
         return this.index.length ? this.index[y] : y;
     },
 
+    getIndex: function(y) {
+        return this.dataSource.getIndex(this.transposeY(y));
+    },
+
     /**
      * @memberOf DataSourceIndexed.prototype
      * @param y

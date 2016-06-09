@@ -71,6 +71,10 @@ var DataSourceSorterComposite = DataSourceIndexed.extend('DataSourceSorterCompos
         this.last = this.dataSource;
     },
 
+    getIndex: function(y) {
+        return this.last.getIndex(y);
+    },
+
     /**
      * @memberOf DataSourceSorterComposite.prototype
      * @param {number} x

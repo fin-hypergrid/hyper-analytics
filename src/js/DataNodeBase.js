@@ -67,6 +67,10 @@ var DataNodeBase = Base.extend('DataNodeBase', {
         this.expanded = false;
     },
 
+    getIndex: function(y) {
+        return y;
+    },
+
     /**
      * @memberOf DataNodeLeaf.prototype
      * @param x

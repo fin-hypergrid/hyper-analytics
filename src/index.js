@@ -6,6 +6,7 @@ module.exports = {
     DataSourceSorterComposite: require('./js/DataSourceSorterComposite'),
     DataSourceGlobalFilter: require('./js/DataSourceGlobalFilter'),
     DataSourceAggregator: require('./js/DataSourceAggregator'),
+    DataSourceTreeview: require('./js/DataSourceTreeview'),
     DataNodeGroupSorter: require('./js/DataNodeGroupSorter'),
     util: {
         aggregations: require('./js/util/aggregations'),

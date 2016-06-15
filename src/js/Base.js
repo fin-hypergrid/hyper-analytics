@@ -9,12 +9,16 @@ Base.prototype.click = function(y) {
     }
 };
 
-Base.prototype.replaceIndent = '____________________________________________________';
+Base.prototype.findRow = function(columnName, value) {
+    return this.dataSource.findRow(columnName, value);
+};
+
+Base.prototype.replaceIndent = '_';
 
 Base.prototype.fixIndentForTableDisplay = function(string) {
     var count = string.search(/\S/);
     var end = string.substring(count);
-    var result = this.replaceIndent.substring(0, count) + end;
+    var result = Array(count + 1).join(this.replaceIndent) + end;
     return result;
 };
 

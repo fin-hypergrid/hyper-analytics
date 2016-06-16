@@ -305,11 +305,15 @@ var DataSourceAggregator = Base.extend('DataSourceAggregator', {
      * @param y
      */
     click: function(y) {
+        if (!this.viewMakesSense()) {
+            return this.dataSource.click(y);
+        }
         var group = this.view[y];
         if (group) {
             group.toggleExpansionState(this);
+            this.buildView();
         }
-        this.buildView();
+        return !!group;
     },
 
     /**

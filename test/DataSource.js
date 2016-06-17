@@ -1,5 +1,8 @@
 var test = require('./util/test');
+var headerify = require('../src/js/util/headerify');
 var should = require('should'); // extends `Object` (!) with `.should`; creates `should()`
+
+headerify.transform = headerify.capitalize;
 
 var INDEX_VECTOR = [ 0, 1, 2, 3, 4 ],
     INVERSE_VECTOR = [ 4, 3, 2, 1, 0];

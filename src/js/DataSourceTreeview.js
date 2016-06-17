@@ -100,9 +100,8 @@ var DataSourceTreeview = DataSourceIndexed.extend('DataSourceTreeview', {
     },
 
     click: function(y) {
-        var row = this.getRow(y);
-        var expandable = row.__EXPANDED !== undefined;
-        if (expandable) {
+        var expandable, row = this.getRow(y);
+        if ((expandable = row.__EXPANDED !== undefined)) {
             row.__EXPANDED = !row.__EXPANDED;
         }
         return expandable;

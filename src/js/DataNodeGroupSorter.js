@@ -39,7 +39,7 @@ var DataNodeGroupSorter = Base.extend('DataNodeGroupSorter', {
     /**
      * @memberOf DataSourceSorterComposite.prototype
      */
-    applySorts: function() {
+    apply: function() {
         this.dataSource.sortGroups(this);
     },
 
@@ -87,5 +87,10 @@ var DataNodeGroupSorter = Base.extend('DataNodeGroupSorter', {
     }
 
 });
+
+DataNodeGroupSorter.prototype.applySorts = function() {
+    (console.warn || console.log).call(console, 'applySorts deprecated; use apply');
+    this.apply();
+};
 
 module.exports = DataNodeGroupSorter;

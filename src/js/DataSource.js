@@ -95,7 +95,7 @@ var DataSource = Base.extend('DataSource', {
     getHeaders: function() {
         return (
             this.headers = this.headers || this.getDefaultHeaders().map(function(each) {
-                return headerify(each);
+                return headerify.transform(each);
             })
         );
     },

@@ -5,7 +5,7 @@ Base.extend = require('extend-me');
 
 Base.prototype.click = function(y) {
     if (this.dataSource) {
-        this.dataSource.click(y);
+        return this.dataSource.click(y);
     }
 };
 

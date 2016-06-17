@@ -52,7 +52,7 @@ var DataSourceSorterComposite = DataSourceIndexed.extend('DataSourceSorterCompos
     /**
      * @memberOf DataSourceSorterComposite.prototype
      */
-    applySorts: function() {
+    apply: function() {
         var each = this.dataSource;
 
         this.sorts.forEach(function(sort) {
@@ -95,5 +95,10 @@ var DataSourceSorterComposite = DataSourceIndexed.extend('DataSourceSorterCompos
         this.last.setValue(x, y, value);
     }
 });
+
+DataSourceSorterComposite.prototype.applySorts = function() {
+    (console.warn || console.log).call(console, 'applySorts deprecated; use apply');
+    this.apply();
+};
 
 module.exports = DataSourceSorterComposite;

@@ -122,7 +122,7 @@ var DataSourceAggregator = Base.extend('DataSourceAggregator', {
      * @param func
      */
     addAggregate: function(label, func) {
-        func.header = headerify(label);
+        func.header = headerify.transform(label);
         this.aggregates.push(func);
     },
 
@@ -308,12 +308,15 @@ var DataSourceAggregator = Base.extend('DataSourceAggregator', {
         if (!this.viewMakesSense()) {
             return this.dataSource.click(y);
         }
-        var group = this.view[y];
-        if (group) {
+        var group, expandable;
+        if ((group = this.view[y])) {
             group.toggleExpansionState(this);
-            this.buildView();
+            if ((expandable = group.children)) {
+                this.buildView();
+            }
         }
-        return !!group;
+
+        return !!expandable;
     },
 
     /**

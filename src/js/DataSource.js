@@ -37,7 +37,11 @@ var DataSource = Base.extend('DataSource', {
     },
 
     findRow: function(columnName, value) {
-        return this.data.find(function(row) { return row[columnName] === value; });
+        var result;
+        if (value != null) {
+            result = this.data.find(function(row) { return row[columnName] === value; });
+        }
+        return result;
     },
 
     /**

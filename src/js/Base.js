@@ -3,14 +3,22 @@
 function Base() {}
 Base.extend = require('extend-me');
 
-Base.prototype.click = function(y) {
+Base.prototype.click = function() {
     if (this.dataSource) {
-        return this.dataSource.click(y);
+        return this.dataSource.click.apply(this.dataSource, arguments);
     }
 };
 
-Base.prototype.findRow = function(columnName, value) {
-    return this.dataSource.findRow(columnName, value);
+Base.prototype.findRow = function() {
+    if (this.dataSource) {
+        return this.dataSource.findRow.apply(this.dataSource, arguments);
+    }
+};
+
+Base.prototype.revealRow = function() {
+    if (this.dataSource) {
+        return this.dataSource.revealRow.apply(this.dataSource, arguments);
+    }
 };
 
 Base.prototype.replaceIndent = '_';

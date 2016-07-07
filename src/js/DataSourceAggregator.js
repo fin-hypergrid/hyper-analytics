@@ -303,20 +303,25 @@ var DataSourceAggregator = Base.extend('DataSourceAggregator', {
     /**
      * @memberOf DataSourceAggregator.prototype
      * @param y
+     * @param {boolean} [depth] - If omitted, toggles state.
+     * @returns {undefined|boolean} One of:
+     * * `undefined` - row was not expandable
+     * * `true` - row was expandable _and_ state changed
+     * * `false` - row was expandable _but_ state did _not_ change
      */
-    click: function(y) {
+    click: function(y, depth) {
         if (!this.viewMakesSense()) {
-            return this.dataSource.click(y);
+            return this.dataSource.click.apply(this.dataSource, arguments);
         }
-        var group, expandable;
+        var group, expandable, changed;
         if ((group = this.view[y])) {
-            group.toggleExpansionState(this);
+            changed = group.toggleExpansionState(this, depth);
             if ((expandable = group.children)) {
                 this.buildView();
             }
         }
 
-        return !!expandable;
+        return expandable ? changed : undefined;
     },
 
     /**

@@ -76,13 +76,20 @@ var DataNodeGroup = DataNodeBase.extend('DataNodeGroup', {
     /**
      * @memberOf DataNodeGroup.prototype
      * @param aggregator
+     * @param {boolean} [expand] - If omitted, toggles state.
+     * @returns {boolean} If this call resulted in a state change.
      */
-    toggleExpansionState: function(aggregator) { /* aggregator */
-        this.expanded = !this.expanded;
+    toggleExpansionState: function(aggregator, expand) { /* aggregator */
+        if (expand === undefined) {
+            expand = !this.expanded;
+        }
+        var changed = this.expanded ^ expand;
+        this.expanded = expand;
         this.data[0] = this.computeDepthString();
         if (this.expanded) {
             this.computeAggregates(aggregator);
         }
+        return !!changed;
     },
 
     /**

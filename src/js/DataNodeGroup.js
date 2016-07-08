@@ -76,7 +76,10 @@ var DataNodeGroup = DataNodeBase.extend('DataNodeGroup', {
     /**
      * @memberOf DataNodeGroup.prototype
      * @param aggregator
-     * @param {boolean} [expand] - If omitted, toggles state.
+     * @param {boolean} [expand] - One of:
+     * * `true` - Expand all rows that are currently collapsed.
+     * * `false` - Collapse all rows that are currently expanded.
+     * * `undefined` (or omitted) - Expand all currently collapsed rows; collapse all currently expanded rows.
      * @returns {boolean} If this call resulted in a state change.
      */
     toggleExpansionState: function(aggregator, expand) { /* aggregator */

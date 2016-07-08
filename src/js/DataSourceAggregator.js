@@ -259,10 +259,8 @@ var DataSourceAggregator = Base.extend('DataSourceAggregator', {
         if (!this.viewMakesSense()) {
             return this.dataSource.getValue(x, y);
         }
-
         var row = this.view[y];
-
-        return row ? row.getValue(x) : null; // TODO: what kind of object is row... ? should it be unfiltred?
+        return row ? row.getValue(x) : null;
     },
 
     /**
@@ -303,19 +301,31 @@ var DataSourceAggregator = Base.extend('DataSourceAggregator', {
     /**
      * @memberOf DataSourceAggregator.prototype
      * @param y
-     * @param {boolean} [depth] - If omitted, toggles state.
+     * @param {boolean} [expand] - One of:
+     * * `true` - Expand all rows that are currently collapsed.
+     * * `false` - Collapse all rows that are currently expanded.
+     * * `undefined` (or omitted) - Expand all currently collapsed rows; collapse all currently expanded rows.
+     * @param {number} [depth=Infinity] - One of:
+     * * number > 0 - Apply only if row depth is above the given depth.
+     * * number <= 0 - Apply only if row depth is below the given depth.
      * @returns {undefined|boolean} One of:
      * * `undefined` - row was not expandable
      * * `true` - row was expandable _and_ state changed
      * * `false` - row was expandable _but_ state did _not_ change
      */
-    click: function(y, depth) {
+    click: function(y, expand, depth) {
         if (!this.viewMakesSense()) {
             return this.dataSource.click.apply(this.dataSource, arguments);
         }
-        var group, expandable, changed;
-        if ((group = this.view[y])) {
-            changed = group.toggleExpansionState(this, depth);
+        var group = this.view[y], expandable, changed;
+        if (
+            group && (
+                depth === undefined ||
+                depth > 0 && group.depth < depth ||
+                depth <= 0 && group.depth >= -depth
+            )
+        ) {
+            changed = group.toggleExpansionState(this, expand);
             if ((expandable = group.children)) {
                 this.buildView();
             }

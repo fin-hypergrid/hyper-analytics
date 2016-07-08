@@ -131,8 +131,8 @@ var DataSourceTreeview = DataSourceIndexed.extend('DataSourceTreeview', {
      * * `false` - Collapse all rows that are currently expanded.
      * * `undefined` (or omitted) - Expand all currently collapsed rows; collapse all currently expanded rows.
      * @param {number} [depth=Infinity] - One of:
-     * * number > 0 - Apply only to rows above the given depth.
-     * * number <= 0 - Apply only to rows at or below the given depth.
+     * * number > 0 - Apply only if row depth is above the given depth.
+     * * number <= 0 - Apply only if row depth is below the given depth.
      * @returns {undefined|boolean} One of:
      * * `undefined` - Row was not expandable.
      * * `true` - Row had drill-down _and_ state changed.

@@ -11,7 +11,7 @@ var headerify = require('./util/headerify');
  * @constructor
  * @param {DataSource} dataSource
  */
-var DataSourceAggregator = Base.extend('DataSourceAggregator', {
+var DataSourceGroupView = Base.extend('DataSourceGroupView', {
     initialize: function(dataSource) {
 
         /**
@@ -24,7 +24,7 @@ var DataSourceAggregator = Base.extend('DataSourceAggregator', {
          * @memberOf DataSourceAggregator.prototype
          * @type {DataNodeTree}
          */
-        this.tree = new DataNodeTree('Totals');
+        this.tree = new DataNodeTree('Group');
 
         /**
          * @memberOf DataSourceAggregator.prototype
@@ -32,13 +32,6 @@ var DataSourceAggregator = Base.extend('DataSourceAggregator', {
          * @default []
          */
         this.index = [];
-
-        /**
-         * @memberOf DataSourceAggregator.prototype
-         * @type {Array}
-         * @default []
-         */
-        this.aggregates = [];
 
         /**
          * @memberOf DataSourceAggregator.prototype
@@ -68,41 +61,9 @@ var DataSourceAggregator = Base.extend('DataSourceAggregator', {
          */
         this.presortGroups = true;
 
-        /**
-         * @memberOf DataSourceAggregator.prototype
-         * @type {object}
-         * @default {}
-         */
-        this.lastAggregate = {};
-
-        this.setAggregates({});
     },
 
     isNullObject: false,
-
-
-    /**
-     * @memberOf DataSourceAggregator.prototype
-     * @param aggregations, groups
-     */
-    setAggregateGroups: function(aggregations, groups) {
-        this.setGroupBys(groups);
-        this.setAggregates(aggregations);
-    },
-
-    /**
-     * @memberOf DataSourceAggregator.prototype
-     * @param aggregations
-     */
-    setAggregates: function(aggregations) {
-        this.lastAggregate = aggregations;
-        this.clearAggregations();
-
-        for (var key in aggregations) {
-            this.addAggregate(key, aggregations[key]);
-        }
-
-    },
 
     getFields: function() {
         if (!this.viewMakesSense()) {
@@ -118,22 +79,11 @@ var DataSourceAggregator = Base.extend('DataSourceAggregator', {
         if (!this.viewMakesSense()) {
             return this.dataSource.getHeaders();
         }
-        var headers = this.aggregates.map(function(e) {
-            return e.header;
-        });
-        if (this.hasGroups()) {
+        var headers = this.dataSource.getHeaders();
+        if (this.hasGroups() && headers[0] !== 'Tree'){
             headers.unshift('Tree');
         }
         return headers;
-    },
-    /**
-     * @memberOf DataSourceAggregator.prototype
-     * @param label
-     * @param func
-     */
-    addAggregate: function(label, func) {
-        func.header = headerify.transform(label);
-        this.aggregates.push(func);
     },
 
     /**
@@ -146,7 +96,6 @@ var DataSourceAggregator = Base.extend('DataSourceAggregator', {
         columnIndexArray.forEach(function(columnIndex) {
             groupBys.push(columnIndex);
         });
-        this.setAggregates(this.lastAggregate);
     },
 
     /**
@@ -167,14 +116,6 @@ var DataSourceAggregator = Base.extend('DataSourceAggregator', {
 
     /**
      * @memberOf DataSourceAggregator.prototype
-     * @returns {boolean}
-     */
-    hasAggregates: function() {
-        return !!this.aggregates.length;
-    },
-
-    /**
-     * @memberOf DataSourceAggregator.prototype
      */
     apply: function() {
         this.buildGroupTree();
@@ -190,19 +131,12 @@ var DataSourceAggregator = Base.extend('DataSourceAggregator', {
     /**
      * @memberOf DataSourceAggregator.prototype
      */
-    clearAggregations: function() {
-        this.aggregates.length = 0;
-    },
-
-    /**
-     * @memberOf DataSourceAggregator.prototype
-     */
     buildGroupTree: function() {
         var reversedGroupBys = this.groupBys.slice(0).reverse(),
             leafDepth = this.groupBys.length - 1,
             source = this.dataSource,
             rowCount = source.getRowCount(),
-            tree = this.tree = new DataNodeTree('Totals');
+            tree = this.tree = new DataNodeTree('Group');
 
         // first sort data
         if (this.presortGroups) {
@@ -226,8 +160,9 @@ var DataSourceAggregator = Base.extend('DataSourceAggregator', {
 
         this.sorterInstance = new DataSourceSorter(source);
         tree.toArray();
-        tree.computeAggregates(this);
+        //tree.computeAggregates(this);
         this.buildView();
+        this.dump();
     },
 
     /**
@@ -252,7 +187,7 @@ var DataSourceAggregator = Base.extend('DataSourceAggregator', {
      * @returns {*|boolean}
      */
     viewMakesSense: function() {
-        return this.hasAggregates() && this.hasGroups();
+        return this.hasGroups();
     },
 
     getDataIndex: function(y) {
@@ -363,15 +298,6 @@ var DataSourceAggregator = Base.extend('DataSourceAggregator', {
 
     /**
      * @memberOf DataSourceAggregator.prototype
-     * @returns {object[]}
-     */
-    getGrandTotals: function() {
-        var view = this.tree;
-        return [view.data];
-    },
-
-    /**
-     * @memberOf DataSourceAggregator.prototype
      * @param y
      * @returns {*}
      */
@@ -409,4 +335,4 @@ function factoryDataNodeGroup(key) {
     return new DataNodeGroup(key);
 }
 
-module.exports = DataSourceAggregator;
+module.exports = DataSourceGroupView;

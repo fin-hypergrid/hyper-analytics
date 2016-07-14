@@ -1,5 +1,3 @@
-/* eslint-disable no-underscore-dangle */
-
 'use strict';
 
 var DataSourceIndexed = require('./DataSourceIndexed');
@@ -68,16 +66,15 @@ var DataSourceTreeview = DataSourceIndexed.extend('DataSourceTreeview', {
             rowCount = this.getRowCount();
             r = rowCount;
             while (r--) {
-                depth = -1;
+                depth = 0;
                 leafRow = this.getRow(r);
                 row = leafRow;
                 ID = row[idColumnName];
 
-                do {
-                    parentID = row[parentIdColumnName];
+                while ((parentID = row[parentIdColumnName]) != undefined) { // eslint-disable-line eqeqeq
                     row = this.findRow(idColumnName, parentID);
                     ++depth;
-                } while (parentID != undefined); // eslint-disable-line eqeqeq
+                }
 
                 leafRow.__DEPTH = depth;
 

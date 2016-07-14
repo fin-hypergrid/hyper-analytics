@@ -156,7 +156,7 @@ function hash(key) {
             }
             // fall through when not null:
         case 'function':
-            return (key.___finhash = key.___finhash || OID_PREFIX + counter++); // eslint-disable-line no-underscore-dangle
+            return (key.___finhash = key.___finhash || OID_PREFIX + counter++);
     }
 }
 

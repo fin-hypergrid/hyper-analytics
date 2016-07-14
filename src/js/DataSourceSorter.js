@@ -40,7 +40,7 @@ var DataSourceSorter = DataSourceIndexed.extend('DataSourceSorter', {
         }
 
         function getValue(rowIdx) {
-            return valOrFuncCall(self.dataSource.getValue(colIdx, rowIdx));
+            return valOrFunc(self.dataSource.getRow(rowIdx), self.dataSource.getFields()[colIdx], colIdx);
         }
     }
 });
@@ -50,8 +50,9 @@ var DataSourceSorter = DataSourceIndexed.extend('DataSourceSorter', {
  * @param {*|function} valOrFunc
  * @returns {*}
  */
-function valOrFuncCall(valOrFunc) {
-    return typeof valOrFunc === 'function' ? valOrFunc() : valOrFunc;
+function valOrFunc(dataRow, columnName, columnIndex) {
+    var vf = dataRow[columnName];
+    return (typeof vf)[0] === 'f' ? vf(dataRow, columnName, columnIndex) : vf;
 }
 
 module.exports = DataSourceSorter;

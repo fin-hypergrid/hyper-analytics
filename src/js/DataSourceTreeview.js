@@ -27,6 +27,7 @@ var DataSourceTreeview = DataSourceIndexed.extend('DataSourceTreeview', {
      * @param {string} [options.idColumnName='ID'] - Column name of the primary key column.
      * @param {string} [options.parentIdColumnName='parentID'] - Column name of the foreign key column for grouping.
      * @param {string} [options.treeColumnName='name'] - Column name of the drill-down column to decorate.
+     * @returns {boolean} Joined state.
      * @memberOf DataSourceTreeview.prototype
      */
     setRelation: function(options) {
@@ -85,6 +86,8 @@ var DataSourceTreeview = DataSourceIndexed.extend('DataSourceTreeview', {
                 }
             }
         }
+
+        return this.joined;
     },
 
     /**
@@ -141,7 +144,7 @@ var DataSourceTreeview = DataSourceIndexed.extend('DataSourceTreeview', {
             return this.dataSource.click.apply(this.dataSource, arguments);
         }
         var changed, row = this.getRow(y);
-        if (row.__EXPANDED !== undefined) {
+        if (row && row.__EXPANDED !== undefined) {
             if (depth !== undefined && (
                 depth > 0 && row.__DEPTH >= depth ||
                 depth <= 0 && row.__DEPTH < -depth

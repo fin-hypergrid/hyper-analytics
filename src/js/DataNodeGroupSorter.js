@@ -33,7 +33,11 @@ var DataNodeGroupSorter = Base.extend('DataNodeGroupSorter', {
      * @param direction
      */
     sortOn: function(columnIndex, direction) {
-        this.sorts.push([columnIndex, direction]);
+        this.sorts.push({ columnIndex: columnIndex, direction: direction });
+    },
+
+    setSorts: function(sorts) {
+        this.sorts = sorts || [];
     },
 
     /**
@@ -56,30 +60,27 @@ var DataNodeGroupSorter = Base.extend('DataNodeGroupSorter', {
             group.originalOrder = group.children.slice(0);
         }
         var sorts = this.sorts;
-        for (var i = 0; i < sorts.length; i++) {
+        for (var i = sorts.length - 1; i >= 0; i--) {
             this.sortGroupOnEach(group, sorts[sorts.length - i - 1]);
         }
     },
 
-    sortGroupOnEach: function(group, sortInfo) {
+    sortGroupOnEach: function(group, sortSpec) {
         // we actually sort the children here....
         var children = group.children.slice(0);
-        var colIndex = sortInfo[0];
-        var ascDesc = sortInfo[1];
         var indexVector = [];
-        var i = 0;
 
-        for (i = 0; i < children.length; i++) {
+        for (var i = 0; i < children.length; i++) {
             indexVector[i] = i;
         }
 
         stableSort(indexVector, function(rowNumber) {
             var child = children[rowNumber];
-            if (colIndex === 0) {
+            if (sortSpec.columnIndex === 0) {
                 return child.label;
             }
-            return child.data[colIndex];
-        }, ascDesc);
+            return child.data[sortSpec.columnIndex];
+        }, sortSpec.direction);
 
         for (i = 0; i < children.length; i++) {
             group.children[i] = children[indexVector[i]];

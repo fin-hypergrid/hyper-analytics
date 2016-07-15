@@ -22,10 +22,13 @@ var DataSourceSorter = DataSourceIndexed.extend('DataSourceSorter', {
 
     /**
      * @memberOf DataSourceSorter.prototype
-     * @param {number} colIdx
+     * @param {number} columnIndex
      * @param {number} [direction=1]
      */
-    sortOn: function(colIdx, direction) {
+    sortOn: function(columnIndex, direction) {
+        var dataSource = this.dataSource,
+            columnName = dataSource.getFields()[columnIndex];
+
         switch (direction) {
             case 0:
                 this.clearIndex();
@@ -34,13 +37,12 @@ var DataSourceSorter = DataSourceIndexed.extend('DataSourceSorter', {
             case undefined:
             case 1:
             case -1:
-                var self = this; // for use in getValue
                 stableSort.sort(this.buildIndex(), getValue, direction);
                 break;
         }
 
         function getValue(rowIdx) {
-            return valOrFunc(self.dataSource.getRow(rowIdx), self.dataSource.getFields()[colIdx], colIdx);
+            return valOrFunc(dataSource.getRow(rowIdx), columnName);
         }
     }
 });
@@ -50,9 +52,9 @@ var DataSourceSorter = DataSourceIndexed.extend('DataSourceSorter', {
  * @param {*|function} valOrFunc
  * @returns {*}
  */
-function valOrFunc(dataRow, columnName, columnIndex) {
+function valOrFunc(dataRow, columnName) {
     var vf = dataRow[columnName];
-    return (typeof vf)[0] === 'f' ? vf(dataRow, columnName, columnIndex) : vf;
+    return (typeof vf)[0] === 'f' ? vf(dataRow, columnName) : vf;
 }
 
 module.exports = DataSourceSorter;

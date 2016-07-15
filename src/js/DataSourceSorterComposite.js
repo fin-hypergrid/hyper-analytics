@@ -46,7 +46,11 @@ var DataSourceSorterComposite = DataSourceIndexed.extend('DataSourceSorterCompos
      * @param direction
      */
     sortOn: function(columnIndex, direction) {
-        this.sorts.push([columnIndex, direction]);
+        this.sorts.push({ columnIndex: columnIndex, direction: direction });
+    },
+
+    setSorts: function(sorts) {
+        this.sorts = sorts || [];
     },
 
     /**
@@ -55,9 +59,9 @@ var DataSourceSorterComposite = DataSourceIndexed.extend('DataSourceSorterCompos
     apply: function() {
         var each = this.dataSource;
 
-        this.sorts.forEach(function(sort) {
+        this.sorts.forEach(function(sortSpec) {
             each = new DataSourceSorter(each);
-            each.sortOn.apply(each, sort);
+            each.sortOn(sortSpec.columnIndex, sortSpec.direction);
         });
 
         this.last = each;

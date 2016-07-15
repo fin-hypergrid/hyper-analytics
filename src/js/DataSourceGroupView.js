@@ -76,9 +76,15 @@ var DataSourceGroupView = Base.extend('DataSourceGroupView', {
     },
 
     getHeaders: function() {
-        //if (!this.viewMakesSense()) {
+        if (!this.viewMakesSense()) {
             return this.dataSource.getHeaders();
-        //}
+        }
+        var headers = this.dataSource.getHeaders().slice(0);
+
+        if (this.hasGroups()) {
+            headers.unshift('Tree');
+        }
+        return headers;
     },
 
     /**

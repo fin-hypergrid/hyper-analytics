@@ -133,7 +133,7 @@ var DataNodeBase = Base.extend('DataNodeBase', {
     /**
      * @memberOf DataNodeLeaf.prototype
      */
-    toggleExpansionState: function() { /* aggregator */
+    toggleExpansionState: function() {
         //do nothing by default
     },
 

@@ -307,9 +307,9 @@ var DataSourceGroupView = Base.extend('DataSourceGroupView', {
             return this.dataSource.getRow(y);
         }
 
-        var rollups = this.view[y];
+        var groups = this.view[y];
 
-        return rollups ? rollups : this.tree;
+        return groups ? groups : this.tree;
     },
 
     /**

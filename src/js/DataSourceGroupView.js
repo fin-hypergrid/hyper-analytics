@@ -161,7 +161,7 @@ var DataSourceGroupView = Base.extend('DataSourceGroupView', {
 
         this.sorterInstance = new DataSourceSorter(source);
         tree.toArray();
-        //tree.computeAggregates(this);
+        tree.getRowData(this);
         this.buildView();
         //this.dump();
     },

@@ -4,7 +4,7 @@ var Base = require('./Base');
 var DataSourceSorter = require('./DataSourceSorter');
 var DataNodeTree = require('./DataNodeTree');
 var DataNodeGroup = require('./DataNodeGroup');
-var DataNodeLeaf = require('./DataNodeLeaf');
+var DataNodeLeaf = require('./AggregatorNodeLeaf');
 var headerify = require('./util/headerify');
 
 /**
@@ -226,7 +226,7 @@ var DataSourceAggregator = Base.extend('DataSourceAggregator', {
 
         this.sorterInstance = new DataSourceSorter(source);
         tree.toArray();
-        tree.computeAggregates(this);
+        tree.getRowData(this);
         this.buildView();
     },
 

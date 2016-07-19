@@ -75,14 +75,14 @@ var DataNodeGroup = DataNodeBase.extend('DataNodeGroup', {
 
     /**
      * @memberOf DataNodeGroup.prototype
-     * @param aggregator
+     * @param drillDown
      * @param {boolean} [expand] - One of:
      * * `true` - Expand all rows that are currently collapsed.
      * * `false` - Collapse all rows that are currently expanded.
      * * `undefined` (or omitted) - Expand all currently collapsed rows; collapse all currently expanded rows.
      * @returns {boolean} If this call resulted in a state change.
      */
-    toggleExpansionState: function(aggregator, expand) { /* aggregator */
+    toggleExpansionState: function(drillDown, expand) { /* aggregator */
         if (expand === undefined) {
             expand = !this.expanded;
         }
@@ -90,20 +90,20 @@ var DataNodeGroup = DataNodeBase.extend('DataNodeGroup', {
         this.expanded = expand;
         this.data[0] = this.computeDepthString();
         if (this.expanded) {
-            this.computeAggregates(aggregator);
+            this.getRowData(drillDown);
         }
         return !!changed;
     },
 
     /**
      * @memberOf DataNodeGroup.prototype
-     * @param aggregator
+     * @param drillDown
      */
-    computeAggregates: function(aggregator) {
-        DataNodeBase.prototype.computeAggregates.call(this, aggregator); // call base class's version
+    getRowData: function(drillDown) {
+        DataNodeBase.prototype.getRowData.call(this, drillDown); // call base class's version
         if (this.expanded) {
             this.children.forEach(function(child) {
-                child.computeAggregates(aggregator);
+                child.getRowData(drillDown);
             });
         }
     },
@@ -112,11 +112,11 @@ var DataNodeGroup = DataNodeBase.extend('DataNodeGroup', {
      * @memberOf DataNodeGroup.prototype
      * @param aggregator
      */
-    buildView: function(aggregator) {
-        aggregator.view.push(this);
+    buildView: function(drillDown) {
+        drillDown.view.push(this);
         if (this.expanded) {
             this.children.forEach(function(child) {
-                child.buildView(aggregator);
+                child.buildView(drillDown);
             });
         }
     },

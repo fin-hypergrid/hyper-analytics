@@ -43,7 +43,7 @@ var DataNodeBase = Base.extend('DataNodeBase', {
          * @type {boolean}
          * @default false
          */
-        this.hasChildren = false; // TODO: Where/how is this used?
+        this.hasChildren = false; // Not being used
 
         /**
          * @memberOf DataNodeBase.prototype
@@ -111,33 +111,23 @@ var DataNodeBase = Base.extend('DataNodeBase', {
 
     /**
      * @memberOf DataNodeLeaf.prototype
-     * @param aggregator
+     * @param drillDown
      */
-    computeAggregates: function(aggregator) {
+    getRowData: function(drillDown) {
         var index = this.getIndex();
 
         if (index.length) {
-            var groupsOffset = Number(aggregator.hasGroups());
-
-            // redimension the data
-            var data = this.data;
-            data.length = groupsOffset + aggregator.aggregates.length;
-
-            var sorter = aggregator.sorterInstance;
-            sorter.index = index;
-
-            aggregator.aggregates.forEach(function(aggregate, i) {
-                data[groupsOffset + i] = aggregate(sorter);
-            });
+            // Group and Tree nodes will have no data besides the tree column
+            this.data.length = drillDown.getColumnCount();
         }
     },
 
     /**
      * @memberOf DataNodeLeaf.prototype
-     * @param aggregator
+     * @param drillDown
      */
-    buildView: function(aggregator) {
-        aggregator.addView(this);
+    buildView: function(drillDown) {
+        drillDown.addView(this);
     },
 
     /**
@@ -151,6 +141,5 @@ var DataNodeBase = Base.extend('DataNodeBase', {
     }
 });
 
-//DataNodeBase.prototype.applyAggregates = DataNodeBase.prototype.computeAggregates;
 
 module.exports = DataNodeBase;

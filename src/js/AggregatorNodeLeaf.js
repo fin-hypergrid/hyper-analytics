@@ -1,12 +1,12 @@
 'use strict';
 
-var DataNodeBase = require('./DataNodeBase');
+var AggregatorNodeBase = require('./AggregatorNodeBase');
 
 /**
  * @constructor
  * @extends DataNodeBase
  */
-var DataNodeLeaf = DataNodeBase.extend('DataNodeLeaf', {
+var AggregatorNodeLeaf = AggregatorNodeBase.extend('AggregatorNodeLeaf', {
 
     /**
      * @memberOf DataNodeLeaf.prototype
@@ -35,28 +35,6 @@ var DataNodeLeaf = DataNodeBase.extend('DataNodeLeaf', {
 
     /**
      * @memberOf DataNodeLeaf.prototype
-     * @param aggregator
-     */
-    getRowData: function(drillDown) {
-        var index = this.getIndex();
-
-        if (index.length) {
-            var //groupsOffset = Number(drillDown.hasGroups()),
-                data = this.data,
-                dataLen = drillDown.getColumnCount(),
-                i = 1,
-                sorter = drillDown.sorterInstance;
-
-            sorter.index = index;
-
-            for (i; i < dataLen; i++) {
-                data[i] = drillDown.getValue(i,0);
-            }
-        }
-    },
-
-    /**
-     * @memberOf DataNodeLeaf.prototype
      * @returns {number}
      */
     computeHeight: function() {
@@ -73,4 +51,4 @@ var DataNodeLeaf = DataNodeBase.extend('DataNodeLeaf', {
 
 });
 
-module.exports = DataNodeLeaf;
+module.exports = AggregatorNodeLeaf;

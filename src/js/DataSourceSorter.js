@@ -8,18 +8,6 @@ var stableSort = require('./util/stableSort');
  * @extends DataSourceIndexed
  */
 var DataSourceSorter = DataSourceIndexed.extend('DataSourceSorter', {
-
-    /**
-     * @memberOf DataSourceSorter.prototype
-     */
-    initialize: function() {
-        /**
-         * @memberOf DataSourceSorter.prototype
-         * @type {boolean}
-         */
-        this.descendingSort = false; // TODO: this does not seem to be in use
-    },
-
     /**
      * @memberOf DataSourceSorter.prototype
      * @param {number} columnIndex
@@ -42,19 +30,10 @@ var DataSourceSorter = DataSourceIndexed.extend('DataSourceSorter', {
         }
 
         function getValue(rowIdx) {
-            return valOrFunc(dataSource.getRow(rowIdx), columnName);
+            var dataRow = dataSource.getRow(rowIdx);
+            return DataSourceIndexed.valOrFunc(dataRow, columnName);
         }
     }
 });
-
-/**
- * @private
- * @param {*|function} valOrFunc
- * @returns {*}
- */
-function valOrFunc(dataRow, columnName) {
-    var vf = dataRow[columnName];
-    return (typeof vf)[0] === 'f' ? vf(dataRow, columnName) : vf;
-}
 
 module.exports = DataSourceSorter;

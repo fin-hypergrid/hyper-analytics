@@ -165,4 +165,15 @@ var DataSourceIndexed = Base.extend('DataSourceIndexed', {
  * @returns {boolean} Row qualifies (passes through filter).
  */
 
+/**
+ * Used by the sorters (`DataSourceSorter` and `DataSourceTreeviewSorter`).
+ * @param {object} dataRow
+ * @param {string} columnName
+ * @returns {*}
+ */
+DataSourceIndexed.valOrFunc = function(dataRow, columnName) {
+    var vf = dataRow[columnName];
+    return (typeof vf)[0] === 'f' ? vf(dataRow, columnName) : vf;
+};
+
 module.exports = DataSourceIndexed;

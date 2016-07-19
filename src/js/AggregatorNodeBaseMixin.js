@@ -1,17 +1,7 @@
 'use strict';
 
-var DataNodeBase = require('./DataNodeBase');
 
-/**
- * See {@link DataBaseNode#initialize|initialize()} method for parameters.
- * @constructor
- */
-var AggregatorNodeBase = DataNodeBase.extend('DataNodeBase', {
-
-    /**
-     * @memberOf DataNodeLeaf.prototype
-     * @param aggregator
-     */
+var AggregatorNodeBaseMixin = {
     getRowData: function(aggregator) {
         var index = this.getIndex();
 
@@ -30,6 +20,6 @@ var AggregatorNodeBase = DataNodeBase.extend('DataNodeBase', {
             });
         }
     }
-});
+};
 
-module.exports = AggregatorNodeBase;
+module.exports = AggregatorNodeBaseMixin;

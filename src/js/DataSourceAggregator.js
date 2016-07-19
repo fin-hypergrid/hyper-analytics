@@ -2,8 +2,8 @@
 
 var Base = require('./Base');
 var DataSourceSorter = require('./DataSourceSorter');
-var DataNodeTree = require('./DataNodeTree');
-var DataNodeGroup = require('./DataNodeGroup');
+var DataNodeTree = require('./AggregatorNodeTree');
+var DataNodeGroup = require('./AggregatorNodeGroup');
 var DataNodeLeaf = require('./AggregatorNodeLeaf');
 var headerify = require('./util/headerify');
 

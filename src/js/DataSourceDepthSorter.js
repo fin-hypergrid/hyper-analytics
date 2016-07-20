@@ -4,6 +4,8 @@ var DataSourceIndexed = require('./DataSourceIndexed');
 var stableSort = require('./util/stableSort');
 
 /**
+ * Used by `DataSourceTreeviewSorter`.
+ * One of these data sources should be created for each sort depth, starting with the maximum sort depth, and then one for each sort depth through the top (0) sort depth.
  * @constructor
  * @extends DataSourceIndexed
  */
@@ -14,14 +16,16 @@ var DataSourceDepthSorter = DataSourceIndexed.extend('DataSourceDepthSorter', {
     },
 
     /**
-     * @memberOf DataSourceDepthSorter.prototype
      * @param {number} columnIndex
      * @param {number} [direction=1]
+     * @param {number} sortDepth - If greater than row depth, sorts on _edge value_ value; otherwise sorts on value of ancestor of this depth. "Edge" means a value that lexically comes before all others (ascending sort) or after all others (descending sort).
+     * @memberOf DataSourceDepthSorter.prototype
      */
-    sortOn: function(columnIndex, direction, depth) {
-        var self = this, // used in getValue
-            dataSource = this.dataSource,
-            columnName = dataSource.getFields()[columnIndex];
+    sortOn: function(columnIndex, direction, sortDepth) {
+        var columnName = this.dataSource.getFields()[columnIndex],
+            self = this, // used in getValue
+            depth = 0,
+            numeric, edge;
 
         switch (direction) {
             case 0:
@@ -31,19 +35,20 @@ var DataSourceDepthSorter = DataSourceIndexed.extend('DataSourceDepthSorter', {
             case undefined:
             case 1:
             case -1:
-                if (dataSource.getRowCount()) {
-                    var numeric = typeof getValue(0) === 'number';
-                    var edge = direction === -1 // used in getValue
+                if (this.dataSource.getRowCount()) {
+                    this.buildIndex();
+                    numeric = typeof getValue(0) !== 'string'; // works with date objects as well as numbers
+                    edge = direction === -1 // used in getValue
                         ? (numeric ? +Infinity : '\uffff')
                         : (numeric ? -Infinity : '');
-
-                    stableSort.sort(this.buildIndex(), getValue, direction);
+                    depth = sortDepth;
+                    stableSort.sort(this.index, getValue, direction);
                 }
                 break;
         }
 
         function getValue(rowIdx) {
-            var dataRow = dataSource.getRow(rowIdx);
+            var dataRow = self.dataSource.getRow(rowIdx);
 
             if (dataRow.__DEPTH < depth) {
                 return edge;

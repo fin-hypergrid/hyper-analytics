@@ -8,8 +8,8 @@ var expandedMap = {
     undefined: '  ' // for leaf rows
 };
 
-
 /**
+ * For proper sorting, include `DataSourceTreeviewSorter` in your pipeline, _ahead of_ (closer to the data than) this data source.
  * @constructor
  * @extends DataSourceIndexed
  */
@@ -32,7 +32,7 @@ var DataSourceTreeview = DataSourceIndexed.extend('DataSourceTreeview', {
      */
     setRelation: function(options) {
         var idColumnName, parentIdColumnName, treeColumnName, fields,
-            rowCount, r, parentID, depth, leafRow, row, ID;
+            r, parentID, depth, leafRow, row, ID;
 
         this.joined = false;
 
@@ -57,6 +57,10 @@ var DataSourceTreeview = DataSourceIndexed.extend('DataSourceTreeview', {
                 this.treeColumnIndex = fields.indexOf(treeColumnName);
 
                 this.joined = this.treeColumnIndex !== undefined;
+
+                // treeviewSorter needs to know following for access by each DataSourceSorter it creates:
+                this.dataSource.idColumnName = idColumnName;
+                this.dataSource.parentIdColumnName = parentIdColumnName;
             }
         }
 
@@ -64,8 +68,7 @@ var DataSourceTreeview = DataSourceIndexed.extend('DataSourceTreeview', {
 
         if (this.joined) {
             // mutate data row with __DEPTH (all rows) and __EXPANDED (all "parent" rows)
-            rowCount = this.getRowCount();
-            r = rowCount;
+            r = this.getRowCount();
             while (r--) {
                 depth = 0;
                 leafRow = this.getRow(r);
@@ -95,7 +98,7 @@ var DataSourceTreeview = DataSourceIndexed.extend('DataSourceTreeview', {
      */
     apply: function() {
         if (this.viewMakesSense()) {
-            this.buildIndex(this.treeColumnIndex === undefined ? undefined : collapseRows);
+            this.buildIndex(this.treeColumnIndex === undefined ? undefined : rowIsRevealed);
         }
     },
 
@@ -143,6 +146,7 @@ var DataSourceTreeview = DataSourceIndexed.extend('DataSourceTreeview', {
         if (!this.viewMakesSense()) {
             return this.dataSource.click.apply(this.dataSource, arguments);
         }
+
         var changed, row = this.getRow(y);
         if (row && row.__EXPANDED !== undefined) {
             if (depth !== undefined && (
@@ -183,15 +187,20 @@ var DataSourceTreeview = DataSourceIndexed.extend('DataSourceTreeview', {
     }
 });
 
-function collapseRows(r, row) {
+function rowIsRevealed(r, row) {
     var parentID;
+
+    // are any of the row's ancestors collapsed?
     while ((parentID = row[this.parentIdColumnName]) != undefined) { // eslint-disable-line eqeqeq
+        // walk up through each parent...
         row = this.findRow(this.idColumnName, parentID);
-        if (row.__EXPANDED === false) {
-            return false;
+        if (row.__EXPANDED === false) { // an ancestor is collapsed
+            return false; // exclude row from build
         }
     }
-    return true;
+
+    // no ancestors were collapsed
+    return true; // include row in build
 }
 
 module.exports = DataSourceTreeview;

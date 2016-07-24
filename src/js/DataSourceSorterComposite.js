@@ -49,7 +49,7 @@ var DataSourceSorterComposite = DataSourceIndexed.extend('DataSourceSorterCompos
         this.sorts.push({ columnIndex: columnIndex, direction: direction });
     },
 
-    setSorts: function(sorts) {
+    set: function(sorts) {
         this.sorts = sorts || [];
     },
 

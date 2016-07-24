@@ -36,7 +36,7 @@ var DataNodeGroupSorter = Base.extend('DataNodeGroupSorter', {
         this.sorts.push({ columnIndex: columnIndex, direction: direction });
     },
 
-    setSorts: function(sorts) {
+    set: function(sorts) {
         this.sorts = sorts || [];
     },
 

@@ -9,11 +9,13 @@ var headerify = require('./util/headerify');
  * @param {string[]} fields
  */
 var DataSource = Base.extend('DataSource', {
-    initialize: function(data, fields) {
+    initialize: function(data, fields, calculators) {
         /**
          * @type {string[]}
          */
         this.fields = fields || computeFieldNames(data[0]);
+
+        this.calculators = calculators || Array(this.fields.length);
 
         /**
          * @type {object[]}
@@ -102,6 +104,10 @@ var DataSource = Base.extend('DataSource', {
                 return headerify.transform(each);
             })
         );
+    },
+
+    getCalculators: function() {
+        return this.calculators;
     },
 
     /**

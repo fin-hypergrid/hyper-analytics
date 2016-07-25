@@ -14,6 +14,12 @@ Base.prototype = {
         }
     },
 
+    getCalculators: function() {
+        if (this.dataSource) {
+            return this.dataSource.getCalculators.apply(this.dataSource, arguments);
+        }
+    },
+
     click: function() {
         if (this.dataSource) {
             return this.dataSource.click.apply(this.dataSource, arguments);

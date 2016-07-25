@@ -15,7 +15,8 @@ var DataSourceSorter = DataSourceIndexed.extend('DataSourceSorter', {
      */
     sortOn: function(columnIndex, direction) {
         var dataSource = this.dataSource,
-            columnName = dataSource.getFields()[columnIndex];
+            columnName = dataSource.getFields()[columnIndex],
+            calculator = dataSource.getCalculators()[columnIndex];
 
         switch (direction) {
             case 0:
@@ -31,7 +32,7 @@ var DataSourceSorter = DataSourceIndexed.extend('DataSourceSorter', {
 
         function getValue(rowIdx) {
             var dataRow = dataSource.getRow(rowIdx);
-            return DataSourceIndexed.valOrFunc(dataRow, columnName);
+            return DataSourceIndexed.valOrFunc(dataRow, columnName, calculator);
         }
     }
 });

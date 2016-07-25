@@ -23,6 +23,7 @@ var DataSourceDepthSorter = DataSourceIndexed.extend('DataSourceDepthSorter', {
      */
     sortOn: function(columnIndex, direction, sortDepth) {
         var columnName = this.dataSource.getFields()[columnIndex],
+            calculator = this.dataSource.getCalculators()[columnIndex],
             self = this, // used in getValue
             depth = 0,
             numeric, edge;
@@ -58,7 +59,7 @@ var DataSourceDepthSorter = DataSourceIndexed.extend('DataSourceDepthSorter', {
                 }
             }
 
-            return DataSourceIndexed.valOrFunc(dataRow, columnName);
+            return DataSourceIndexed.valOrFunc(dataRow, columnName, calculator);
         }
     }
 });

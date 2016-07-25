@@ -171,9 +171,13 @@ var DataSourceIndexed = Base.extend('DataSourceIndexed', {
  * @param {string} columnName
  * @returns {*}
  */
-DataSourceIndexed.valOrFunc = function(dataRow, columnName) {
-    var vf = dataRow[columnName];
-    return (typeof vf)[0] === 'f' ? vf(dataRow, columnName) : vf;
+DataSourceIndexed.valOrFunc = function(dataRow, columnName, calculator) {
+    var result = dataRow[columnName];
+    calculator = (typeof result)[0] === 'f' && result || calculator;
+    if (calculator) {
+        result = calculator(dataRow, columnName);
+    }
+    return result;
 };
 
 module.exports = DataSourceIndexed;

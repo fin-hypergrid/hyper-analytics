@@ -181,9 +181,13 @@ var DataSourceAggregator = Base.extend('DataSourceAggregator', {
 
     /**
      * @memberOf DataSourceAggregator.prototype
+     * @params [options]
      */
-    apply: function() {
-        this.buildGroupTree();
+    apply: function(options) {
+        var options  = options || {};
+        if (!options.rowClick && !options.columnSort){
+            this.buildGroupTree();
+        }
     },
 
     /**

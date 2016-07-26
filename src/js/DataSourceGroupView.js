@@ -124,9 +124,13 @@ var DataSourceGroupView = Base.extend('DataSourceGroupView', {
 
     /**
      * @memberOf DataSourceGroupView.prototype
+     * @params [options]
      */
-    apply: function() {
-        this.buildGroupTree();
+    apply: function(options) {
+        var options  = options || {};
+        if (!options.rowClick && !options.columnSort){
+            this.buildGroupTree();
+        }
     },
 
     /**
@@ -332,7 +336,7 @@ var DataSourceGroupView = Base.extend('DataSourceGroupView', {
      * @memberOf DataSourceGroupView.prototype
      */
     getGrandTotals: function (){
-        
+
     },
 
     sortGroups: function(groupSorter) {

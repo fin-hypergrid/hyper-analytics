@@ -10,6 +10,14 @@ var DataNodeLeaf = DataNodeBase.extend('DataNodeLeaf', {
 
     /**
      * @memberOf DataNodeLeaf.prototype
+     * @param {string} key
+     */
+    initialize: function(key) {
+        this.hasChildren = false;
+    },
+
+    /**
+     * @memberOf DataNodeLeaf.prototype
      * @param depth
      */
     toArray: function(depth) {

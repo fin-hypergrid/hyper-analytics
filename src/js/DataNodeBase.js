@@ -29,21 +29,21 @@ var DataNodeBase = Base.extend('DataNodeBase', {
          * @type {string[]}
          * @default false
          */
-        this.data = ['']; // TODO: Why is this first element needed?
+        this.data = [''];
 
         /**
          * @memberOf DataNodeBase.prototype
          * @type {number[]}
          * @default ['']
          */
-        this.index = []; // TODO: formerly rowIndex
+        this.index = []; // formerly rowIndex
 
         /**
          * @memberOf DataNodeBase.prototype
          * @type {boolean}
          * @default false
          */
-        this.hasChildren = false; // Not being used
+        this.hasChildren = true;
 
         /**
          * @memberOf DataNodeBase.prototype

@@ -328,6 +328,13 @@ var DataSourceGroupView = Base.extend('DataSourceGroupView', {
         this.apply();
     },
 
+    /**
+     * @memberOf DataSourceGroupView.prototype
+     */
+    getGrandTotals: function (){
+        
+    },
+
     sortGroups: function(groupSorter) {
         this.tree.clearGroupSorts();
         this.tree.sortWith(groupSorter);

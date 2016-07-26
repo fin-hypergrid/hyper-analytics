@@ -22,6 +22,12 @@ var DataSourceAggregator = Base.extend('DataSourceAggregator', {
 
         /**
          * @memberOf DataSourceAggregator.prototype
+         * @type {DataSource}
+         */
+        this.treeColumnIndex = 0;
+
+        /**
+         * @memberOf DataSourceAggregator.prototype
          * @type {DataNodeTree}
          */
         this.tree = new DataNodeTree('Totals');

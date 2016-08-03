@@ -66,9 +66,9 @@ var DataSourceTreeview = DataSourceIndexed.extend('DataSourceTreeview', {
 
         this.buildIndex(); // make all rows visible to getRow()
 
+        r = this.getRowCount();
         if (this.joined) {
             // mutate data row with __DEPTH (all rows) and __EXPANDED (all "parent" rows)
-            r = this.getRowCount();
             while (r--) {
                 depth = 0;
                 leafRow = this.getRow(r);
@@ -87,6 +87,11 @@ var DataSourceTreeview = DataSourceIndexed.extend('DataSourceTreeview', {
                 } else if (leafRow.__EXPANDED === undefined) { // retain previous setting for old rows
                     leafRow.__EXPANDED = false; // default for new row is unexpanded
                 }
+            }
+        } else {
+            // flatten the tree so group sorter sees it as a single group
+            while (r--) {
+                this.getRow(r).__DEPTH = 0;
             }
         }
 

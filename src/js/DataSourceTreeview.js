@@ -117,9 +117,11 @@ var DataSourceTreeview = DataSourceIndexed.extend('DataSourceTreeview', {
         var value = DataSourceIndexed.prototype.getValue.call(this, x, y);
 
         if (this.viewMakesSense() && x === this.treeColumnIndex) {
-            var row = this.getRow(y),
-                prefix = Array(row.__DEPTH + 1).join('    ') + expandedMap[row.__EXPANDED];
-            value = prefix + value;
+            var row = this.getRow(y);
+
+            if (!(value === '' && row.__EXPANDED === undefined)) {
+                value = Array(row.__DEPTH + 1).join('   ') + expandedMap[row.__EXPANDED] + value;
+            }
         }
 
         return value;

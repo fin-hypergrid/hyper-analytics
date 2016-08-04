@@ -9,7 +9,7 @@
   "scripts": {
     "test": "gulp test"
   },
-  "author": "SWirts, JEiten",
+  "author": "SWirts, JEiten, DJones",
   "license": "MIT",
   "devDependencies": {
     "browser-sync": "^2.10.1",

@@ -10,6 +10,14 @@ var DataNodeLeaf = DataNodeBase.extend('DataNodeLeaf', {
 
     /**
      * @memberOf DataNodeLeaf.prototype
+     * @param {string} key
+     */
+    initialize: function(key) {
+        this.hasChildren = false;
+    },
+
+    /**
+     * @memberOf DataNodeLeaf.prototype
      * @param depth
      */
     toArray: function(depth) {
@@ -27,10 +35,32 @@ var DataNodeLeaf = DataNodeBase.extend('DataNodeLeaf', {
 
     /**
      * @memberOf DataNodeLeaf.prototype
+     * @param drillDown
+     */
+    buildView: function(drillDown) {
+        drillDown.addView(this);
+    },
+
+    /**
+     * @memberOf DataNodeLeaf.prototype
      * @param aggregator
      */
-    buildView: function(aggregator) {
-        aggregator.addView(this);
+    getRowData: function(drillDown) {
+        var index = this.getIndex();
+
+        if (index.length) {
+            var groupsOffset = Number(drillDown.hasGroups()),
+                data = this.data,
+                dataLen = drillDown.getColumnCount() + groupsOffset,
+                i = 0,
+                sorter = drillDown.sorterInstance;
+
+            sorter.index = index;
+
+            for (i; i < dataLen; i++) {
+                data[groupsOffset + i] = sorter.getValue(i,0);
+            }
+        }
     },
 
     /**

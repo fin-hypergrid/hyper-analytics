@@ -3,8 +3,8 @@ var should = require('should'); // extends `Object` (!) with `.should`; creates 
 var sinon = require('sinon');
 require('should-sinon'); // extends Object.should to make should-like asserts for sinon spies
 
-var DataSource = require('../src/js/DataSource');
-var DataSourceSorter = require('../src/js/DataSourceSorter');
+var DataSource = require('../js/DataSource');
+var DataSourceSorter = require('../js/DataSourceSorter');
 
 module.exports = function() {
     test.constructorModule('DataSourceSorterComposite', function(DataSourceSorterComposite) {
@@ -22,7 +22,7 @@ module.exports = function() {
         });
 
         it('descends from `DataSourceIndexed`', function() {
-            object.should.be.an.instanceof(require('../src/js/DataSourceIndexed'));
+            object.should.be.an.instanceof(require('../js/DataSourceIndexed'));
         });
 
         test.property('dataSource', function() {
@@ -54,7 +54,7 @@ module.exports = function() {
             });
             test.method('sortOn', 2, function() {
                 it('builds a list', function() {
-                    should(object.sorts).deepEqual([[2, 1], [1, -1]]);
+                    should(object.sorts).deepEqual([{ columnIndex: 2, direction: 1}, { columnIndex: 1, direction: -1}]);
                 })
             });
             test.method('clearSorts', 0, function() {
@@ -70,11 +70,11 @@ module.exports = function() {
             });
         });
 
-        test.method('applySorts', 0, function() {
+        test.method('apply', 0, function() {
             describe('when no defined sorts', function() {
                 it('sets *private* `last` to `dataSource`', function() {
                     object.last = null; // already set to dataSource on initialization so step on it
-                    object.applySorts();
+                    object.apply();
                     object.last.should.equal(object.dataSource);
                 });
             });
@@ -82,7 +82,7 @@ module.exports = function() {
                 var dataSourceSorter, EXPECTED_INDEX = [3, 1, 4, 0, 2];
                 beforeEach(function() {
                     object.sortOn(2, 1); // 3rd column, ascending
-                    object.applySorts();
+                    object.apply();
                     dataSourceSorter = object.last;
                 });
 
@@ -132,7 +132,7 @@ module.exports = function() {
                 beforeEach(function() {
                     object.sortOn(1, 1); // low-order sort comes last: 2nd column, ascending
                     object.sortOn(0, -1); // high-order sort comes first: 1st column, descending
-                    object.applySorts();
+                    object.apply();
                 });
 
                 it('`getValue()` returns correct data', function() {

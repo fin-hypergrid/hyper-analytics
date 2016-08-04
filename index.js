@@ -15,6 +15,6 @@ module.exports = {
         Mappy: require('./js/util/Mappy'),
         stableSort: require('./js/util/stableSort'),
         headerify: require('./js/util/headerify'),
-        generateSampleData: require('./generateSampleData.js')
+        generateSampleData: require('./example/generateSampleData.js')
     }
 };

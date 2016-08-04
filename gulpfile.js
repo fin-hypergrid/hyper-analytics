@@ -9,7 +9,7 @@ var gulp        = require('gulp'),
 
 var name     = 'hyper-analytics',
     global   = 'hyperAnalytics',
-    srcDir   = './src/',
+    srcDir   = './js/',
     testDir  = './test/',
     buildDir = './build/';
 
@@ -29,9 +29,9 @@ gulp.task('build', function(callback) {
     clearBashScreen();
     runSequence(
         'lint',
-        'test',
-        //'doc',
-        //'beautify',
+        // 'test',
+        // 'doc',
+        // 'beautify',
         'browserify',
         callback
     );
@@ -65,7 +65,7 @@ function beautify() {
 }
 
 function browserify() {
-    return gulp.src(srcDir + 'index.js')
+    return gulp.src('index.js')
         .pipe($$.replace(
             'module.exports =',
             'window.' + global + ' ='
@@ -77,7 +77,7 @@ function browserify() {
 }
 
 function browserifyMin() {
-    return gulp.src(srcDir + 'index.js')
+    return gulp.src('index.js')
         .pipe($$.replace(
             'module.exports =',
             'window.' + global + ' ='

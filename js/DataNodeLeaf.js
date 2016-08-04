@@ -58,7 +58,7 @@ var DataNodeLeaf = DataNodeBase.extend('DataNodeLeaf', {
             sorter.index = index;
 
             for (i; i < dataLen; i++) {
-                data[groupsOffset + i] = sorter.getValue(i,0);
+                data[groupsOffset + i] = sorter.getValue(i, 0);
             }
         }
     },

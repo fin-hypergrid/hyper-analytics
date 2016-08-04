@@ -1,7 +1,7 @@
 var test = require('./util/test');
 var should = require('should'); // extends `Object` (!) with `.should`; creates `should()`
 
-var DataSource = require('../src/js/DataSource');
+var DataSource = require('../js/DataSource');
 
 var INDEX_VECTOR = [ 0, 1, 2, 3, 4 ],
     INVERSE_VECTOR = [ 4, 3, 2, 1, 0];

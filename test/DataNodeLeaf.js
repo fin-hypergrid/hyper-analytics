@@ -12,7 +12,7 @@ module.exports = function() {
         });
 
         it('descends from `DataNodeBase`', function() {
-            object.should.be.an.instanceof(require('../src/js/DataNodeBase'));
+            object.should.be.an.instanceof(require('../js/DataNodeBase'));
         });
 
         test.method('toArray', 1, function() {

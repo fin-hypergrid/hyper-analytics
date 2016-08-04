@@ -3,7 +3,7 @@ var should = require('should'); // extends `Object` (!) with `.should`; creates 
 var sinon = require('sinon');
 require('should-sinon'); // extends Object.should to make should-like asserts for sinon spies
 
-var DataSource = require('../src/js/DataSource');
+var DataSource = require('../js/DataSource');
 
 module.exports = function() {
     test.constructorModule('DataSourceGlobalFilter', function(DataSourceGlobalFilter) {
@@ -21,7 +21,7 @@ module.exports = function() {
         });
 
         it('descends from `DataSourceIndexed`', function() {
-            object.should.be.instanceof(require('../src/js/DataSourceIndexed'));
+            object.should.be.instanceof(require('../js/DataSourceIndexed'));
         });
 
         test.method('set', 1, function() {

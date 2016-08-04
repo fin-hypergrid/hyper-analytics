@@ -62,7 +62,7 @@ function constructorModule(pathname, extended, tearDown) {
     });
 }
 
-constructorModule.defaultPath = '../../src/js/';
+constructorModule.defaultPath = '../../js/';
 
 function method(name, parms, setup, tearDown) {
     if ((!tearDown)) {

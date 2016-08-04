@@ -5,6 +5,7 @@ module.exports = {
     DataSourceSorter: require('./js/DataSourceSorter'),
     DataSourceSorterComposite: require('./js/DataSourceSorterComposite'),
     DataSourceGlobalFilter: require('./js/DataSourceGlobalFilter'),
+    DataSourceGroupView: require('./js/DataSourceGroupView'),
     DataSourceAggregator: require('./js/DataSourceAggregator'),
     DataSourceTreeview: require('./js/DataSourceTreeview'),
     DataSourceTreeviewSorter: require('./js/DataSourceTreeviewSorter'),
@@ -13,7 +14,6 @@ module.exports = {
         aggregations: require('./js/util/aggregations'),
         Mappy: require('./js/util/Mappy'),
         stableSort: require('./js/util/stableSort'),
-        headerify: require('./js/util/headerify'),
-        generateSampleData: require('./generateSampleData.js')
+        headerify: require('./js/util/headerify')
     }
 };

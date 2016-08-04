@@ -2,7 +2,7 @@ var test = require('./util/test');
 
 module.exports = function() {
     test.module('aggregations', function() {
-        object = require('../src/js/util/aggregations');
+        object = require('../js/util/aggregations');
 
         var group = {
             rows: [

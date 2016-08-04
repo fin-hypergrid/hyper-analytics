@@ -2,9 +2,9 @@
 
 var Base = require('./Base');
 var DataSourceSorter = require('./DataSourceSorter');
-var DataNodeTree = require('./DataNodeTree');
-var DataNodeGroup = require('./DataNodeGroup');
-var DataNodeLeaf = require('./DataNodeLeaf');
+var DataNodeTree = require('./AggregatorNodeTree');
+var DataNodeGroup = require('./AggregatorNodeGroup');
+var DataNodeLeaf = require('./AggregatorNodeLeaf');
 var headerify = require('./util/headerify');
 
 /**
@@ -19,6 +19,12 @@ var DataSourceAggregator = Base.extend('DataSourceAggregator', {
          * @type {DataSource}
          */
         this.dataSource = dataSource;
+
+        /**
+         * @memberOf DataSourceAggregator.prototype
+         * @type {DataSource}
+         */
+        this.treeColumnIndex = 0;
 
         /**
          * @memberOf DataSourceAggregator.prototype
@@ -79,6 +85,16 @@ var DataSourceAggregator = Base.extend('DataSourceAggregator', {
     },
 
     isNullObject: false,
+
+
+    /**
+     * @memberOf DataSourceAggregator.prototype
+     * @param aggregations, groups
+     */
+    setAggregateGroups: function(aggregations, groups) {
+        this.setGroupBys(groups);
+        this.setAggregates(aggregations);
+    },
 
     /**
      * @memberOf DataSourceAggregator.prototype
@@ -165,9 +181,13 @@ var DataSourceAggregator = Base.extend('DataSourceAggregator', {
 
     /**
      * @memberOf DataSourceAggregator.prototype
+     * @params [options]
      */
-    apply: function() {
-        this.buildGroupTree();
+    apply: function(options) {
+        options  = options || {};
+        if (!options.rowClick && !options.columnSort){
+            this.buildGroupTree();
+        }
     },
 
     /**
@@ -216,7 +236,7 @@ var DataSourceAggregator = Base.extend('DataSourceAggregator', {
 
         this.sorterInstance = new DataSourceSorter(source);
         tree.toArray();
-        tree.computeAggregates(this);
+        tree.getRowData(this);
         this.buildView();
     },
 

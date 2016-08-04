@@ -1,9 +1,12 @@
 /* eslint-env node, browser */
+
+/* globals hyperAnalytics, generateSampleData */
+
 'use strict';
 
 // require('./index.js');
-var analytics = hyperAnalytics;//eslint-disable-line no-undef
-var sampleData = analytics.util.generateSampleData(1000);
+var analytics = hyperAnalytics;
+var sampleData = generateSampleData(1000);
 
 if (!window.fin) {
     window.fin = {};
@@ -65,7 +68,7 @@ window.a.dump(100);
 
 window.s.sortOn(3, 1);
 window.s.sortOn(8, 1);
-window.s.applySorts();
+window.s.apply();
 
 window.a.dump(100);
 

@@ -1,5 +1,5 @@
 var test = require('./util/test');
-var headerify = require('../src/js/util/headerify');
+var headerify = require('../js/util/headerify');
 var should = require('should'); // extends `Object` (!) with `.should`; creates `should()`
 
 headerify.transform = headerify.capitalize;

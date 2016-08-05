@@ -30,11 +30,11 @@ var DataNodeTree = DataNodeGroup.extend('DataNodeTree', {
 
     /**
      * @memberOf DataNodeGroup.prototype
-     * @param aggregator
+     * @param drillDown
      */
-    buildView: function(aggregator) {
+    buildView: function(drillDown) {
         this.children.forEach(function(child) {
-            child.buildView(aggregator);
+            child.buildView(drillDown);
         });
     },
 

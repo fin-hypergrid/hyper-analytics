@@ -10,9 +10,9 @@ var stableSort = require('./util/stableSort');
  * @extends DataSourceIndexed
  */
 var DataSourceDepthSorter = DataSourceIndexed.extend('DataSourceDepthSorter', {
-    initialize: function(dataSource, idColumnName, parentIdColumnName) {
-        this.idColumnName = idColumnName;
-        this.parentIdColumnName = parentIdColumnName;
+    initialize: function(dataSource, idColumn, parentIdColumn) {
+        this.idColumn = idColumn;
+        this.parentIdColumn = parentIdColumn;
     },
 
     /**
@@ -55,7 +55,7 @@ var DataSourceDepthSorter = DataSourceIndexed.extend('DataSourceDepthSorter', {
                 return edge;
             } else {
                 while (dataRow.__DEPTH > depth) {
-                    dataRow = self.findRow(self.idColumnName, dataRow[self.parentIdColumnName]);
+                    dataRow = self.findRow(self.idColumn.name, dataRow[self.parentIdColumn.name]);
                 }
             }
 

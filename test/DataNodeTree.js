@@ -12,7 +12,7 @@ module.exports = function() {
         });
 
         it('descends from `DataNodeGroup`', function() {
-            object.should.be.an.instanceof(require('../src/js/DataNodeGroup'));
+            object.should.be.an.instanceof(require('../js/DataNodeGroup'));
         });
 
         test.method('initialize', 1, function() {

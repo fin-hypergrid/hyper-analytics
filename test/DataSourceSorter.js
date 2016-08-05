@@ -3,8 +3,8 @@ var should = require('should'); // extends `Object` (!) with `.should`; creates 
 var sinon = require('sinon');
 require('should-sinon'); // extends Object.should to make should-like asserts for sinon spies
 
-var stableSort = require('../src/js/util/stableSort');
-var DataSource = require('../src/js/DataSource');
+var stableSort = require('../js/util/stableSort');
+var DataSource = require('../js/DataSource');
 
 module.exports = function() {
     test.constructorModule('DataSourceSorter', function(DataSourceSorter) {
@@ -22,14 +22,7 @@ module.exports = function() {
         });
 
         it('descends from `DataSourceIndexed`', function() {
-            object.should.be.instanceof(require('../src/js/DataSourceIndexed'));
-        });
-
-        // TODO: descendingSort does not seem to be in use anywhere
-        test.property('descendingSort', function() {
-            it('initialized to `false`', function() {
-                object.descendingSort.should.false();
-            });
+            object.should.be.instanceof(require('../js/DataSourceIndexed'));
         });
 
         test.method('sortOn', 2, function() {

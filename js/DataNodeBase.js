@@ -29,21 +29,21 @@ var DataNodeBase = Base.extend('DataNodeBase', {
          * @type {string[]}
          * @default false
          */
-        this.data = ['']; // TODO: Why is this first element needed?
+        this.data = [''];
 
         /**
          * @memberOf DataNodeBase.prototype
          * @type {number[]}
          * @default ['']
          */
-        this.index = []; // TODO: formerly rowIndex
+        this.index = []; // formerly rowIndex
 
         /**
          * @memberOf DataNodeBase.prototype
          * @type {boolean}
          * @default false
          */
-        this.hasChildren = false; // TODO: Where/how is this used?
+        this.hasChildren = true;
 
         /**
          * @memberOf DataNodeBase.prototype
@@ -111,39 +111,29 @@ var DataNodeBase = Base.extend('DataNodeBase', {
 
     /**
      * @memberOf DataNodeLeaf.prototype
-     * @param aggregator
+     * @param drillDown
      */
-    computeAggregates: function(aggregator) {
+    getRowData: function(drillDown) {
         var index = this.getIndex();
 
         if (index.length) {
-            var groupsOffset = Number(aggregator.hasGroups());
-
-            // redimension the data
-            var data = this.data;
-            data.length = groupsOffset + aggregator.aggregates.length;
-
-            var sorter = aggregator.sorterInstance;
-            sorter.index = index;
-
-            aggregator.aggregates.forEach(function(aggregate, i) {
-                data[groupsOffset + i] = aggregate(sorter);
-            });
+            // Group and Tree nodes will have no data besides the tree column
+            this.data.length = drillDown.getColumnCount();
         }
     },
 
     /**
      * @memberOf DataNodeLeaf.prototype
-     * @param aggregator
+     * @param drillDown
      */
-    buildView: function(aggregator) {
-        aggregator.addView(this);
+    buildView: function(drillDown) {
+        drillDown.addView(this);
     },
 
     /**
      * @memberOf DataNodeLeaf.prototype
      */
-    toggleExpansionState: function() { /* aggregator */
+    toggleExpansionState: function() {
         //do nothing by default
     },
 
@@ -151,6 +141,5 @@ var DataNodeBase = Base.extend('DataNodeBase', {
     }
 });
 
-//DataNodeBase.prototype.applyAggregates = DataNodeBase.prototype.computeAggregates;
 
 module.exports = DataNodeBase;

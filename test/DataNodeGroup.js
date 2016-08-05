@@ -12,13 +12,13 @@ module.exports = function() {
         });
 
         it('descends from `DataNodeBase`', function() {
-            object.should.be.an.instanceof(require('../src/js/DataNodeBase'));
+            object.should.be.an.instanceof(require('../js/DataNodeBase'));
         });
 
         test.method('initialize', 1, function() {
             test.property('children', function() {
                 it('is initialized to an instance of `Map`', function() {
-                    object.children.should.be.an.instanceof(require('../src/js/util/Mappy'));
+                    object.children.should.be.an.instanceof(require('../js/util/Mappy'));
                 });
             });
         });
@@ -71,7 +71,7 @@ module.exports = function() {
 
         test.method('toggleExpansionState', 1);
 
-        test.method('computeAggregates', 1);
+        test.method('getRowData', 1);
 
         test.method('buildView', 1);
 

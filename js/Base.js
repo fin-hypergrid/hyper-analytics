@@ -38,6 +38,30 @@ Base.prototype = {
         }
     },
 
+    /**
+     * Get new object with name and index given the name or the index.
+     * @param {string|number} [column] - Column name or index.
+     * @param {string} [defaultName] - Name to use when column is omitted or undefined. May be omitted when column is definitely defined.
+     * @returns {{name: string, index: number}}
+     */
+    getColumnInfo: function(column, defaultName) {
+        var name, index;
+        if (column === undefined) {
+            column = defaultName;
+        }
+        if (typeof column === 'number') {
+            name = this.getFields()[index = column];
+        } else {
+            index = this.getFields().indexOf(name = column);
+        }
+        if (name && index >= 0) {
+            return {
+                name: name,
+                index: index
+            };
+        }
+    },
+
     fixIndentForTableDisplay: function(string) {
         var count = string.search(/\S/);
         var end = string.substring(count);

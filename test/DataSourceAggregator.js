@@ -3,7 +3,7 @@ var should = require('should'); // extends `Object` (!) with `.should`; creates 
 var sinon = require('sinon');
 require('should-sinon'); // extends Object.should to make should-like asserts for sinon spies
 
-var DataSource = require('../src/js/DataSource');
+var DataSource = require('../js/DataSource');
 
 module.exports = function() {
     test.constructorModule('DataSourceAggregator', function(DataSourceAggregator) {
@@ -108,7 +108,7 @@ module.exports = function() {
 
             test.method('hasAggregates', 0);
 
-            test.method('apply', 0);
+            test.method('apply', 1);
 
             test.method('clearGroups', 0);
 
@@ -128,7 +128,7 @@ module.exports = function() {
 
             test.method('getRowCount', 0);
 
-            test.method('click', 1);
+            test.method('click', 3);
 
             test.method('getHeaders', 0);
 

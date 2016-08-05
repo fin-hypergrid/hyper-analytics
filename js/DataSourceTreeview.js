@@ -14,7 +14,6 @@ var expandedMap = {
  * @extends DataSourceIndexed
  */
 var DataSourceTreeview = DataSourceIndexed.extend('DataSourceTreeview', {
-
     /**
      * @summary Toggle the tree-view.
      * @desc Calculates or recalculates nesting depth of each row and marks it as expandable if it has children.
@@ -24,51 +23,35 @@ var DataSourceTreeview = DataSourceIndexed.extend('DataSourceTreeview', {
      * All three named columns must exist.
      *
      * @param {boolean|object} [options] - Turn tree-view **ON**. If falsy (or omitted), turn it **OFF**.
-     * @param {string} [options.idColumnName='ID'] - Column name of the primary key column.
-     * @param {string} [options.parentIdColumnName='parentID'] - Column name of the foreign key column for grouping.
-     * @param {string} [options.treeColumnName='name'] - Column name of the drill-down column to decorate.
+     * @param {number|string} [options.idColumn='ID'] - Column name of the primary key column.
+     * @param {number|string} [options.parentIdColumn='parentID'] - Column name of the foreign key column for grouping.
+     * @param {number|string} [options.treeColumn='name'] - Column name of the drill-down column to decorate.
      * @returns {boolean} Joined state.
      * @memberOf DataSourceTreeview.prototype
      */
     setRelation: function(options) {
-        var idColumnName, parentIdColumnName, treeColumnName, fields,
+        var idColumn, parentIdColumn,
             r, parentID, depth, leafRow, row, ID;
 
-        this.joined = false;
-
-        if (options) {
-            fields = this.getFields();
-            idColumnName = options.idColumnName || 'ID';
-            parentIdColumnName = options.parentIdColumnName || 'parentID';
-            treeColumnName = options.treeColumnName || 'name';
-
-            if ( // all three columns must exist
-                fields.indexOf(idColumnName) >= 0 &&
-                fields.indexOf(parentIdColumnName) >= 0 &&
-                fields.indexOf(treeColumnName) >= 0
-            ) {
-                this.idColumnName = idColumnName;
-                this.idColumnIndex = fields.indexOf(idColumnName);
-
-                this.parentIdColumnName = parentIdColumnName;
-                this.parentIdColumnIndex = fields.indexOf(parentIdColumnName);
-
-                this.treeColumnName = treeColumnName;
-                this.treeColumnIndex = fields.indexOf(treeColumnName);
-
-                this.joined = this.treeColumnIndex !== undefined;
-
-                // treeviewSorter needs to know following for access by each DataSourceSorter it creates:
-                this.dataSource.idColumnName = idColumnName;
-                this.dataSource.parentIdColumnName = parentIdColumnName;
-            }
-        }
+        // successful join requires that options object be given and that all three columns exist
+        this.joined = !!(
+            options &&
+            (this.idColumn = this.getColumnInfo(options.idColumn, 'ID')) &&
+            (this.parentIdColumn = this.getColumnInfo(options.parentIdColumn, 'parentID')) &&
+            (this.treeColumn = this.getColumnInfo(options.treeColumn, 'name'))
+        );
 
         this.buildIndex(); // make all rows visible to getRow()
 
         r = this.getRowCount();
         if (this.joined) {
+            // treeviewSorter needs to know following for access by each DataSourceSorter it creates:
+            this.dataSource.idColumn = this.idColumn;
+            this.dataSource.parentIdColumn = this.parentIdColumn;
+
             // mutate data row with __DEPTH (all rows) and __EXPANDED (all "parent" rows)
+            var idColumnName = this.idColumn.name,
+                parentIdColumnName = this.parentIdColumn.name;
             while (r--) {
                 depth = 0;
                 leafRow = this.getRow(r);
@@ -103,7 +86,7 @@ var DataSourceTreeview = DataSourceIndexed.extend('DataSourceTreeview', {
      */
     apply: function() {
         if (this.viewMakesSense()) {
-            this.buildIndex(this.treeColumnIndex === undefined ? undefined : rowIsRevealed);
+            this.buildIndex(this.joined && rowIsRevealed);
         }
     },
 
@@ -116,7 +99,7 @@ var DataSourceTreeview = DataSourceIndexed.extend('DataSourceTreeview', {
     getValue: function(x, y) {
         var value = DataSourceIndexed.prototype.getValue.call(this, x, y);
 
-        if (this.viewMakesSense() && x === this.treeColumnIndex) {
+        if (this.viewMakesSense() && x === this.treeColumn.index) {
             var row = this.getRow(y);
 
             if (!(value === '' && row.__EXPANDED === undefined)) {
@@ -183,12 +166,12 @@ var DataSourceTreeview = DataSourceIndexed.extend('DataSourceTreeview', {
         }
 
         var row, parent, changed = false;
-        while ((row = this.findRow(this.idColumnName, ID))) {
+        while ((row = this.findRow(this.idColumn.name, ID))) {
             if (parent && row.__EXPANDED === false) {
                 row.__EXPANDED = changed = true;
             }
             parent = true;
-            ID = row[this.parentIdColumnName];
+            ID = row[this.parentIdColumn.name];
         }
         return changed;
     }
@@ -198,9 +181,9 @@ function rowIsRevealed(r, row) {
     var parentID;
 
     // are any of the row's ancestors collapsed?
-    while ((parentID = row[this.parentIdColumnName]) != undefined) { // eslint-disable-line eqeqeq
+    while ((parentID = row[this.parentIdColumn.name]) != undefined) { // eslint-disable-line eqeqeq
         // walk up through each parent...
-        row = this.findRow(this.idColumnName, parentID);
+        row = this.findRow(this.idColumn.name, parentID);
         if (row.__EXPANDED === false) { // an ancestor is collapsed
             return false; // exclude row from build
         }

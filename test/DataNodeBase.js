@@ -45,7 +45,7 @@ module.exports = function() {
                 test.property('hasChildren', function() {
                     it('is initialized to boolean `false`', function() {
                         object.hasChildren.should.be.an.Boolean();
-                        object.hasChildren.should.be.false();
+                        object.hasChildren.should.be.true();
                     });
                 });
 
@@ -81,7 +81,7 @@ module.exports = function() {
 
             // testing for empty characters is a bad test, we need to be able
             // to change this.INDENT to other characters....
-            
+
             test.method('computeDepthString', 0, function() {
                 var value;
                 describe('returns a value that', function() {
@@ -139,7 +139,7 @@ module.exports = function() {
             //    });
             //});
 
-            test.method('computeAggregates', 1);
+            test.method('getRowData', 1);
 
             test.method('buildView', 1, function() {
                 it('adds self to given aggregator\'s view', function() {

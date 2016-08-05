@@ -71,7 +71,7 @@ module.exports = function() {
 
         test.method('toggleExpansionState', 1);
 
-        test.method('computeAggregates', 1);
+        test.method('getRowData', 1);
 
         test.method('buildView', 1);
 

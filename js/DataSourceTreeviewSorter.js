@@ -24,7 +24,7 @@ var DataSourceTreeviewSorter = DataSourceSorterComposite.extend('DataSourceTreev
 
             this.sorts.forEach(function(sortSpec) {
                 for (depth = deepest; depth >= 0; --depth) {
-                    each = new DataSourceDepthSorter(each, self.idColumnName, self.parentIdColumnName);
+                    each = new DataSourceDepthSorter(each, self.idColumn, self.parentIdColumn);
                     each.sortOn(sortSpec.columnIndex, sortSpec.direction, depth);
                 }
             });

@@ -30,8 +30,7 @@ var DataSourceTreeview = DataSourceIndexed.extend('DataSourceTreeview', {
      * @memberOf DataSourceTreeview.prototype
      */
     setRelation: function(options) {
-        var idColumn, parentIdColumn,
-            r, parentID, depth, leafRow, row, ID;
+        var r, parentID, depth, leafRow, row, ID;
 
         // successful join requires that options object be given and that all three columns exist
         this.joined = !!(

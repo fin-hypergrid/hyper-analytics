@@ -94,6 +94,8 @@ module.exports = function() {
                     });
                 });
 
+                test.method('findRow', 3);
+
                 test.method('getValue', 2, function() {
                     it('returns `null` for non-existent row', function() {
                         should(object.getValue(3, 9)).equal(null);

@@ -10,9 +10,10 @@ var stableSort = require('./util/stableSort');
  * @extends DataSourceIndexed
  */
 var DataSourceDepthSorter = DataSourceIndexed.extend('DataSourceDepthSorter', {
-    initialize: function(dataSource, idColumn, parentIdColumn) {
-        this.idColumn = idColumn;
-        this.parentIdColumn = parentIdColumn;
+    initialize: function(dataSource, treeViewSorter) {
+        this.idColumnName = treeViewSorter.idColumn.name;
+        this.parentIdColumnName = treeViewSorter.parentIdColumn.name;
+        this.treeColumnIndex = treeViewSorter.treeColumn.index;
     },
 
     /**
@@ -22,12 +23,6 @@ var DataSourceDepthSorter = DataSourceIndexed.extend('DataSourceDepthSorter', {
      * @memberOf DataSourceDepthSorter.prototype
      */
     sortOn: function(columnIndex, direction, sortDepth) {
-        var columnName = this.dataSource.getFields()[columnIndex],
-            calculator = this.dataSource.getCalculators()[columnIndex],
-            self = this, // used in getValue
-            depth = 0,
-            numeric, edge;
-
         switch (direction) {
             case 0:
                 this.clearIndex();
@@ -38,30 +33,44 @@ var DataSourceDepthSorter = DataSourceIndexed.extend('DataSourceDepthSorter', {
             case -1:
                 if (this.dataSource.getRowCount()) {
                     this.buildIndex();
-                    numeric = typeof getValue(0) !== 'string'; // works with date objects as well as numbers
-                    edge = direction === -1 // used in getValue
+
+                    // used in getValue:
+                    this.depth = 0;
+                    this.isTreeColumn = columnIndex === this.treeColumnIndex;
+                    this.columnName = this.dataSource.getFields()[columnIndex];
+                    this.calculator = this.dataSource.getCalculators()[columnIndex];
+
+                    var numeric = typeof getValue.call(this, 0) !== 'string'; // works with date objects as well as numbers
+                    this.edge = direction === -1
                         ? (numeric ? +Infinity : '\uffff')
                         : (numeric ? -Infinity : '');
-                    depth = sortDepth;
-                    stableSort.sort(this.index, getValue, direction);
+
+                    this.depth = sortDepth;
+                    stableSort.sort(this.index, getValue.bind(this), direction);
                 }
                 break;
         }
-
-        function getValue(rowIdx) {
-            var dataRow = self.dataSource.getRow(rowIdx);
-
-            if (dataRow.__DEPTH < depth) {
-                return edge;
-            } else {
-                while (dataRow.__DEPTH > depth) {
-                    dataRow = self.findRow(self.idColumn.name, dataRow[self.parentIdColumn.name]);
-                }
-            }
-
-            return DataSourceIndexed.valOrFunc(dataRow, columnName, calculator);
-        }
     }
 });
+
+function getValue(rowIdx) {
+    var dataRow = this.dataSource.getRow(rowIdx);
+
+    if (dataRow.__DEPTH < this.depth) {
+        return this.edge;
+    }
+
+    // bubble up to group label of requested depth while either...
+    while (
+        // ...in tree column AND this is a leaf row
+        this.isTreeColumn && dataRow.__EXPANDED === undefined ||
+        // ...still deeper than the requested depth
+        dataRow.__DEPTH > this.depth
+    ) {
+        dataRow = this.findRow(this.idColumnName, dataRow[this.parentIdColumnName]);
+    }
+
+    return DataSourceIndexed.valOrFunc(dataRow, this.columnName, this.calculator);
+}
 
 module.exports = DataSourceDepthSorter;

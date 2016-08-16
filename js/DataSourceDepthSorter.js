@@ -13,7 +13,7 @@ var DataSourceDepthSorter = DataSourceIndexed.extend('DataSourceDepthSorter', {
     initialize: function(dataSource, treeViewSorter) {
         this.idColumnName = treeViewSorter.idColumn.name;
         this.parentIdColumnName = treeViewSorter.parentIdColumn.name;
-        this.treeColumnIndex = treeViewSorter.treeColumn.index;
+        this.sortColumnIndex = treeViewSorter.defaultSortColumn.index;
     },
 
     /**
@@ -36,7 +36,7 @@ var DataSourceDepthSorter = DataSourceIndexed.extend('DataSourceDepthSorter', {
 
                     // used in getValue:
                     this.depth = 0;
-                    this.isTreeColumn = columnIndex === this.treeColumnIndex;
+                    this.isSortColumn = columnIndex === this.sortColumnIndex;
                     this.columnName = this.dataSource.getFields()[columnIndex];
                     this.calculator = this.dataSource.getCalculators()[columnIndex];
 
@@ -63,7 +63,7 @@ function getValue(rowIdx) {
     // bubble up to group label of requested depth while either...
     while (
         // ...in tree column AND this is a leaf row
-        this.isTreeColumn && dataRow.__EXPANDED === undefined ||
+        this.isSortColumn && dataRow.__EXPANDED === undefined ||
         // ...still deeper than the requested depth
         dataRow.__DEPTH > this.depth
     ) {

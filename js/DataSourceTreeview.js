@@ -23,9 +23,10 @@ var DataSourceTreeview = DataSourceIndexed.extend('DataSourceTreeview', {
      * All three named columns must exist.
      *
      * @param {boolean|object} [options] - Turn tree-view **ON**. If falsy (or omitted), turn it **OFF**.
-     * @param {number|string} [options.idColumn='ID'] - Column name of the primary key column.
-     * @param {number|string} [options.parentIdColumn='parentID'] - Column name of the foreign key column for grouping.
-     * @param {number|string} [options.treeColumn='name'] - Column name of the drill-down column to decorate.
+     * @param {number|string} [options.idColumn='ID'] - Name or index of the primary key column.
+     * @param {number|string} [options.parentIdColumn='parentID'] - Name or index of the foreign key column for grouping.
+     * @param {number|string} [options.treeColumn='name'] - Name or index of the drill-down column to decorate.
+     * @param {number|string} [options.defaultSortColumn=this.treeColumn.index] - Name or index of the group column.
      * @returns {boolean} Joined state.
      * @memberOf DataSourceTreeview.prototype
      */
@@ -37,7 +38,8 @@ var DataSourceTreeview = DataSourceIndexed.extend('DataSourceTreeview', {
             options &&
             (this.idColumn = this.getColumnInfo(options.idColumn, 'ID')) &&
             (this.parentIdColumn = this.getColumnInfo(options.parentIdColumn, 'parentID')) &&
-            (this.treeColumn = this.getColumnInfo(options.treeColumn, 'name'))
+            (this.treeColumn = this.getColumnInfo(options.treeColumn, 'name')) &&
+            (this.defaultSortColumn = this.getColumnInfo(options.defaultSortColumn, this.treeColumn.index))
         );
 
         this.buildIndex(); // make all rows visible to getRow()
@@ -47,7 +49,7 @@ var DataSourceTreeview = DataSourceIndexed.extend('DataSourceTreeview', {
             // DataSourceTreeviewSorter needs to know following for access by each DataSourceDepthSorter it creates:
             this.dataSource.idColumn = this.idColumn;
             this.dataSource.parentIdColumn = this.parentIdColumn;
-            this.dataSource.treeColumn = this.treeColumn;
+            this.dataSource.defaultSortColumn = this.defaultSortColumn;
 
             // mutate data row with __DEPTH (all rows) and __EXPANDED (all "parent" rows)
             var idColumnName = this.idColumn.name,

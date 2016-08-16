@@ -44,9 +44,10 @@ var DataSourceTreeview = DataSourceIndexed.extend('DataSourceTreeview', {
 
         r = this.getRowCount();
         if (this.joined) {
-            // treeviewSorter needs to know following for access by each DataSourceSorter it creates:
+            // DataSourceTreeviewSorter needs to know following for access by each DataSourceDepthSorter it creates:
             this.dataSource.idColumn = this.idColumn;
             this.dataSource.parentIdColumn = this.parentIdColumn;
+            this.dataSource.treeColumn = this.treeColumn;
 
             // mutate data row with __DEPTH (all rows) and __EXPANDED (all "parent" rows)
             var idColumnName = this.idColumn.name,

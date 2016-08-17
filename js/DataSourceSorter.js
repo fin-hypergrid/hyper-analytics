@@ -16,7 +16,7 @@ var DataSourceSorter = DataSourceIndexed.extend('DataSourceSorter', {
     sortOn: function(columnIndex, direction) {
         var dataSource = this.dataSource,
             columnName = dataSource.getFields()[columnIndex],
-            calculator = dataSource.getCalculators()[columnIndex];
+            calculator = dataSource.getProperty('calculators')[columnIndex];
 
         switch (direction) {
             case 0:

@@ -14,6 +14,15 @@ var expandedMap = {
  * @extends DataSourceIndexed
  */
 var DataSourceTreeview = DataSourceIndexed.extend('DataSourceTreeview', {
+
+    /** DataSourceTreeviewSorter needs access to this object for instance variables `joined`, `idColumn`, and `parentIdColumn`, these last two of which are passed to the DataSourceDepthSorter constructor. (If dataSource is not the sorter, this is not used but harmless.)
+     * @param dataSource
+     * @memberOf DataSourceTreeview.prototype
+     */
+    initialize: function(dataSource) {
+        dataSource.treeView = this;
+    },
+
     /**
      * @summary Toggle the tree-view.
      * @desc Calculates or recalculates nesting depth of each row and marks it as expandable if it has children.
@@ -26,7 +35,6 @@ var DataSourceTreeview = DataSourceIndexed.extend('DataSourceTreeview', {
      * @param {number|string} [options.idColumn='ID'] - Name or index of the primary key column.
      * @param {number|string} [options.parentIdColumn='parentID'] - Name or index of the foreign key column for grouping.
      * @param {number|string} [options.treeColumn='name'] - Name or index of the drill-down column to decorate.
-     * @param {number|string} [options.defaultSortColumn=this.idColumn.index] - Name or index of the grouping column. The grouping column must contain discrete values within each level of grouping.
      * @returns {boolean} Joined state.
      * @memberOf DataSourceTreeview.prototype
      */
@@ -39,21 +47,19 @@ var DataSourceTreeview = DataSourceIndexed.extend('DataSourceTreeview', {
             (this.idColumn = this.getColumnInfo(options.idColumn, 'ID')) &&
             (this.parentIdColumn = this.getColumnInfo(options.parentIdColumn, 'parentID')) &&
             (this.treeColumn = this.getColumnInfo(options.treeColumn, 'name')) &&
-            (this.defaultSortColumn = this.getColumnInfo(options.defaultSortColumn, this.idColumn.index))
+            (this.groupColumn = this.getColumnInfo(options.groupColumn, this.treeColumn.name))
         );
 
         this.buildIndex(); // make all rows visible to getRow()
 
         r = this.getRowCount();
         if (this.joined) {
-            // DataSourceTreeviewSorter needs to know following for access by each DataSourceDepthSorter it creates:
-            this.dataSource.idColumn = this.idColumn;
-            this.dataSource.parentIdColumn = this.parentIdColumn;
-            this.dataSource.defaultSortColumn = this.defaultSortColumn;
-
             // mutate data row with __DEPTH (all rows) and __EXPANDED (all "parent" rows)
             var idColumnName = this.idColumn.name,
                 parentIdColumnName = this.parentIdColumn.name;
+
+            this.maxDepth = 0;
+
             while (r--) {
                 depth = 0;
                 leafRow = this.getRow(r);
@@ -63,6 +69,10 @@ var DataSourceTreeview = DataSourceIndexed.extend('DataSourceTreeview', {
                 while ((parentID = row[parentIdColumnName]) != undefined) { // eslint-disable-line eqeqeq
                     row = this.findRow(idColumnName, parentID);
                     ++depth;
+                }
+
+                if (this.maxDepth < depth) {
+                    this.maxDepth = depth;
                 }
 
                 leafRow.__DEPTH = depth;

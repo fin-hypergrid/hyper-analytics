@@ -10,10 +10,9 @@ var stableSort = require('./util/stableSort');
  * @extends DataSourceIndexed
  */
 var DataSourceDepthSorter = DataSourceIndexed.extend('DataSourceDepthSorter', {
-    initialize: function(dataSource, treeViewSorter) {
-        this.idColumnName = treeViewSorter.idColumn.name;
-        this.parentIdColumnName = treeViewSorter.parentIdColumn.name;
-        this.sortColumnIndex = treeViewSorter.defaultSortColumn.index;
+    initialize: function(dataSource, treeView) {
+        this.idColumnName = treeView.idColumn.name;
+        this.parentIdColumnName = treeView.parentIdColumn.name;
     },
 
     /**
@@ -22,7 +21,7 @@ var DataSourceDepthSorter = DataSourceIndexed.extend('DataSourceDepthSorter', {
      * @param {number} sortDepth - If greater than row depth, sorts on _edge value_ value; otherwise sorts on value of ancestor of this depth. "Edge" means a value that lexically comes before all others (ascending sort) or after all others (descending sort).
      * @memberOf DataSourceDepthSorter.prototype
      */
-    sortOn: function(columnIndex, direction, sortDepth) {
+    sortOn: function(sortDepth, direction, columnIndex) {
         switch (direction) {
             case 0:
                 this.clearIndex();
@@ -32,28 +31,57 @@ var DataSourceDepthSorter = DataSourceIndexed.extend('DataSourceDepthSorter', {
             case 1:
             case -1:
                 if (this.dataSource.getRowCount()) {
+                    var getValue;
+
                     this.buildIndex();
 
                     // used in getValue:
                     this.depth = 0;
-                    this.isSortColumn = columnIndex === this.sortColumnIndex;
-                    this.columnName = this.dataSource.getFields()[columnIndex];
-                    this.calculator = this.dataSource.getCalculators()[columnIndex];
+                    this.edge = direction === -1 ? +Infinity : -Infinity; // for numbers, date objects
 
-                    var numeric = typeof getValue.call(this, 0) !== 'string'; // works with date objects as well as numbers
-                    this.edge = direction === -1
-                        ? (numeric ? +Infinity : '\uffff')
-                        : (numeric ? -Infinity : '');
+                    if (columnIndex === undefined) {
+                        getValue = getRowIndex.bind(this);
+                    } else {
+                        getValue = getColumnValue.bind(this);
+                        this.columnName = this.dataSource.getFields()[columnIndex];
+                        this.calculator = this.dataSource.getProperty('calculators')[columnIndex];
+                        if (typeof getValue(0) === 'string') {
+                            this.edge = direction === -1 ? '\uffff' : ''; // for strings
+                        }
+                    }
 
                     this.depth = sortDepth;
-                    stableSort.sort(this.index, getValue.bind(this), direction);
+                    stableSort.sort(this.index, getValue, direction);
                 }
                 break;
         }
     }
 });
 
-function getValue(rowIdx) {
+function getRowIndex(rowIdx) {
+    var dataRow = this.dataSource.getRow(rowIdx);
+
+    if (dataRow.__DEPTH < this.depth) {
+        return this.edge;
+    }
+
+    rowIdx = this.getDataIndex(rowIdx);
+
+    // bubble up to group label of requested depth while either...
+    while (
+            // ...this is a leaf row
+            dataRow.__EXPANDED === undefined ||
+            // ...or: still deeper than the requested depth
+            dataRow.__DEPTH > this.depth
+        ) {
+        dataRow = this.findRow(this.idColumnName, dataRow[this.parentIdColumnName]);
+        rowIdx = this.getProperty('foundRowIndex');
+    }
+
+    return rowIdx;
+}
+
+function getColumnValue(rowIdx) {
     var dataRow = this.dataSource.getRow(rowIdx);
 
     if (dataRow.__DEPTH < this.depth) {
@@ -62,9 +90,9 @@ function getValue(rowIdx) {
 
     // bubble up to group label of requested depth while either...
     while (
-        // ...in tree column AND this is a leaf row
-        this.isSortColumn && dataRow.__EXPANDED === undefined ||
-        // ...still deeper than the requested depth
+        // ...this is a leaf row
+        dataRow.__EXPANDED === undefined ||
+        // ...or: still deeper than the requested depth
         dataRow.__DEPTH > this.depth
     ) {
         dataRow = this.findRow(this.idColumnName, dataRow[this.parentIdColumnName]);

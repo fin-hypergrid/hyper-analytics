@@ -14,9 +14,13 @@ Base.prototype = {
         }
     },
 
-    getCalculators: function() {
+    getProperty: function getProperty(propName) {
+        if (propName in this) {
+            return this[propName];
+        }
+
         if (this.dataSource) {
-            return this.dataSource.getCalculators.apply(this.dataSource, arguments);
+            return getProperty.call(this.dataSource, propName);
         }
     },
 

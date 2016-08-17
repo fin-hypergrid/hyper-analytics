@@ -2,6 +2,7 @@
 
 var DataSourceSorterComposite = require('./DataSourceSorterComposite');
 var DataSourceDepthSorter = require('./DataSourceDepthSorter');
+var DataSourceSorter = require('./DataSourceSorter');
 
 /**
  * This data source should be positioned _ahead of_ (closer to the data than) `DataSourceTreeview`.
@@ -11,28 +12,41 @@ var DataSourceDepthSorter = require('./DataSourceDepthSorter');
 var DataSourceTreeviewSorter = DataSourceSorterComposite.extend('DataSourceTreeviewSorter', {
 
     apply: function() {
-        if (this.sorts.length) {
-            var self = this,
-                each = this.dataSource;
+        var each = this.dataSource,
+            last, // last sort spec ("first" sort) when and only when joined AND it is the group column
+            columnIndex, direction;
 
-            for (var deepest = 0, rowIdx = this.getColumnCount() - 1; rowIdx >= 0; --rowIdx) {
-                var depth = this.getRow(rowIdx).__DEPTH;
-                if (depth > deepest) {
-                    deepest = depth;
-                }
+        if (this.sorts.length) {
+            if (this.treeView.joined) {
+                last = this.sorts[this.sorts.length - 1];
+                last = last.columnIndex === this.treeView.groupColumn.index && last;
             }
 
             this.sorts.forEach(function(sortSpec) {
-                for (depth = deepest; depth >= 0; --depth) {
-                    each = new DataSourceDepthSorter(each, self);
-                    each.sortOn(sortSpec.columnIndex, sortSpec.direction, depth);
+                if (sortSpec !== last) {
+                    each = new DataSourceSorter(each);
+                    each.sortOn(sortSpec.columnIndex, sortSpec.direction);
                 }
             });
-
-            this.last = each;
-        } else {
-            this.clearSorts();
         }
+
+        if (this.treeView.joined) {
+            if (last) {
+                columnIndex = last.columnIndex;
+                direction = last.direction;
+            } else {
+                columnIndex = undefined;
+                direction = 1;
+            }
+
+            // Finally, apply a "depth sort" to either the group column (if last) or the ID column to group it properly
+            for (var depth = this.treeView.maxDepth; depth >= 0; --depth) {
+                each = new DataSourceDepthSorter(each, this.treeView);
+                each.sortOn(depth, direction, columnIndex);
+            }
+        }
+
+        this.last = each;
     }
 
 });

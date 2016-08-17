@@ -60,23 +60,25 @@ var DataSource = Base.extend('DataSource', {
      * @todo Implement binary search when the column is currently indexed (sorted).
      */
     findRow: function findRow(columnName, value, replacement) {
-        var result, index, keys, hash,
-            lastArgIndex = findRow.length;
+        var result, index, keys, hash, args;
 
         if (typeof columnName === 'object') {
             hash = columnName;
 
             if (value instanceof Array) {
+                args = 2;
                 keys = value;
                 if (keys.reduce(function(sum, key) {
-                    if (key in hash) { sum++; }
+                    if (key in hash) {
+                        sum++;
+                    }
                     return sum;
                 }, 0) !== keys.length) {
                     throw 'Expected all keys given in 2nd arg to be found in hash given in 1st arg.';
                 }
             } else {
+                args = 1;
                 keys = Object.keys(hash);
-                lastArgIndex--;
                 replacement = value; // promote
             }
 
@@ -86,6 +88,9 @@ var DataSource = Base.extend('DataSource', {
                 hash = undefined;
             } else if (keys.length) {
                 result = this.data.find(function(row, idx) {
+                    if (!row) {
+                        return;
+                    }
                     index = idx;
                     for (var key in keys) {
                         columnName = keys[key];
@@ -96,30 +101,38 @@ var DataSource = Base.extend('DataSource', {
                     return true; // found!
                 });
             }
+        } else {
+            if (arguments.length < 2) {
+                throw 'Expected at least 2 arguments when first argument not object but found ' + arguments.length + '.';
+            }
+            args = 2;
         }
 
         if (!hash) {
             result = this.data.find(function(row, idx) {
+                if (!row) { return; }
                 index = idx;
                 return row[columnName] === value;
             });
         }
 
         if (result) {
-            if (typeof replacement === 'object') {
-                if (replacement === null) {
-                    this.data.splice(index, 1);
-                } else {
-                    this.data[index] = replacement;
-                }
+            this.foundRowIndex = index;
+            if (replacement === null) {
+                this.data.splice(index, 1);
+            } else if (typeof replacement === 'object') {
+                this.data[index] = replacement;
             } else if (replacement === undefined) {
-                if (arguments.length >= 3) { // explicit undefined was passed
-                    result = index;
+                if (arguments.length > args) {
+                    delete this.data[index];
                 }
             } else {
                 throw 'Expected null, undefined, or object but found ' + typeof replacement + '.';
             }
+        } else {
+            this.foundRowIndex = undefined;
         }
+
         return result;
     },
 
@@ -181,10 +194,6 @@ var DataSource = Base.extend('DataSource', {
                 return headerify.transform(each);
             })
         );
-    },
-
-    getCalculators: function() {
-        return this.calculators;
     },
 
     /**

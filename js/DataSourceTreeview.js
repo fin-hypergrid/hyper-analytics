@@ -26,7 +26,7 @@ var DataSourceTreeview = DataSourceIndexed.extend('DataSourceTreeview', {
      * @param {number|string} [options.idColumn='ID'] - Name or index of the primary key column.
      * @param {number|string} [options.parentIdColumn='parentID'] - Name or index of the foreign key column for grouping.
      * @param {number|string} [options.treeColumn='name'] - Name or index of the drill-down column to decorate.
-     * @param {number|string} [options.defaultSortColumn=this.treeColumn.index] - Name or index of the group column.
+     * @param {number|string} [options.defaultSortColumn=this.idColumn.index] - Name or index of the grouping column. The grouping column must contain discrete values within each level of grouping.
      * @returns {boolean} Joined state.
      * @memberOf DataSourceTreeview.prototype
      */
@@ -39,7 +39,7 @@ var DataSourceTreeview = DataSourceIndexed.extend('DataSourceTreeview', {
             (this.idColumn = this.getColumnInfo(options.idColumn, 'ID')) &&
             (this.parentIdColumn = this.getColumnInfo(options.parentIdColumn, 'parentID')) &&
             (this.treeColumn = this.getColumnInfo(options.treeColumn, 'name')) &&
-            (this.defaultSortColumn = this.getColumnInfo(options.defaultSortColumn, this.treeColumn.index))
+            (this.defaultSortColumn = this.getColumnInfo(options.defaultSortColumn, this.idColumn.index))
         );
 
         this.buildIndex(); // make all rows visible to getRow()

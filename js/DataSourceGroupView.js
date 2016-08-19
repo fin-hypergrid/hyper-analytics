@@ -14,54 +14,54 @@ var DataSourceGroupView = Base.extend('DataSourceGroupView', {
     initialize: function(dataSource) {
 
         /**
-         * @memberOf DataSourceGroupView.prototype
+         * @memberOf DataSourceGroupView#
          * @type {DataSource}
          */
         this.dataSource = dataSource;
 
         /**
-         * @memberOf DataSourceGroupView.prototype
+         * @memberOf DataSourceGroupView#
          * @type {DataNodeTree}
          */
         this.tree = new DataNodeTree('Group');
 
         /**
-         * @memberOf DataSourceGroupView.prototype
+         * @memberOf DataSourceGroupView#
          * @type {number[]}
          * @default []
          */
         this.index = [];
 
         /**
-         * @memberOf DataSourceGroupView.prototype
+         * @memberOf DataSourceGroupView#
          * @type {Array}
          * @default []
          */
         this.groupBys = [];
 
         /**
-         * @memberOf DataSourceGroupView.prototype
+         * @memberOf DataSourceGroupView#
          * @type {Array}
          * @default []
          */
         this.view = [];
 
         /**
-         * @memberOf DataSourceGroupView.prototype
+         * @memberOf DataSourceGroupView#
          * @type {object}
          * @default {}
          */
         this.treeColumnIndex = 0;
 
         /**
-         * @memberOf DataSourceGroupView.prototype
+         * @memberOf DataSourceGroupView#
          * @type {object}
          * @default {}
          */
         this.sorterInstance = {};
 
         /**
-         * @memberOf DataSourceGroupView.prototype
+         * @memberOf DataSourceGroupView#
          * @type {boolean}
          * @default true
          */
@@ -94,7 +94,7 @@ var DataSourceGroupView = Base.extend('DataSourceGroupView', {
     },
 
     /**
-     * @memberOf DataSourceGroupView.prototype
+     * @memberOf DataSourceGroupView#
      * @param columnIndexArray
      */
     setGroupBys: function(columnIndexArray) {
@@ -106,7 +106,7 @@ var DataSourceGroupView = Base.extend('DataSourceGroupView', {
     },
 
     /**
-     * @memberOf DataSourceGroupView.prototype
+     * @memberOf DataSourceGroupView#
      * @param index
      */
     addGroupBy: function(index) {
@@ -114,7 +114,7 @@ var DataSourceGroupView = Base.extend('DataSourceGroupView', {
     },
 
     /**
-     * @memberOf DataSourceGroupView.prototype
+     * @memberOf DataSourceGroupView#
      * @returns {boolean}
      */
     hasGroups: function() {
@@ -122,7 +122,7 @@ var DataSourceGroupView = Base.extend('DataSourceGroupView', {
     },
 
     /**
-     * @memberOf DataSourceGroupView.prototype
+     * @memberOf DataSourceGroupView#
      * @params [options]
      */
     apply: function(options) {
@@ -133,14 +133,14 @@ var DataSourceGroupView = Base.extend('DataSourceGroupView', {
     },
 
     /**
-     * @memberOf DataSourceGroupView.prototype
+     * @memberOf DataSourceGroupView#
      */
     clearGroups: function() {
         this.groupBys.length = 0;
     },
 
     /**
-     * @memberOf DataSourceGroupView.prototype
+     * @memberOf DataSourceGroupView#
      */
     buildGroupTree: function() {
         var reversedGroupBys = this.groupBys.slice(0).reverse(),
@@ -177,7 +177,7 @@ var DataSourceGroupView = Base.extend('DataSourceGroupView', {
     },
 
     /**
-     * @memberOf DataSourceGroupView.prototype
+     * @memberOf DataSourceGroupView#
      * @param dataNode
      */
     addView: function(dataNode) {
@@ -185,7 +185,7 @@ var DataSourceGroupView = Base.extend('DataSourceGroupView', {
     },
 
     /**
-     * @memberOf DataSourceGroupView.prototype
+     * @memberOf DataSourceGroupView#
      */
     buildView: function() {
         this.view.length = 0;
@@ -194,7 +194,7 @@ var DataSourceGroupView = Base.extend('DataSourceGroupView', {
     },
 
     /**
-     * @memberOf DataSourceGroupView.prototype
+     * @memberOf DataSourceGroupView#
      * @returns {*|boolean}
      */
     viewMakesSense: function() {
@@ -206,7 +206,7 @@ var DataSourceGroupView = Base.extend('DataSourceGroupView', {
     },
 
     /**
-     * @memberOf DataSourceGroupView.prototype
+     * @memberOf DataSourceGroupView#
      * @param x
      * @param y
      * @returns {*}
@@ -220,7 +220,7 @@ var DataSourceGroupView = Base.extend('DataSourceGroupView', {
     },
 
     /**
-     * @memberOf DataSourceGroupView.prototype
+     * @memberOf DataSourceGroupView#
      * @param x
      * @param y
      * @param value
@@ -233,7 +233,7 @@ var DataSourceGroupView = Base.extend('DataSourceGroupView', {
     },
 
     /**
-     * @memberOf DataSourceGroupView.prototype
+     * @memberOf DataSourceGroupView#
      * @returns {*}
      */
     getColumnCount: function() {
@@ -244,7 +244,7 @@ var DataSourceGroupView = Base.extend('DataSourceGroupView', {
     },
 
     /**
-     * @memberOf DataSourceGroupView.prototype
+     * @memberOf DataSourceGroupView#
      * @returns {*}
      */
     getRowCount: function() {
@@ -255,7 +255,7 @@ var DataSourceGroupView = Base.extend('DataSourceGroupView', {
     },
 
     /**
-     * @memberOf DataSourceGroupView.prototype
+     * @memberOf DataSourceGroupView#
      * @param y
      * @param {boolean} [expand] - One of:
      * * `true` - Expand all rows that are currently collapsed.
@@ -291,7 +291,7 @@ var DataSourceGroupView = Base.extend('DataSourceGroupView', {
     },
 
     /**
-     * @memberOf DataSourceGroupView.prototype
+     * @memberOf DataSourceGroupView#
      * @param headers
      */
     setHeaders: function(headers) {
@@ -299,7 +299,7 @@ var DataSourceGroupView = Base.extend('DataSourceGroupView', {
     },
 
     /**
-     * @memberOf DataSourceGroupView.prototype
+     * @memberOf DataSourceGroupView#
      * @param fields
      * @returns {*}
      */
@@ -308,7 +308,7 @@ var DataSourceGroupView = Base.extend('DataSourceGroupView', {
     },
 
     /**
-     * @memberOf DataSourceGroupView.prototype
+     * @memberOf DataSourceGroupView#
      * @param y
      * @returns {*}
      */
@@ -323,7 +323,7 @@ var DataSourceGroupView = Base.extend('DataSourceGroupView', {
     },
 
     /**
-     * @memberOf DataSourceGroupView.prototype
+     * @memberOf DataSourceGroupView#
      * @param arrayOfUniformObjects
      */
     setData: function(arrayOfUniformObjects) {
@@ -332,7 +332,7 @@ var DataSourceGroupView = Base.extend('DataSourceGroupView', {
     },
 
     /**
-     * @memberOf DataSourceGroupView.prototype
+     * @memberOf DataSourceGroupView#
      */
     getGrandTotals: function (){
 

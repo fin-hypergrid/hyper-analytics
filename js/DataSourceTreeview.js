@@ -8,16 +8,26 @@ var expandedMap = {
     undefined: '  ' // for leaf rows
 };
 
+/** @typedef columnAddress
+ * @property {string} name - The name of a column listed in the fields array. See the {@link DataSourceTreeview#getFields|getFields()} method.
+ * @property {number} index - The index of the column in the fields array. See the {@link DataSourceTreeview#getFields|getFields()} method.
+ */
+
+
 /**
- * For proper sorting, include `DataSourceTreeviewSorter` in your pipeline, _ahead of_ (closer to the data than) this data source.
+ * @classdesc For proper sorting, include `DataSourceTreeviewSorter` in your data source pipeline, _ahead of_ (closer to the data than) this data source.
  * @constructor
+ * @param dataSource
  * @extends DataSourceIndexed
  */
 var DataSourceTreeview = DataSourceIndexed.extend('DataSourceTreeview', {
 
-    /** DataSourceTreeviewSorter needs access to this object for instance variables `joined`, `idColumn`, and `parentIdColumn`, these last two of which are passed to the DataSourceDepthSorter constructor. (If dataSource is not the sorter, this is not used but harmless.)
+    /** @summary Initialize a new instance.
+     * @desc Set up {@link DataSourceTreeviewSorter} access to this object. Access is provided to the whole object although only instance variables `joined`, `idColumn`, and `parentIdColumn` are needed by the sorter. The two ID columns are passed to the {@link DataSourceDepthSorter} constructor. (If dataSource is not the sorter, this is not used but harmless.)
+     *
+     * Note that all ancestor classes' `initialize` methods are called (top-down) before this one. See {@link http://npmjs.org/extend-me} for more info.
      * @param dataSource
-     * @memberOf DataSourceTreeview.prototype
+     * @memberOf DataSourceTreeview#
      */
     initialize: function(dataSource) {
         dataSource.treeView = this;
@@ -25,28 +35,74 @@ var DataSourceTreeview = DataSourceIndexed.extend('DataSourceTreeview', {
 
     /**
      * @summary Toggle the tree-view.
-     * @desc Calculates or recalculates nesting depth of each row and marks it as expandable if it has children.
+     * @desc Calculates or recalculates nesting depth of each row and marks it as "expandable" iff it has children.
      *
-     * If resetting previously set data, the state of expansion of all rows that still have children is retained.
+     * If resetting previously set data, the state of expansion of all rows that still have children is retained. (All expanded rows will still be expanded when tree-view is turned back *ON*.)
      *
-     * All three named columns must exist.
+     * All of the columns referenced by the properties `idColumn`, `parentColumn`, `treeColumn`, and `groupColumn` must exist. These four columns have default references (names) as listed below. The references may be overridden in `options` by supplying alternate column names or indexes.
      *
-     * @param {boolean|object} [options] - Turn tree-view **ON**. If falsy (or omitted), turn it **OFF**.
+     * @param {boolean|object} [options] - If truthy, turn tree-view **ON**. If falsy (or omitted), turn it **OFF**.
      * @param {number|string} [options.idColumn='ID'] - Name or index of the primary key column.
      * @param {number|string} [options.parentIdColumn='parentID'] - Name or index of the foreign key column for grouping.
-     * @param {number|string} [options.treeColumn='name'] - Name or index of the drill-down column to decorate.
+     * @param {number|string} [options.treeColumn='name'] - Name or index of the drill-down column to decorate with triangles.
+     * @param {number|string} [options.groupColumn=this.treeColumn.name] - Name or index of the column that contains the group names. This is normally the same as the drill-down column. You only need to specify a different value when you want the drill down to this column, such as when the drill-down is in a column of its own. See {@link http://openfin.github.io/fin-hypergrid/tree-view-separate-drill-down.html} for an example.
      * @returns {boolean} Joined state.
-     * @memberOf DataSourceTreeview.prototype
+     *
+     * @memberOf DataSourceTreeview#
      */
     setRelation: function(options) {
         var r, parentID, depth, leafRow, row, ID;
 
         // successful join requires that options object be given and that all three columns exist
         this.joined = !!(
-            options &&
+
+            options && // turns tree view on or off (based on truthiness)
+
+            /** @summary Reference to the primary key column.
+             * @desc The primary key column uniquely identifies a data row.
+             * Used to relate a child row to a parent row.
+             *
+             * Redefined each time tree-view is turned *ON* by a call to {@link DataSourceTreeview#setRelation|setRelation()}.
+             * @type {columnAddress}
+             * @name idColumn
+             * @memberOf DataSourceTreeview#
+             */
             (this.idColumn = this.getColumnInfo(options.idColumn, 'ID')) &&
+
+            /** @summary Reference to the foreign key column for grouping.
+             * @desc The foreign key column relates this tree node row to its parent tree node row. Top-level tree nodes have no parent. In that case the value in the column is `null`.
+             *
+             * Redefined each time tree-view is turned *ON* by a call to {@link DataSourceTreeview#setRelation|setRelation()}.
+             * @type {columnAddress}
+             * @name parentIdColumn
+             * @memberOf DataSourceTreeview#
+             */
             (this.parentIdColumn = this.getColumnInfo(options.parentIdColumn, 'parentID')) &&
+
+            /** @summary Reference to the drill-down column.
+             * @desc The drill-down column is the column that is indented and decorated with drill-down controls (triangles).
+             *
+             * Redefined each time tree-view is turned *ON* by a call to {@link DataSourceTreeview#setRelation|setRelation()}.
+             * @type {columnAddress}
+             * @name treeColumn
+             * @memberOf DataSourceTreeview#
+             */
             (this.treeColumn = this.getColumnInfo(options.treeColumn, 'name')) &&
+
+            /** @summary Reference to the group name column.
+             * @desc The group name column is the column whose content describes the group.
+             *
+             * The treeview sorter treats the group name column differently than other columns,
+             * apply a "group sort" to it, which means only the group rows (rows with children)
+             * are sorted and the leaves are left alone (stable sorted).
+             *
+             * Normally refers to the same column as {@link DataSourceTreeview#treeColumn|treeColumn}.
+             *
+             * Redefined each time tree-view is turned *ON* by a call to {@link DataSourceTreeview#setRelation|setRelation()}.
+             * @type {columnAddress}
+             * @name groupColumn
+             * @memberOf DataSourceTreeview#
+             */
             (this.groupColumn = this.getColumnInfo(options.groupColumn, this.treeColumn.name))
         );
 
@@ -94,7 +150,9 @@ var DataSourceTreeview = DataSourceIndexed.extend('DataSourceTreeview', {
     },
 
     /**
-     * @memberOf DataSourceTreeview.prototype
+     * @summary Rebuild the index.
+     * @desc Rebuild the index to show only "revealed" rows. (Rows that are not inside a collapsed parent node row.)
+     * @memberOf DataSourceTreeview#
      */
     apply: function() {
         if (this.viewMakesSense()) {
@@ -103,10 +161,12 @@ var DataSourceTreeview = DataSourceIndexed.extend('DataSourceTreeview', {
     },
 
     /**
+     * @summary Get the value for the specified cell.
+     * @desc Intercepts tree column values and indents and decorates them.
      * @param x
      * @param y
      * @returns {*}
-     * @memberOf DataSourceTreeview.prototype
+     * @memberOf DataSourceTreeview#
      */
     getValue: function(x, y) {
         var value = DataSourceIndexed.prototype.getValue.call(this, x, y);
@@ -127,6 +187,7 @@ var DataSourceTreeview = DataSourceIndexed.extend('DataSourceTreeview', {
     },
 
     /**
+     * @summary Handle a click event in the drill-down column.
      * @desc Operates only on the following rows:
      * * Expandable rows - Rows with a drill-down control.
      * * Revealed rows - Rows not hidden inside of collapsed drill-downs.
@@ -142,7 +203,7 @@ var DataSourceTreeview = DataSourceIndexed.extend('DataSourceTreeview', {
      * * `undefined` - Row was not expandable.
      * * `true` - Row had drill-down _and_ state changed.
      * * `false` - Row had drill-down _but_ state did _not_ change.
-     * @memberOf DataSourceTreeview.prototype
+     * @memberOf DataSourceTreeview#
      */
     click: function(y, expand, depth) {
         if (!this.viewMakesSense()) {
@@ -171,6 +232,7 @@ var DataSourceTreeview = DataSourceIndexed.extend('DataSourceTreeview', {
      * @summary Expand nested drill-downs containing this row.
      * @param ID - The unique row ID.
      * @returns {boolean} If any rows expanded.
+     * @memberOf DataSourceTreeview#
      */
     revealRow: function(ID) {
         if (!this.viewMakesSense()) {

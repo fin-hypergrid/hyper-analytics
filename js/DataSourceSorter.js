@@ -9,7 +9,7 @@ var stableSort = require('./util/stableSort');
  */
 var DataSourceSorter = DataSourceIndexed.extend('DataSourceSorter', {
     /**
-     * @memberOf DataSourceSorter.prototype
+     * @memberOf DataSourceSorter#
      * @param {number} columnIndex
      * @param {number} [direction=1]
      */

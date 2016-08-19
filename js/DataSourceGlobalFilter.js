@@ -17,14 +17,14 @@ var DataSourceGlobalFilter = DataSourceIndexed.extend('DataSourceGlobalFilter', 
 
     /**
      *
-     * @memberOf DataSourceGlobalFilter.prototype
+     * @memberOf DataSourceGlobalFilter#
      * @param {object} [filter] - If undefined, deletes filter.
      */
     set: function(filter) {
         if (filter) {
             /**
              * @type {filterFunction}
-             * @memberOf DataSourceGlobalFilter.prototype
+             * @memberOf DataSourceGlobalFilter#
              */
             this.filter = filter;
         } else {
@@ -38,7 +38,7 @@ var DataSourceGlobalFilter = DataSourceIndexed.extend('DataSourceGlobalFilter', 
 
     /**
      *
-     * @memberOf DataSourceGlobalFilter.prototype
+     * @memberOf DataSourceGlobalFilter#
      */
     apply: function() {
         if (!this.filter) {
@@ -52,7 +52,7 @@ var DataSourceGlobalFilter = DataSourceIndexed.extend('DataSourceGlobalFilter', 
 
     /**
      *
-     * @memberOf DataSourceGlobalFilter.prototype
+     * @memberOf DataSourceGlobalFilter#
      * @returns {number}
      */
     getRowCount: function() {

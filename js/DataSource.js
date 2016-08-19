@@ -12,6 +12,7 @@ var DataSource = Base.extend('DataSource', {
     initialize: function(data, fields, calculators) {
         /**
          * @type {string[]}
+         * @memberOf DataSource#
          */
         this.fields = fields || computeFieldNames(data[0]);
 
@@ -19,6 +20,7 @@ var DataSource = Base.extend('DataSource', {
 
         /**
          * @type {object[]}
+         * @memberOf DataSource#
          */
         this.data = data;
     },
@@ -30,7 +32,7 @@ var DataSource = Base.extend('DataSource', {
     },
 
     /**
-     * @memberOf DataSource.prototype
+     * @memberOf DataSource#
      * @param y
      * @returns {object[]}
      */
@@ -57,7 +59,8 @@ var DataSource = Base.extend('DataSource', {
      * * `undefined` - data row not found
      * * _object_ - found data row object (will have been deleted if `replacement` was `null`)
      * * _number_ - index of found data row object in `this.data` (if `replacement` was `undefined`)
-     * @todo Implement binary search when the column is currently indexed (sorted).
+     * @todo Use a binary search (rather than `Array..find`) when column is known to be indexed (sorted).
+     * @memberOf DataSource#
      */
     findRow: function findRow(columnName, value, replacement) {
         var result, index, keys, hash, args;
@@ -137,7 +140,7 @@ var DataSource = Base.extend('DataSource', {
     },
 
     /**
-     * @memberOf DataSource.prototype
+     * @memberOf DataSource#
      * @param x
      * @param y
      * @returns {*}
@@ -151,7 +154,7 @@ var DataSource = Base.extend('DataSource', {
     },
 
     /**
-     * @memberOf DataSource.prototype
+     * @memberOf DataSource#
      * @param {number} x
      * @param {number} y
      * @param value
@@ -161,7 +164,7 @@ var DataSource = Base.extend('DataSource', {
     },
 
     /**
-     * @memberOf DataSource.prototype
+     * @memberOf DataSource#
      * @returns {number}
      */
     getRowCount: function() {
@@ -169,7 +172,7 @@ var DataSource = Base.extend('DataSource', {
     },
 
     /**
-     * @memberOf DataSource.prototype
+     * @memberOf DataSource#
      * @returns {number}
      */
     getColumnCount: function() {
@@ -177,7 +180,7 @@ var DataSource = Base.extend('DataSource', {
     },
 
     /**
-     * @memberOf DataSource.prototype
+     * @memberOf DataSource#
      * @returns {number[]}
      */
     getFields: function() {
@@ -185,7 +188,7 @@ var DataSource = Base.extend('DataSource', {
     },
 
     /**
-     * @memberOf DataSource.prototype
+     * @memberOf DataSource#
      * @returns {string[]}
      */
     getHeaders: function() {
@@ -197,7 +200,7 @@ var DataSource = Base.extend('DataSource', {
     },
 
     /**
-     * @memberOf DataSource.prototype
+     * @memberOf DataSource#
      * @returns {string[]}
      */
     getDefaultHeaders: function() {
@@ -205,7 +208,7 @@ var DataSource = Base.extend('DataSource', {
     },
 
     /**
-     * @memberOf DataSource.prototype
+     * @memberOf DataSource#
      * @param {string[]} fields
      */
     setFields: function(fields) {
@@ -213,7 +216,7 @@ var DataSource = Base.extend('DataSource', {
     },
 
     /**
-     * @memberOf DataSource.prototype
+     * @memberOf DataSource#
      * @param {string[]} headers
      */
     setHeaders: function(headers) {
@@ -224,14 +227,14 @@ var DataSource = Base.extend('DataSource', {
     },
 
     /**
-     * @memberOf DataSource.prototype
+     * @memberOf DataSource#
      */
     getGrandTotals: function() {
         //nothing here
     },
 
     /**
-     * @memberOf DataSource.prototype
+     * @memberOf DataSource#
      * @param arrayOfUniformObjects
      */
     setData: function(arrayOfUniformObjects) {

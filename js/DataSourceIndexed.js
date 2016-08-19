@@ -3,17 +3,15 @@
 var Base = require('./Base');
 
 /**
+ * @param dataSource
  * @constructor
  */
 var DataSourceIndexed = Base.extend('DataSourceIndexed', {
 
-    /**
-     *
-     */
     isNullObject: false,
 
     /**
-     * @memberOf DataSourceIndexed.prototype
+     * @memberOf DataSourceIndexed#
      * @param dataSource
      */
     initialize: function(dataSource) {
@@ -22,7 +20,7 @@ var DataSourceIndexed = Base.extend('DataSourceIndexed', {
     },
 
     /**
-     * @memberOf DataSourceIndexed.prototype
+     * @memberOf DataSourceIndexed#
      * @param y
      * @returns {*}
      */
@@ -35,7 +33,7 @@ var DataSourceIndexed = Base.extend('DataSourceIndexed', {
     },
 
     /**
-     * @memberOf DataSourceIndexed.prototype
+     * @memberOf DataSourceIndexed#
      * @param y
      * @returns {object}
      */
@@ -44,7 +42,7 @@ var DataSourceIndexed = Base.extend('DataSourceIndexed', {
     },
 
     /**
-     * @memberOf DataSourceIndexed.prototype
+     * @memberOf DataSourceIndexed#
      * @param x
      * @param y
      * @returns {*|Mixed}
@@ -54,7 +52,7 @@ var DataSourceIndexed = Base.extend('DataSourceIndexed', {
     },
 
     /**
-     * @memberOf DataSourceIndexed.prototype
+     * @memberOf DataSourceIndexed#
      * @param {number} x
      * @param {number} y
      * @param {*} value
@@ -64,7 +62,7 @@ var DataSourceIndexed = Base.extend('DataSourceIndexed', {
     },
 
     /**
-     * @memberOf DataSourceIndexed.prototype
+     * @memberOf DataSourceIndexed#
      * @returns {Number|*}
      */
     getRowCount: function() {
@@ -74,13 +72,14 @@ var DataSourceIndexed = Base.extend('DataSourceIndexed', {
     /**
      *
      * @returns {*}
+     * @memberOf DataSourceIndexed#
      */
     getColumnCount: function() {
         return this.dataSource.getColumnCount();
     },
 
     /**
-     * @memberOf DataSourceIndexed.prototype
+     * @memberOf DataSourceIndexed#
      * @returns {*}
      */
     getFields: function() {
@@ -88,7 +87,7 @@ var DataSourceIndexed = Base.extend('DataSourceIndexed', {
     },
 
     /**
-     * @memberOf DataSourceIndexed.prototype
+     * @memberOf DataSourceIndexed#
      * @param fields
      * @returns {*}
      */
@@ -97,7 +96,7 @@ var DataSourceIndexed = Base.extend('DataSourceIndexed', {
     },
 
     /**
-     * @memberOf DataSourceIndexed.prototype
+     * @memberOf DataSourceIndexed#
      * @param {string[]} headers
      * @returns {string[]}
      */
@@ -108,13 +107,14 @@ var DataSourceIndexed = Base.extend('DataSourceIndexed', {
     /**
      *
      * @returns {string[]}
+     * @memberOf DataSourceIndexed#
      */
     getHeaders: function() {
         return this.dataSource.getHeaders();
     },
 
     /**
-     * @memberOf DataSourceIndexed.prototype
+     * @memberOf DataSourceIndexed#
      * @returns {*}
      */
     getGrandTotals: function() {
@@ -122,7 +122,7 @@ var DataSourceIndexed = Base.extend('DataSourceIndexed', {
     },
 
     /**
-     * @memberOf DataSourceIndexed.prototype
+     * @memberOf DataSourceIndexed#
      * @param {object[]} arrayOfUniformObjects
      * @returns {object[]}
      */
@@ -131,14 +131,14 @@ var DataSourceIndexed = Base.extend('DataSourceIndexed', {
     },
 
     /**
-     * @memberOf DataSourceIndexed.prototype
+     * @memberOf DataSourceIndexed#
      */
     clearIndex: function() {
         this.index.length = 0;
     },
 
     /**
-     * @memberOf DataSourceIndexed.prototype
+     * @memberOf DataSourceIndexed#
      * @param {filterPredicate} predicate
      * @returns {number[]}
      */
@@ -172,10 +172,13 @@ var DataSourceIndexed = Base.extend('DataSourceIndexed', {
  * @returns {*}
  */
 DataSourceIndexed.valOrFunc = function(dataRow, columnName, calculator) {
-    var result = dataRow[columnName];
-    calculator = (typeof result)[0] === 'f' && result || calculator;
-    if (calculator) {
-        result = calculator(dataRow, columnName);
+    var result;
+    if (dataRow) {
+        result = dataRow[columnName];
+        calculator = (typeof result)[0] === 'f' && result || calculator;
+        if (calculator) {
+            result = calculator(dataRow, columnName);
+        }
     }
     return result;
 };

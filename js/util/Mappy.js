@@ -14,7 +14,7 @@ Mappy.prototype = {
     constructor: Mappy.prototype.constructor, // preserve constructor
 
     /**
-     * @memberOf Mappy.prototype
+     * @memberOf Mappy#
      * @param key
      * @param value
      */
@@ -28,7 +28,7 @@ Mappy.prototype = {
     },
 
     /**
-     * @memberOf Mappy.prototype
+     * @memberOf Mappy#
      * @param key
      * @returns {*}
      */
@@ -39,7 +39,7 @@ Mappy.prototype = {
 
     /**
      *
-     * @memberOf Mappy.prototype
+     * @memberOf Mappy#
      * @param key
      * @param {function} ifUndefinedFunc - Value getter when value is otherwise undefined.
      * @returns {*}
@@ -58,7 +58,7 @@ Mappy.prototype = {
     },
 
     /**
-     * @memberOf Mappy.prototype
+     * @memberOf Mappy#
      */
     clear: function() {
         this.keys.length = 0;
@@ -67,7 +67,7 @@ Mappy.prototype = {
     },
 
     /**
-     * @memberOf Mappy.prototype
+     * @memberOf Mappy#
      * @param key
      */
     delete: function(key) {
@@ -81,7 +81,7 @@ Mappy.prototype = {
     },
 
     /**
-     * @memberOf Mappy.prototype
+     * @memberOf Mappy#
      * @param {function} iteratee
      */
     forEach: function(iteratee) {
@@ -96,7 +96,7 @@ Mappy.prototype = {
     },
 
     /**
-     * @memberOf Mappy.prototype
+     * @memberOf Mappy#
      * @param {function} iteratee
      * @returns {Mappy}
      */
@@ -118,7 +118,7 @@ Mappy.prototype = {
     },
 
     /**
-     * @memberOf Mappy.prototype
+     * @memberOf Mappy#
      * @returns {Mappy}
      */
     copy: function() {

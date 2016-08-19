@@ -9,7 +9,7 @@ var DataNodeBase = require('./DataNodeBase');
 var DataNodeLeaf = DataNodeBase.extend('DataNodeLeaf', {
 
     /**
-     * @memberOf DataNodeLeaf.prototype
+     * @memberOf DataNodeLeaf#
      * @param {string} key
      */
     initialize: function(key) {
@@ -17,7 +17,7 @@ var DataNodeLeaf = DataNodeBase.extend('DataNodeLeaf', {
     },
 
     /**
-     * @memberOf DataNodeLeaf.prototype
+     * @memberOf DataNodeLeaf#
      * @param depth
      */
     toArray: function(depth) {
@@ -26,7 +26,7 @@ var DataNodeLeaf = DataNodeBase.extend('DataNodeLeaf', {
     },
 
     /**
-     * @memberOf DataNodeLeaf.prototype
+     * @memberOf DataNodeLeaf#
      * @returns {numer[]}
      */
     getIndex: function() {
@@ -34,7 +34,7 @@ var DataNodeLeaf = DataNodeBase.extend('DataNodeLeaf', {
     },
 
     /**
-     * @memberOf DataNodeLeaf.prototype
+     * @memberOf DataNodeLeaf#
      * @param drillDown
      */
     buildView: function(drillDown) {
@@ -42,7 +42,7 @@ var DataNodeLeaf = DataNodeBase.extend('DataNodeLeaf', {
     },
 
     /**
-     * @memberOf DataNodeLeaf.prototype
+     * @memberOf DataNodeLeaf#
      * @param aggregator
      */
     getRowData: function(drillDown) {
@@ -64,7 +64,7 @@ var DataNodeLeaf = DataNodeBase.extend('DataNodeLeaf', {
     },
 
     /**
-     * @memberOf DataNodeLeaf.prototype
+     * @memberOf DataNodeLeaf#
      * @returns {number}
      */
     computeHeight: function() {

@@ -13,54 +13,54 @@ var DataNodeBase = Base.extend('DataNodeBase', {
     INDENT: '   ', // 3 spaces
 
     /**
-     * @memberOf DataNodeBase.prototype
+     * @memberOf DataNodeBase#
      * @param {string} key
      */
     initialize: function(key) {
         /**
-         * @memberOf DataNodeBase.prototype
+         * @memberOf DataNodeBase#
          * @type {string}
          */
 
         this.label = key;
 
         /**
-         * @memberOf DataNodeBase.prototype
+         * @memberOf DataNodeBase#
          * @type {string[]}
          * @default false
          */
         this.data = [''];
 
         /**
-         * @memberOf DataNodeBase.prototype
+         * @memberOf DataNodeBase#
          * @type {number[]}
          * @default ['']
          */
         this.index = []; // formerly rowIndex
 
         /**
-         * @memberOf DataNodeBase.prototype
+         * @memberOf DataNodeBase#
          * @type {boolean}
          * @default false
          */
         this.hasChildren = true;
 
         /**
-         * @memberOf DataNodeBase.prototype
+         * @memberOf DataNodeBase#
          * @type {number}
          * @default 0
          */
         this.depth = 0;
 
         /**
-         * @memberOf DataNodeBase.prototype
+         * @memberOf DataNodeBase#
          * @type {number}
          * @default 1
          */
         this.height = 1;
 
         /**
-         * @memberOf DataNodeBase.prototype
+         * @memberOf DataNodeBase#
          * @type {boolean}
          * @default false
          */
@@ -68,7 +68,7 @@ var DataNodeBase = Base.extend('DataNodeBase', {
     },
 
     /**
-     * @memberOf DataNodeLeaf.prototype
+     * @memberOf DataNodeLeaf#
      * @param x
      * @returns {*}
      */
@@ -77,7 +77,7 @@ var DataNodeBase = Base.extend('DataNodeBase', {
     },
 
     /**
-     * @memberOf DataNodeLeaf.prototype
+     * @memberOf DataNodeLeaf#
      * @param depth
      */
     toArray: function(depth) {
@@ -86,7 +86,7 @@ var DataNodeBase = Base.extend('DataNodeBase', {
     },
 
     /**
-     * @memberOf DataNodeLeaf.prototype
+     * @memberOf DataNodeLeaf#
      * @returns {string}
      */
     computeDepthString: function() {
@@ -94,7 +94,7 @@ var DataNodeBase = Base.extend('DataNodeBase', {
     },
 
     /**
-     * @memberOf DataNodeLeaf.prototype
+     * @memberOf DataNodeLeaf#
      * @returns {number}
      */
     computeHeight: function() {
@@ -102,7 +102,7 @@ var DataNodeBase = Base.extend('DataNodeBase', {
     },
 
     /**
-     * @memberOf DataNodeLeaf.prototype
+     * @memberOf DataNodeLeaf#
      * @returns {Array}
      */
     getIndex: function() { // TODO: formerly getAllRowIndexes
@@ -110,7 +110,7 @@ var DataNodeBase = Base.extend('DataNodeBase', {
     },
 
     /**
-     * @memberOf DataNodeLeaf.prototype
+     * @memberOf DataNodeLeaf#
      * @param drillDown
      */
     getRowData: function(drillDown) {
@@ -123,7 +123,7 @@ var DataNodeBase = Base.extend('DataNodeBase', {
     },
 
     /**
-     * @memberOf DataNodeLeaf.prototype
+     * @memberOf DataNodeLeaf#
      * @param drillDown
      */
     buildView: function(drillDown) {
@@ -131,7 +131,7 @@ var DataNodeBase = Base.extend('DataNodeBase', {
     },
 
     /**
-     * @memberOf DataNodeLeaf.prototype
+     * @memberOf DataNodeLeaf#
      */
     toggleExpansionState: function() {
         //do nothing by default

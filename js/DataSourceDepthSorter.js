@@ -4,9 +4,11 @@ var DataSourceIndexed = require('./DataSourceIndexed');
 var stableSort = require('./util/stableSort');
 
 /**
- * Used by `DataSourceTreeviewSorter`.
- * One of these data sources should be created for each sort depth, starting with the maximum sort depth, and then one for each sort depth through the top (0) sort depth.
+ * @classdesc Sorts on non-terminal tree node rows only (_i.e.,_ expandable rows with children).
+ *
+ * One of these sorters is created by {@link DataSourceTreeviewSorter} for each grouping level, starting with the maximum group level depth, and then one for each group level through the top level (0) sort depth.
  * @constructor
+ * @param dataSource
  * @extends DataSourceIndexed
  */
 var DataSourceDepthSorter = DataSourceIndexed.extend('DataSourceDepthSorter', {
@@ -16,12 +18,17 @@ var DataSourceDepthSorter = DataSourceIndexed.extend('DataSourceDepthSorter', {
     },
 
     /**
-     * @param {number} columnIndex
-     * @param {number} [direction=1]
-     * @param {number} sortDepth - If greater than row depth, sorts on _edge value_ value; otherwise sorts on value of ancestor of this depth. "Edge" means a value that lexically comes before all others (ascending sort) or after all others (descending sort).
-     * @memberOf DataSourceDepthSorter.prototype
+     * @desc Stable-sorts non-terminal tree node rows. Terminal (leaf) rows remain stable.
+     * @param {number} groupLevel - If greater than row depth, sorts on an _edge value_ value, which is a value lexically inferior to (ascending sort) or superior to (descending sort) the row value.
+     * Otherwise sorts on value of ancestor of this depth.
+     *
+     * @param {number} [direction=1] - One of:
+     * `1` - Sort ascending.
+     * `-1` - Sort descending.
+     * @param {number} [columnIndex] - Sorts on the values in this column. Otherwise sorts on the row index.
+     * @memberOf DataSourceDepthSorter#
      */
-    sortOn: function(sortDepth, direction, columnIndex) {
+    sortOn: function(groupLevel, direction, columnIndex) {
         switch (direction) {
             case 0:
                 this.clearIndex();
@@ -50,7 +57,7 @@ var DataSourceDepthSorter = DataSourceIndexed.extend('DataSourceDepthSorter', {
                         }
                     }
 
-                    this.depth = sortDepth;
+                    this.depth = groupLevel;
                     stableSort.sort(this.index, getValue, direction);
                 }
                 break;

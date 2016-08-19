@@ -5,12 +5,17 @@ var DataSourceDepthSorter = require('./DataSourceDepthSorter');
 var DataSourceSorter = require('./DataSourceSorter');
 
 /**
- * This data source should be positioned _ahead of_ (closer to the data than) `DataSourceTreeview`.
+ * @classdesc Should be positioned in the data source pipeline _ahead of_ (closer to the data than) `DataSourceTreeview`.
  * @constructor
- * @extends DataSourceIndexed
+ * @param dataSource
+ * @extends DataSourceSorterComposite
  */
 var DataSourceTreeviewSorter = DataSourceSorterComposite.extend('DataSourceTreeviewSorter', {
 
+    /**
+     * @summary Rebuild the index.
+     * @memberOf DataSourceSorterComposite#
+     */
     apply: function() {
         var each = this.dataSource,
             last, // last sort spec ("first" sort) when and only when joined AND it is the group column

@@ -10,7 +10,7 @@ var DataNodeGroup = require('./DataNodeGroup');
 var DataNodeTree = DataNodeGroup.extend('DataNodeTree', {
 
     /**
-     * @memberOf DataNodeGroup.prototype
+     * @memberOf DataNodeGroup#
      * @param {string} key
      */
     initialize: function(key) {
@@ -19,7 +19,7 @@ var DataNodeTree = DataNodeGroup.extend('DataNodeTree', {
     },
 
     /**
-     * @memberOf DataNodeGroup.prototype
+     * @memberOf DataNodeGroup#
      */
     toArray: function() {
         this.children = this.children.values;
@@ -29,7 +29,7 @@ var DataNodeTree = DataNodeGroup.extend('DataNodeTree', {
     },
 
     /**
-     * @memberOf DataNodeGroup.prototype
+     * @memberOf DataNodeGroup#
      * @param drillDown
      */
     buildView: function(drillDown) {
@@ -39,7 +39,7 @@ var DataNodeTree = DataNodeGroup.extend('DataNodeTree', {
     },
 
     /**
-     * @memberOf DataNodeGroup.prototype
+     * @memberOf DataNodeGroup#
      * @returns {number}
      */
     computeHeight: function() {

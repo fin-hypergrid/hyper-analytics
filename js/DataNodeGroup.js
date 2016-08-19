@@ -18,7 +18,7 @@ var DataNodeGroup = DataNodeBase.extend('DataNodeGroup', {
     extendable: true,
 
     /**
-     * @memberOf DataNodeGroup.prototype
+     * @memberOf DataNodeGroup#
      * @param key
      */
     initialize: function(key) {
@@ -26,7 +26,7 @@ var DataNodeGroup = DataNodeBase.extend('DataNodeGroup', {
     },
 
     /**
-     * @memberOf DataNodeGroup.prototype
+     * @memberOf DataNodeGroup#
      * @param depth
      */
     toArray: function(depth) {
@@ -39,7 +39,7 @@ var DataNodeGroup = DataNodeBase.extend('DataNodeGroup', {
     },
 
     /**
-     * @memberOf DataNodeGroup.prototype
+     * @memberOf DataNodeGroup#
      * @returns {string}
      */
     computeDepthString: function() {
@@ -50,7 +50,7 @@ var DataNodeGroup = DataNodeBase.extend('DataNodeGroup', {
     },
 
     /**
-     * @memberOf DataNodeGroup.prototype
+     * @memberOf DataNodeGroup#
      * @returns {*}
      */
     getIndex: function() {
@@ -61,7 +61,7 @@ var DataNodeGroup = DataNodeBase.extend('DataNodeGroup', {
     },
 
     /**
-     * @memberOf DataNodeGroup.prototype
+     * @memberOf DataNodeGroup#
      * @returns {Array}
      */
     computeIndex: function() { // TODO: formerly computeAllRowIndexes
@@ -74,7 +74,7 @@ var DataNodeGroup = DataNodeBase.extend('DataNodeGroup', {
     },
 
     /**
-     * @memberOf DataNodeGroup.prototype
+     * @memberOf DataNodeGroup#
      * @param drillDown
      * @param {boolean} [expand] - One of:
      * * `true` - Expand all rows that are currently collapsed.
@@ -96,7 +96,7 @@ var DataNodeGroup = DataNodeBase.extend('DataNodeGroup', {
     },
 
     /**
-     * @memberOf DataNodeGroup.prototype
+     * @memberOf DataNodeGroup#
      * @param drillDown
      */
     getRowData: function(drillDown) {
@@ -109,7 +109,7 @@ var DataNodeGroup = DataNodeBase.extend('DataNodeGroup', {
     },
 
     /**
-     * @memberOf DataNodeGroup.prototype
+     * @memberOf DataNodeGroup#
      * @param aggregator
      */
     buildView: function(drillDown) {
@@ -122,7 +122,7 @@ var DataNodeGroup = DataNodeBase.extend('DataNodeGroup', {
     },
 
     /**
-     * @memberOf DataNodeGroup.prototype
+     * @memberOf DataNodeGroup#
      * @returns {number}
      */
     computeHeight: function() {

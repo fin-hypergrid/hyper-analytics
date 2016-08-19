@@ -15,67 +15,67 @@ var DataSourceAggregator = Base.extend('DataSourceAggregator', {
     initialize: function(dataSource) {
 
         /**
-         * @memberOf DataSourceAggregator.prototype
+         * @memberOf DataSourceAggregator#
          * @type {DataSource}
          */
         this.dataSource = dataSource;
 
         /**
-         * @memberOf DataSourceAggregator.prototype
+         * @memberOf DataSourceAggregator#
          * @type {DataSource}
          */
         this.treeColumnIndex = 0;
 
         /**
-         * @memberOf DataSourceAggregator.prototype
+         * @memberOf DataSourceAggregator#
          * @type {DataNodeTree}
          */
         this.tree = new DataNodeTree('Totals');
 
         /**
-         * @memberOf DataSourceAggregator.prototype
+         * @memberOf DataSourceAggregator#
          * @type {number[]}
          * @default []
          */
         this.index = [];
 
         /**
-         * @memberOf DataSourceAggregator.prototype
+         * @memberOf DataSourceAggregator#
          * @type {Array}
          * @default []
          */
         this.aggregates = [];
 
         /**
-         * @memberOf DataSourceAggregator.prototype
+         * @memberOf DataSourceAggregator#
          * @type {Array}
          * @default []
          */
         this.groupBys = [];
 
         /**
-         * @memberOf DataSourceAggregator.prototype
+         * @memberOf DataSourceAggregator#
          * @type {Array}
          * @default []
          */
         this.view = [];
 
         /**
-         * @memberOf DataSourceAggregator.prototype
+         * @memberOf DataSourceAggregator#
          * @type {object}
          * @default {}
          */
         this.sorterInstance = {};
 
         /**
-         * @memberOf DataSourceAggregator.prototype
+         * @memberOf DataSourceAggregator#
          * @type {boolean}
          * @default true
          */
         this.presortGroups = true;
 
         /**
-         * @memberOf DataSourceAggregator.prototype
+         * @memberOf DataSourceAggregator#
          * @type {object}
          * @default {}
          */
@@ -88,7 +88,7 @@ var DataSourceAggregator = Base.extend('DataSourceAggregator', {
 
 
     /**
-     * @memberOf DataSourceAggregator.prototype
+     * @memberOf DataSourceAggregator#
      * @param aggregations, groups
      */
     setAggregateGroups: function(aggregations, groups) {
@@ -97,7 +97,7 @@ var DataSourceAggregator = Base.extend('DataSourceAggregator', {
     },
 
     /**
-     * @memberOf DataSourceAggregator.prototype
+     * @memberOf DataSourceAggregator#
      * @param aggregations
      */
     setAggregates: function(aggregations) {
@@ -133,7 +133,7 @@ var DataSourceAggregator = Base.extend('DataSourceAggregator', {
         return headers;
     },
     /**
-     * @memberOf DataSourceAggregator.prototype
+     * @memberOf DataSourceAggregator#
      * @param label
      * @param func
      */
@@ -143,7 +143,7 @@ var DataSourceAggregator = Base.extend('DataSourceAggregator', {
     },
 
     /**
-     * @memberOf DataSourceAggregator.prototype
+     * @memberOf DataSourceAggregator#
      * @param columnIndexArray
      */
     setGroupBys: function(columnIndexArray) {
@@ -156,7 +156,7 @@ var DataSourceAggregator = Base.extend('DataSourceAggregator', {
     },
 
     /**
-     * @memberOf DataSourceAggregator.prototype
+     * @memberOf DataSourceAggregator#
      * @param index
      */
     addGroupBy: function(index) {
@@ -164,7 +164,7 @@ var DataSourceAggregator = Base.extend('DataSourceAggregator', {
     },
 
     /**
-     * @memberOf DataSourceAggregator.prototype
+     * @memberOf DataSourceAggregator#
      * @returns {boolean}
      */
     hasGroups: function() {
@@ -172,7 +172,7 @@ var DataSourceAggregator = Base.extend('DataSourceAggregator', {
     },
 
     /**
-     * @memberOf DataSourceAggregator.prototype
+     * @memberOf DataSourceAggregator#
      * @returns {boolean}
      */
     hasAggregates: function() {
@@ -180,7 +180,7 @@ var DataSourceAggregator = Base.extend('DataSourceAggregator', {
     },
 
     /**
-     * @memberOf DataSourceAggregator.prototype
+     * @memberOf DataSourceAggregator#
      * @params [options]
      */
     apply: function(options) {
@@ -191,21 +191,21 @@ var DataSourceAggregator = Base.extend('DataSourceAggregator', {
     },
 
     /**
-     * @memberOf DataSourceAggregator.prototype
+     * @memberOf DataSourceAggregator#
      */
     clearGroups: function() {
         this.groupBys.length = 0;
     },
 
     /**
-     * @memberOf DataSourceAggregator.prototype
+     * @memberOf DataSourceAggregator#
      */
     clearAggregations: function() {
         this.aggregates.length = 0;
     },
 
     /**
-     * @memberOf DataSourceAggregator.prototype
+     * @memberOf DataSourceAggregator#
      */
     buildGroupTree: function() {
         var reversedGroupBys = this.groupBys.slice(0).reverse(),
@@ -241,7 +241,7 @@ var DataSourceAggregator = Base.extend('DataSourceAggregator', {
     },
 
     /**
-     * @memberOf DataSourceAggregator.prototype
+     * @memberOf DataSourceAggregator#
      * @param dataNode
      */
     addView: function(dataNode) {
@@ -249,7 +249,7 @@ var DataSourceAggregator = Base.extend('DataSourceAggregator', {
     },
 
     /**
-     * @memberOf DataSourceAggregator.prototype
+     * @memberOf DataSourceAggregator#
      */
     buildView: function() {
         this.view.length = 0;
@@ -258,7 +258,7 @@ var DataSourceAggregator = Base.extend('DataSourceAggregator', {
     },
 
     /**
-     * @memberOf DataSourceAggregator.prototype
+     * @memberOf DataSourceAggregator#
      * @returns {*|boolean}
      */
     viewMakesSense: function() {
@@ -270,7 +270,7 @@ var DataSourceAggregator = Base.extend('DataSourceAggregator', {
     },
 
     /**
-     * @memberOf DataSourceAggregator.prototype
+     * @memberOf DataSourceAggregator#
      * @param x
      * @param y
      * @returns {*}
@@ -284,7 +284,7 @@ var DataSourceAggregator = Base.extend('DataSourceAggregator', {
     },
 
     /**
-     * @memberOf DataSourceAggregator.prototype
+     * @memberOf DataSourceAggregator#
      * @param x
      * @param y
      * @param value
@@ -297,7 +297,7 @@ var DataSourceAggregator = Base.extend('DataSourceAggregator', {
     },
 
     /**
-     * @memberOf DataSourceAggregator.prototype
+     * @memberOf DataSourceAggregator#
      * @returns {*}
      */
     getColumnCount: function() {
@@ -308,7 +308,7 @@ var DataSourceAggregator = Base.extend('DataSourceAggregator', {
     },
 
     /**
-     * @memberOf DataSourceAggregator.prototype
+     * @memberOf DataSourceAggregator#
      * @returns {*}
      */
     getRowCount: function() {
@@ -319,7 +319,7 @@ var DataSourceAggregator = Base.extend('DataSourceAggregator', {
     },
 
     /**
-     * @memberOf DataSourceAggregator.prototype
+     * @memberOf DataSourceAggregator#
      * @param y
      * @param {boolean} [expand] - One of:
      * * `true` - Expand all rows that are currently collapsed.
@@ -355,7 +355,7 @@ var DataSourceAggregator = Base.extend('DataSourceAggregator', {
     },
 
     /**
-     * @memberOf DataSourceAggregator.prototype
+     * @memberOf DataSourceAggregator#
      * @param headers
      */
     setHeaders: function(headers) {
@@ -363,7 +363,7 @@ var DataSourceAggregator = Base.extend('DataSourceAggregator', {
     },
 
     /**
-     * @memberOf DataSourceAggregator.prototype
+     * @memberOf DataSourceAggregator#
      * @param fields
      * @returns {*}
      */
@@ -372,7 +372,7 @@ var DataSourceAggregator = Base.extend('DataSourceAggregator', {
     },
 
     /**
-     * @memberOf DataSourceAggregator.prototype
+     * @memberOf DataSourceAggregator#
      * @returns {object[]}
      */
     getGrandTotals: function() {
@@ -381,7 +381,7 @@ var DataSourceAggregator = Base.extend('DataSourceAggregator', {
     },
 
     /**
-     * @memberOf DataSourceAggregator.prototype
+     * @memberOf DataSourceAggregator#
      * @param y
      * @returns {*}
      */
@@ -396,7 +396,7 @@ var DataSourceAggregator = Base.extend('DataSourceAggregator', {
     },
 
     /**
-     * @memberOf DataSourceAggregator.prototype
+     * @memberOf DataSourceAggregator#
      * @param arrayOfUniformObjects
      */
     setData: function(arrayOfUniformObjects) {

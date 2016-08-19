@@ -10,7 +10,7 @@ var DataSourceSorter = require('./DataSourceSorter');
 var DataSourceSorterComposite = DataSourceIndexed.extend('DataSourceSorterComposite', {
 
     /**
-     * @memberOf DataSourceSorterComposite.prototype
+     * @memberOf DataSourceSorterComposite#
      */
     initialize: function() {
         /**
@@ -20,19 +20,19 @@ var DataSourceSorterComposite = DataSourceIndexed.extend('DataSourceSorterCompos
          * 2. Columns should be added low- to high-order (i.e., most grouped columns come last)
          *
          * @type {number[]}
-         * @memberOf DataSourceSorterComposite.prototype
+         * @memberOf DataSourceSorterComposite#
          */
         this.sorts = [];
 
         /**
          * @type {DataSource}
-         * @memberOf DataSourceSorterComposite.prototype
+         * @memberOf DataSourceSorterComposite#
          */
         this.last = this.dataSource;
     },
 
     /**
-     * @memberOf DataSourceSorterComposite.prototype
+     * @memberOf DataSourceSorterComposite#
      * @param {number} y
      * @returns {Object}
      */
@@ -41,7 +41,7 @@ var DataSourceSorterComposite = DataSourceIndexed.extend('DataSourceSorterCompos
     },
 
     /**
-     * @memberOf DataSourceSorterComposite.prototype
+     * @memberOf DataSourceSorterComposite#
      * @param columnIndex
      * @param direction
      */
@@ -54,7 +54,7 @@ var DataSourceSorterComposite = DataSourceIndexed.extend('DataSourceSorterCompos
     },
 
     /**
-     * @memberOf DataSourceSorterComposite.prototype
+     * @memberOf DataSourceSorterComposite#
      */
     apply: function() {
         var each = this.dataSource;
@@ -68,7 +68,7 @@ var DataSourceSorterComposite = DataSourceIndexed.extend('DataSourceSorterCompos
     },
 
     /**
-     * @memberOf DataSourceSorterComposite.prototype
+     * @memberOf DataSourceSorterComposite#
      */
     clearSorts: function() {
         this.sorts.length = 0;
@@ -80,7 +80,7 @@ var DataSourceSorterComposite = DataSourceIndexed.extend('DataSourceSorterCompos
     },
 
     /**
-     * @memberOf DataSourceSorterComposite.prototype
+     * @memberOf DataSourceSorterComposite#
      * @param {number} x
      * @param {number} y
      * @returns {*}
@@ -90,7 +90,7 @@ var DataSourceSorterComposite = DataSourceIndexed.extend('DataSourceSorterCompos
     },
 
     /**
-     * @memberOf DataSourceSorterComposite.prototype
+     * @memberOf DataSourceSorterComposite#
      * @param {number} x
      * @param {number} y
      * @param {*} value

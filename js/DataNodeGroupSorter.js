@@ -10,7 +10,7 @@ var stableSort = require('./util/stableSort').sort;
 var DataNodeGroupSorter = Base.extend('DataNodeGroupSorter', {
 
     /**
-     * @memberOf DataSourceSorterComposite.prototype
+     * @memberOf DataSourceSorterComposite#
      */
     initialize: function(dataSource) {
         this.dataSource = dataSource;
@@ -19,7 +19,7 @@ var DataNodeGroupSorter = Base.extend('DataNodeGroupSorter', {
     },
 
     /**
-     * @memberOf DataSourceSorterComposite.prototype
+     * @memberOf DataSourceSorterComposite#
      * @param {number} y
      * @returns {Object}
      */
@@ -28,7 +28,7 @@ var DataNodeGroupSorter = Base.extend('DataNodeGroupSorter', {
     },
 
     /**
-     * @memberOf DataSourceSorterComposite.prototype
+     * @memberOf DataSourceSorterComposite#
      * @param columnIndex
      * @param direction
      */
@@ -41,14 +41,14 @@ var DataNodeGroupSorter = Base.extend('DataNodeGroupSorter', {
     },
 
     /**
-     * @memberOf DataSourceSorterComposite.prototype
+     * @memberOf DataSourceSorterComposite#
      */
     apply: function() {
         this.dataSource.sortGroups(this);
     },
 
     /**
-     * @memberOf DataSourceSorterComposite.prototype
+     * @memberOf DataSourceSorterComposite#
      */
     clearSorts: function() {
         this.sorts.length = 0;

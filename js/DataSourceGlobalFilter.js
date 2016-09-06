@@ -41,6 +41,10 @@ var DataSourceGlobalFilter = DataSourceIndexed.extend('DataSourceGlobalFilter', 
     get: function(filter) {
         return this.filter;
     },
+    
+    sortGroups: function(sorter){
+      this.dataSource.sortGroups(sorter);  
+    },
 
     /**
      *

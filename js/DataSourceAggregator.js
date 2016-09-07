@@ -265,6 +265,18 @@ var DataSourceAggregator = Base.extend('DataSourceAggregator', {
         return this.hasAggregates() && this.hasGroups();
     },
 
+    /**
+     * @memberOf DataSourceAggregator#
+     * @returns {*|boolean}
+     */
+    isDrillDown: function(event) {
+        var result = this.viewMakesSense();
+        if (result && event) {
+            result = event.dataCell.x === this.treeColumnIndex;
+        }
+        return result;
+    },
+
     getDataIndex: function(y) {
         return this.viewMakesSense() ? y : this.dataSource.getDataIndex(y);
     },

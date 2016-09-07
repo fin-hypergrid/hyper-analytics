@@ -201,6 +201,18 @@ var DataSourceGroupView = Base.extend('DataSourceGroupView', {
         return this.hasGroups();
     },
 
+    /**
+     * @memberOf DataSourceGroupView#
+     * @returns {*|boolean}
+     */
+    isDrillDown: function(event) {
+        var result = this.viewMakesSense();
+        if (result && event) {
+            result = event.dataCell.x === this.treeColumnIndex;
+        }
+        return result;
+    },
+
     getDataIndex: function(y) {
         return this.viewMakesSense() ? y : this.dataSource.getDataIndex(y);
     },

@@ -8,6 +8,7 @@ module.exports = {
     DataSourceGroupView: require('./js/DataSourceGroupView'),
     DataSourceAggregator: require('./js/DataSourceAggregator'),
     DataSourceTreeview: require('./js/DataSourceTreeview'),
+    DataSourceTreeviewFilter: require('./js/DataSourceTreeviewFilter'),
     DataSourceTreeviewSorter: require('./js/DataSourceTreeviewSorter'),
     DataNodeGroupSorter: require('./js/DataNodeGroupSorter'),
     util: {

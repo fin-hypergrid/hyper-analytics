@@ -83,7 +83,7 @@ function getRowIndex(rowIdx) {
         dataRow.__DEPTH > this.depth
     ) {
         parentID = dataRow[this.parentIdColumnName];
-        if (parentID == undefined) { break; }
+        if (parentID == null) { break; }
         dataRow = this.findRow(this.idColumnName, parentID);
         rowIdx = this.getProperty('foundRowIndex');
     }
@@ -107,7 +107,7 @@ function getColumnValue(rowIdx) {
         dataRow.__DEPTH > this.depth
     ) {
         parentID = dataRow[this.parentIdColumnName];
-        if (parentID == undefined) { break; }
+        if (parentID == null) { break; }
         dataRow = this.findRow(this.idColumnName, parentID);
     }
 

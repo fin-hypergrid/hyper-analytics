@@ -16,6 +16,8 @@ var expandedMap = {
 
 /**
  * @classdesc For proper sorting, include `DataSourceTreeviewSorter` in your data source pipeline, _ahead of_ (closer to the data than) this data source.
+ *
+ * For proper filtering, include `DataSourceTreeviewFilter` in your data source pipeline, _ahead of_ `DataSourceTreeviewSorter`, if included; or at any rate ahead of this data source.
  * @constructor
  * @param dataSource
  * @extends DataSourceIndexed
@@ -30,7 +32,12 @@ var DataSourceTreeview = DataSourceIndexed.extend('DataSourceTreeview', {
      * @memberOf DataSourceTreeview#
      */
     initialize: function(dataSource) {
-        dataSource.treeView = this;
+        while (dataSource) {
+            if (/treeview/i.test(dataSource.$$CLASS_NAME)) {
+                dataSource.treeview = this;
+            }
+            dataSource = dataSource.dataSource;
+        }
     },
 
     /**
@@ -157,7 +164,7 @@ var DataSourceTreeview = DataSourceIndexed.extend('DataSourceTreeview', {
                 row = leafRow;
                 ID = row[idColumnName];
 
-                while ((parentID = row[parentIdColumnName]) != undefined) { // eslint-disable-line eqeqeq
+                while ((parentID = row[parentIdColumnName]) != null) {
                     row = this.findRow(idColumnName, parentID);
                     ++depth;
                 }
@@ -181,6 +188,8 @@ var DataSourceTreeview = DataSourceIndexed.extend('DataSourceTreeview', {
             }
         }
 
+        // look for DataSourceTreeviewFilter
+
         return this.joined;
     },
 
@@ -190,7 +199,9 @@ var DataSourceTreeview = DataSourceIndexed.extend('DataSourceTreeview', {
      * @memberOf DataSourceTreeview#
      */
     apply: function() {
-        if (this.viewMakesSense()) {
+        if (!this.viewMakesSense()) {
+            this.clearIndex();
+        } else {
             this.buildIndex(this.joined && rowIsRevealed);
         }
     },
@@ -290,7 +301,7 @@ function rowIsRevealed(r, row) {
     var parentID;
 
     // are any of the row's ancestors collapsed?
-    while ((parentID = row[this.parentIdColumn.name]) != undefined) { // eslint-disable-line eqeqeq
+    while ((parentID = row[this.parentIdColumn.name]) != null) {
         // walk up through each parent...
         row = this.findRow(this.idColumn.name, parentID);
         if (row.__EXPANDED === false) { // an ancestor is collapsed

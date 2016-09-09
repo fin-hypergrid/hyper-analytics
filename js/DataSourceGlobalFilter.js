@@ -3,10 +3,16 @@
 var DataSourceIndexed = require('./DataSourceIndexed');
 
 /**
- * @typedef {function} filterFunction
- * @param cellValue
- * @param {object} rowObject - Reference to `this.dataSource.data[r]`.
- * @param {number} r - Row number (index within `this.dataSource.data`).
+ * @interface filterInterface
+ */
+
+/**
+ * @name filterInterface#test
+ * @method
+ * @param {object} dataRow - Object representing a row in the grid containing all the fields listed in {@link DataSource#fields|fields}.
+ * @returns {boolean}
+ * * `true` - include in grid (row passes through filter)
+ * * `false` - exclude from grid (row is blocked by filter)
  */
 
 /**
@@ -18,12 +24,12 @@ var DataSourceGlobalFilter = DataSourceIndexed.extend('DataSourceGlobalFilter', 
     /**
      *
      * @memberOf DataSourceGlobalFilter#
-     * @param {object} [filter] - If undefined, deletes filter.
+     * @param {filterFunction} [filter] - If undefined, deletes filter.
      */
     set: function(filter) {
         if (filter) {
             /**
-             * @type {filterFunction}
+             * @implements filterInterface
              * @memberOf DataSourceGlobalFilter#
              */
             this.filter = filter;
@@ -35,6 +41,10 @@ var DataSourceGlobalFilter = DataSourceIndexed.extend('DataSourceGlobalFilter', 
     get: function(filter) {
         return this.filter;
     },
+    
+    sortGroups: function(sorter){
+      this.dataSource.sortGroups(sorter);  
+    },
 
     /**
      *
@@ -44,11 +54,18 @@ var DataSourceGlobalFilter = DataSourceIndexed.extend('DataSourceGlobalFilter', 
         if (!this.filter) {
             this.clearIndex();
         } else {
-            this.buildIndex(function applyFilter(r, rowObject) {
-                return this.filter.test(rowObject);
-            });
+            this.buildIndex(this.filterTest);
         }
     },
+
+    /**
+     * @implements filterPredicate
+     * @memberOf DataSourceGlobalFilter#
+     */
+    filterTest: function(r, rowObject) {
+        return this.filter.test(rowObject);
+    },
+
 
     /**
      *

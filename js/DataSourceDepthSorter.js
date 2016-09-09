@@ -66,7 +66,8 @@ var DataSourceDepthSorter = DataSourceIndexed.extend('DataSourceDepthSorter', {
 });
 
 function getRowIndex(rowIdx) {
-    var dataRow = this.dataSource.getRow(rowIdx);
+    var parentID,
+        dataRow = this.dataSource.getRow(rowIdx);
 
     if (dataRow.__DEPTH < this.depth) {
         return this.edge;
@@ -76,12 +77,14 @@ function getRowIndex(rowIdx) {
 
     // bubble up to group label of requested depth while either...
     while (
-            // ...this is a leaf row
-            dataRow.__EXPANDED === undefined ||
-            // ...or: still deeper than the requested depth
-            dataRow.__DEPTH > this.depth
-        ) {
-        dataRow = this.findRow(this.idColumnName, dataRow[this.parentIdColumnName]);
+        // ...this is a leaf row
+        dataRow.__EXPANDED === undefined ||
+        // ...or: still deeper than the requested depth
+        dataRow.__DEPTH > this.depth
+    ) {
+        parentID = dataRow[this.parentIdColumnName];
+        if (parentID == null) { break; }
+        dataRow = this.findRow(this.idColumnName, parentID);
         rowIdx = this.getProperty('foundRowIndex');
     }
 
@@ -89,7 +92,8 @@ function getRowIndex(rowIdx) {
 }
 
 function getColumnValue(rowIdx) {
-    var dataRow = this.dataSource.getRow(rowIdx);
+    var parentID,
+        dataRow = this.dataSource.getRow(rowIdx);
 
     if (dataRow.__DEPTH < this.depth) {
         return this.edge;
@@ -102,7 +106,9 @@ function getColumnValue(rowIdx) {
         // ...or: still deeper than the requested depth
         dataRow.__DEPTH > this.depth
     ) {
-        dataRow = this.findRow(this.idColumnName, dataRow[this.parentIdColumnName]);
+        parentID = dataRow[this.parentIdColumnName];
+        if (parentID == null) { break; }
+        dataRow = this.findRow(this.idColumnName, parentID);
     }
 
     return DataSourceIndexed.valOrFunc(dataRow, this.columnName, this.calculator);

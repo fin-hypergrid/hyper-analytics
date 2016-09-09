@@ -8,12 +8,6 @@ Base.prototype = {
 
     replaceIndent: '_',
 
-    getHeaders: function() {
-        if (this.dataSource) {
-            return this.dataSource.getHeaders.apply(this.dataSource, arguments);
-        }
-    },
-
     getProperty: function getProperty(propName) {
         if (propName in this) {
             return this[propName];
@@ -23,22 +17,100 @@ Base.prototype = {
             return getProperty.call(this.dataSource, propName);
         }
     },
-
+    getDataIndex: function(y) {
+        if (this.dataSource) {
+            return this.dataSource.getDataIndex.apply(this.dataSource, arguments);
+        }
+    },
+    getRow: function() {
+        if (this.dataSource) {
+            return this.dataSource.getRow.apply(this.dataSource, arguments);
+        }
+    },
+    findRow: function(columnName, value) {
+        if (this.dataSource) {
+            return this.dataSource.findRow.apply(this.dataSource, arguments);
+        }
+    },
+    revealRow: function() {
+        if (this.dataSource) {
+            return this.dataSource.revealRow.apply(this.dataSource, arguments);
+        }
+    },
+    getValue: function(x, y){
+        if (this.dataSource) {
+            return this.dataSource.getValue.apply(this.dataSource, arguments);
+        }
+    },
+    setValue: function(x, y, value){
+        if (this.dataSource) {
+            return this.dataSource.setValue.apply(this.dataSource, arguments);
+        }
+    },
+    getRowCount: function() {
+        if (this.dataSource) {
+            return this.dataSource.getRowCount.apply(this.dataSource, arguments);
+        }
+    },
+    getColumnCount: function() {
+        if (this.dataSource) {
+            return this.dataSource.getColumnCount.apply(this.dataSource, arguments);
+        }
+    },
+    getFields: function() {
+        if (this.dataSource) {
+            return this.dataSource.getFields.apply(this.dataSource, arguments);
+        }
+    },
+    getHeaders: function() {
+        if (this.dataSource) {
+            return this.dataSource.getHeaders.apply(this.dataSource, arguments);
+        }
+    },
+    getCalculators: function(){
+        if (this.dataSource) {
+            return this.dataSource.revealRow.apply(this.dataSource, arguments);
+        }
+    },
+    getDefaultHeaders: function(){
+        if (this.dataSource) {
+            return this.dataSource.getDefaultHeaders.apply(this.dataSource, arguments);
+        }
+    },
+    setFields: function(arr) {
+        if (this.dataSource) {
+            return this.dataSource.setFields.apply(this.dataSource, arguments);
+        }
+    },
+    setHeaders: function(arr) {
+        if (this.dataSource) {
+            return this.dataSource.setHeaders.apply(this.dataSource, arguments);
+        }
+    },
+    getGrandTotals: function(row){
+        if (this.dataSource) {
+            return this.dataSource.getGrandTotals.apply(this.dataSource, arguments);
+        }
+    },
+    setData: function(arr) {
+        if (this.dataSource) {
+            return this.dataSource.setData.apply(this.dataSource, arguments);
+        }
+    },
     click: function() {
         if (this.dataSource) {
             return this.dataSource.click.apply(this.dataSource, arguments);
         }
     },
-
-    findRow: function() {
+    isDrillDown: function() {
         if (this.dataSource) {
-            return this.dataSource.findRow.apply(this.dataSource, arguments);
+            return this.dataSource.isDrillDown.apply(this.dataSource, arguments);
         }
     },
-
-    revealRow: function() {
+    apply: function() {},
+    viewMakesSense: function() {
         if (this.dataSource) {
-            return this.dataSource.revealRow.apply(this.dataSource, arguments);
+            return this.dataSource.viewMakesSense.apply(this.dataSource, arguments);
         }
     },
 

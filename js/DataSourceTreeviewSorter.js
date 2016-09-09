@@ -5,7 +5,7 @@ var DataSourceDepthSorter = require('./DataSourceDepthSorter');
 var DataSourceSorter = require('./DataSourceSorter');
 
 /**
- * @classdesc Should be positioned in the data source pipeline _ahead of_ (closer to the data than) `DataSourceTreeview`.
+ * @classdesc Should be positioned in the data source pipeline _ahead of_ (closer to the data than) the required `DataSourceTreeview` (which sets `this.treeview`) but _behind_ the optional `DataSourceTreeviewFilter`.
  * @constructor
  * @param dataSource
  * @extends DataSourceSorterComposite
@@ -17,14 +17,15 @@ var DataSourceTreeviewSorter = DataSourceSorterComposite.extend('DataSourceTreev
      * @memberOf DataSourceSorterComposite#
      */
     apply: function() {
-        var each = this.dataSource,
+        var joined = this.treeview.viewMakesSense(),
+            each = this.dataSource,
             last, // last sort spec ("first" sort) when and only when joined AND it is the group column
             columnIndex, direction;
 
         if (this.sorts.length) {
-            if (this.treeView.joined) {
+            if (joined) {
                 last = this.sorts[this.sorts.length - 1];
-                last = last.columnIndex === this.treeView.groupColumn.index && last;
+                last = last.columnIndex === this.treeview.groupColumn.index && last;
             }
 
             this.sorts.forEach(function(sortSpec) {
@@ -35,7 +36,7 @@ var DataSourceTreeviewSorter = DataSourceSorterComposite.extend('DataSourceTreev
             });
         }
 
-        if (this.treeView.joined) {
+        if (joined) {
             if (last) {
                 columnIndex = last.columnIndex;
                 direction = last.direction;
@@ -45,8 +46,8 @@ var DataSourceTreeviewSorter = DataSourceSorterComposite.extend('DataSourceTreev
             }
 
             // Finally, apply a "depth sort" to either the group column (if last) or the ID column to group it properly
-            for (var depth = this.treeView.maxDepth; depth >= 0; --depth) {
-                each = new DataSourceDepthSorter(each, this.treeView);
+            for (var depth = this.treeview.maxDepth; depth >= 0; --depth) {
+                each = new DataSourceDepthSorter(each, this.treeview);
                 each.sortOn(depth, direction, columnIndex);
             }
         }

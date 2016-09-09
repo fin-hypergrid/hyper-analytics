@@ -160,6 +160,7 @@ var DataSourceIndexed = Base.extend('DataSourceIndexed', {
 
 /** @typedef {function} filterPredicate
  * @summary Applies filter to given row.
+ * @this {DataSourceGlobalFilter}
  * @param {nubmer} r - Row index of row data within rows array `this.dataSource.data[]`.
  * @param {object} rowObject - Row data; element of `this.dataSource.data[]`.
  * @returns {boolean} Row qualifies (passes through filter).

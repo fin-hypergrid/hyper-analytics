@@ -20,15 +20,6 @@ var DataNodeGroupSorter = Base.extend('DataNodeGroupSorter', {
 
     /**
      * @memberOf DataSourceSorterComposite#
-     * @param {number} y
-     * @returns {Object}
-     */
-    getRow: function(y) {
-        return this.last.getRow(y);
-    },
-
-    /**
-     * @memberOf DataSourceSorterComposite#
      * @param columnIndex
      * @param direction
      */

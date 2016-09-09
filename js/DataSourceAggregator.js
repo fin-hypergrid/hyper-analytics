@@ -267,12 +267,13 @@ var DataSourceAggregator = Base.extend('DataSourceAggregator', {
 
     /**
      * @memberOf DataSourceAggregator#
+     * @param {number} columnIndex
      * @returns {*|boolean}
      */
-    isDrillDown: function(event) {
+    isDrillDown: function(columnIndex) {
         var result = this.viewMakesSense();
-        if (result && event) {
-            result = event.dataCell.x === this.treeColumnIndex;
+        if (result && columnIndex) {
+            result = columnIndex === this.treeColumnIndex;
         }
         return result;
     },

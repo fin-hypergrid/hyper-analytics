@@ -88,8 +88,6 @@ Base.prototype = {
         }
     },
     getGrandTotals: function(row){
-        //row: Ideally this should be set and get bottom/top totals
-        //Currently this function is just sending the same for both in aggregations
         if (this.dataSource) {
             return this.dataSource.getGrandTotals.apply(this.dataSource, arguments);
         }

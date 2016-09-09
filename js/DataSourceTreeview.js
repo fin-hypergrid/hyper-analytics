@@ -233,12 +233,13 @@ var DataSourceTreeview = DataSourceIndexed.extend('DataSourceTreeview', {
     },
     /**
      * @memberOf DataSourceTreeview#
+     * @param {number} columnIndex
      * @returns {*|boolean}
      */
-    isDrillDown: function(event) {
+    isDrillDown: function(columnIndex) {
         var result = this.viewMakesSense();
-        if (result && event) {
-            result = event.dataCell.x === this.treeColumn.index;
+        if (result && columnIndex) {
+            result = columnIndex === this.treeColumnIndex;
         }
         return result;
     },

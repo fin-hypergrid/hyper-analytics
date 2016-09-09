@@ -11,18 +11,35 @@ var headerify = require('./util/headerify');
 var DataSource = Base.extend('DataSource', {
     initialize: function(data, fields, calculators) {
         /**
+         * @summary The array of data row objects.
+         * @desc Access through {@link DataSource#getRow|getRow()}.
+         * @name data
+         * @type {object[]}
+         * @memberOf DataSource#
+         */
+        this.data = data;
+
+        /**
+         * @summary The list of field names.
+         * @desc These are all the members of the data row objects visible to Hypergrid.
+         *
+         * Access through {@link DataSource#getFields|getFields()}.
+         * @name fields
          * @type {string[]}
          * @memberOf DataSource#
          */
         this.fields = fields || computeFieldNames(data[0]);
 
-        this.calculators = calculators || Array(this.fields.length);
-
         /**
-         * @type {object[]}
+         * @summary The list of calculators that implement computed columns.
+         * @desc Congruent to {@link DataSource#fields|fields}.
+         *
+         * Elements representing regular (non-computed) fields should contain `undefined`.
+         * @name calculators
+         * @type {function[]}
          * @memberOf DataSource#
          */
-        this.data = data;
+        this.calculators = calculators || Array(this.fields.length);
     },
 
     isNullObject: false,
@@ -193,6 +210,15 @@ var DataSource = Base.extend('DataSource', {
      */
     getHeaders: function() {
         return (
+            /**
+             * @summary The list of header strings.
+             * @desc Congruent to {@link DataSource#fields|fields}.
+             *
+             * Access through {@link DataSource#getHeaders|getHeaders()}.
+             * @name headers
+             * @type {string[]}
+             * @memberOf DataSource#
+             */
             this.headers = this.headers || this.getDefaultHeaders().map(function(each) {
                 return headerify.transform(each);
             })

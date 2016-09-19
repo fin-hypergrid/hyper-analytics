@@ -57,7 +57,7 @@ var DataSource = Base.extend('DataSource', {
         return this.data[y];
     },
 
-    /**
+        /**
      * @summary Find, replace, or update a row by it's primary key column.
      * @param {string|object} columnName - One of:
      * * _string_ - Column name. See `value`.

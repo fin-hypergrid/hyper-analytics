@@ -41,9 +41,9 @@ var DataSourceGlobalFilter = DataSourceIndexed.extend('DataSourceGlobalFilter', 
     get: function(filter) {
         return this.filter;
     },
-    
+
     sortGroups: function(sorter){
-      this.dataSource.sortGroups(sorter);  
+        this.dataSource.sortGroups(sorter);
     },
 
     /**
@@ -76,5 +76,7 @@ var DataSourceGlobalFilter = DataSourceIndexed.extend('DataSourceGlobalFilter', 
         return this.filter ? this.index.length : this.dataSource.getRowCount();
     }
 });
+
+Object.defineProperty(DataSourceGlobalFilter.prototype, 'type', { value: 'filter' }); // read-only property
 
 module.exports = DataSourceGlobalFilter;

@@ -85,4 +85,6 @@ DataNodeGroupSorter.prototype.applySorts = function() {
     this.apply();
 };
 
+Object.defineProperty(DataNodeGroupSorter.prototype, 'type', { value: 'sorter' }); // read-only property
+
 module.exports = DataNodeGroupSorter;

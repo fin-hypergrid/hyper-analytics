@@ -432,4 +432,6 @@ function factoryDataNodeGroup(key) {
     return new DataNodeGroup(key);
 }
 
+Object.defineProperty(DataSourceAggregator.prototype, 'type', { value: 'aggregator' }); // read-only property
+
 module.exports = DataSourceAggregator;

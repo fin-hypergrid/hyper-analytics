@@ -325,4 +325,6 @@ function rowIsRevealed(r, row) {
     return true; // include row in build
 }
 
+Object.defineProperty(DataSourceTreeview.prototype, 'type', { value: 'treeviewer' }); // read-only property
+
 module.exports = DataSourceTreeview;

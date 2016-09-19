@@ -105,4 +105,6 @@ DataSourceSorterComposite.prototype.applySorts = function() {
     this.apply();
 };
 
+Object.defineProperty(DataSourceSorterComposite.prototype, 'type', { value: 'sorter' }); // read-only property
+
 module.exports = DataSourceSorterComposite;

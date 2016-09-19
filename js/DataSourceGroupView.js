@@ -366,4 +366,6 @@ function factoryDataNodeGroup(key) {
     return new DataNodeGroup(key);
 }
 
+Object.defineProperty(DataSourceGroupView.prototype, 'type', { value: 'groupviewer' }); // read-only property
+
 module.exports = DataSourceGroupView;

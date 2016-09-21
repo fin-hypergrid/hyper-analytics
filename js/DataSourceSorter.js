@@ -13,10 +13,10 @@ var DataSourceSorter = DataSourceIndexed.extend('DataSourceSorter', {
      * @param {number} columnIndex
      * @param {number} [direction=1]
      */
-    sortOn: function(columnIndex, direction) {
+    sortOn: function(columnIndex, direction, type) {
         var dataSource = this.dataSource,
             columnName = dataSource.getFields()[columnIndex],
-            calculator = dataSource.getProperty('calculators')[columnIndex];
+            calculator = dataSource.schema[columnIndex] && dataSource.schema[columnIndex].calculator;
 
         switch (direction) {
             case 0:
@@ -26,7 +26,7 @@ var DataSourceSorter = DataSourceIndexed.extend('DataSourceSorter', {
             case undefined:
             case 1:
             case -1:
-                stableSort.sort(this.buildIndex(), getValue, direction);
+                stableSort.sort(this.buildIndex(), getValue, direction, type);
                 break;
         }
 

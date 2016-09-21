@@ -25,7 +25,7 @@ module.exports = function() {
             });
 
             it('takes 3 parameters', function() {
-                stableSort.length.should.equal(3);
+                stableSort.length.should.equal(4);
             });
             it('when sortType===0, does nothing', function() {
                 stableSort(INDEX_VECTOR, object, 0);

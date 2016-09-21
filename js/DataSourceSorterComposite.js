@@ -49,8 +49,25 @@ var DataSourceSorterComposite = DataSourceIndexed.extend('DataSourceSorterCompos
         this.sorts.push({ columnIndex: columnIndex, direction: direction });
     },
 
-    set: function(sorts) {
-        this.sorts = sorts || [];
+    /**
+     *
+     * @memberOf DataSourceSorterComposite#
+     * @param {sorterFunction} [sorter] - If undefined, deletes sorter.
+     */
+    set: function(sorter) {
+        if (sorter) {
+            /**
+             * @implements sorterInterfacei
+             * @memberOf DataSourceSorterComposite#
+             */
+            this.sorter = sorter;
+        } else {
+            delete this.sorter;
+        }
+    },
+
+    get: function() {
+        return this.sorter;
     },
 
     /**
@@ -58,13 +75,16 @@ var DataSourceSorterComposite = DataSourceIndexed.extend('DataSourceSorterCompos
      */
     apply: function() {
         var each = this.dataSource;
+        // get list of sorts from either API or use existing
+        this.sorts = (this.sorter && this.sorter.prop('sorts')) || this.sorts;
 
-        this.sorts.forEach(function(sortSpec) {
-            each = new DataSourceSorter(each);
-            each.sortOn(sortSpec.columnIndex, sortSpec.direction);
-        });
-
-        this.last = each;
+        if (this.sorts) {
+            this.sorts.forEach(function(sortSpec) {
+                each = new DataSourceSorter(each);
+                each.sortOn(sortSpec.columnIndex, sortSpec.direction, sortSpec.type);
+            });
+            this.last = each;
+        }
     },
 
     /**

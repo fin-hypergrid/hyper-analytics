@@ -20,16 +20,16 @@ var DataSourceTreeviewSorter = DataSourceSorterComposite.extend('DataSourceTreev
         var joined = this.treeview.viewMakesSense(),
             each = this.dataSource,
             last, // last sort spec ("first" sort) when and only when joined AND it is the group column
-            columnIndex, direction;
+            lastIsGroup, columnIndex, direction;
 
         if (this.sorts.length) {
             if (joined) {
                 last = this.sorts[this.sorts.length - 1];
-                last = last.columnIndex === this.treeview.groupColumn.index && last;
+                lastIsGroup = last.columnIndex === this.treeview.groupColumn.index;
             }
 
             this.sorts.forEach(function(sortSpec) {
-                if (sortSpec !== last) {
+                if (!(lastIsGroup && sortSpec === last)) {
                     each = new DataSourceSorter(each);
                     each.sortOn(sortSpec.columnIndex, sortSpec.direction);
                 }
@@ -37,7 +37,7 @@ var DataSourceTreeviewSorter = DataSourceSorterComposite.extend('DataSourceTreev
         }
 
         if (joined) {
-            if (last) {
+            if (lastIsGroup || this.sorts.length === 1) {
                 columnIndex = last.columnIndex;
                 direction = last.direction;
             } else {

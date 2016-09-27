@@ -51,10 +51,10 @@ var DataSourceGlobalFilter = DataSourceIndexed.extend('DataSourceGlobalFilter', 
      * @memberOf DataSourceGlobalFilter#
      */
     apply: function() {
-        if (!this.filter) {
-            this.clearIndex();
-        } else {
+        if (this.filter && this.filter.test) {
             this.buildIndex(this.filterTest);
+        } else {
+            this.clearIndex();
         }
     },
 
@@ -73,7 +73,7 @@ var DataSourceGlobalFilter = DataSourceIndexed.extend('DataSourceGlobalFilter', 
      * @returns {number}
      */
     getRowCount: function() {
-        return this.filter ? this.index.length : this.dataSource.getRowCount();
+        return this.filter && this.filter.test ? this.index.length : this.dataSource.getRowCount();
     }
 });
 

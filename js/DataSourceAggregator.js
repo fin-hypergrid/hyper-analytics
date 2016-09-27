@@ -369,23 +369,6 @@ var DataSourceAggregator = Base.extend('DataSourceAggregator', {
 
     /**
      * @memberOf DataSourceAggregator#
-     * @param headers
-     */
-    setHeaders: function(headers) {
-        this.dataSource.setHeaders(headers);
-    },
-
-    /**
-     * @memberOf DataSourceAggregator#
-     * @param fields
-     * @returns {*}
-     */
-    setFields: function(fields) {
-        return this.dataSource.setFields(fields);
-    },
-
-    /**
-     * @memberOf DataSourceAggregator#
      * @returns {object[]}
      */
     getGrandTotals: function() {

@@ -70,67 +70,6 @@ var DataSourceIndexed = Base.extend('DataSourceIndexed', {
     },
 
     /**
-     *
-     * @returns {*}
-     * @memberOf DataSourceIndexed#
-     */
-    getColumnCount: function() {
-        return this.dataSource.getColumnCount();
-    },
-
-    /**
-     * @memberOf DataSourceIndexed#
-     * @returns {*}
-     */
-    getFields: function() {
-        return this.dataSource.getFields();
-    },
-
-    /**
-     * @memberOf DataSourceIndexed#
-     * @param fields
-     * @returns {*}
-     */
-    setFields: function(fields) {
-        return this.dataSource.setFields(fields);
-    },
-
-    /**
-     * @memberOf DataSourceIndexed#
-     * @param {string[]} headers
-     * @returns {string[]}
-     */
-    setHeaders: function(headers) {
-        return this.dataSource.setHeaders(headers);
-    },
-
-    /**
-     *
-     * @returns {string[]}
-     * @memberOf DataSourceIndexed#
-     */
-    getHeaders: function() {
-        return this.dataSource.getHeaders();
-    },
-
-    /**
-     * @memberOf DataSourceIndexed#
-     * @returns {*}
-     */
-    getGrandTotals: function() {
-        return this.dataSource.getGrandTotals();
-    },
-
-    /**
-     * @memberOf DataSourceIndexed#
-     * @param {object[]} arrayOfUniformObjects
-     * @returns {object[]}
-     */
-    setData: function(arrayOfUniformObjects) {
-        return this.dataSource.setData(arrayOfUniformObjects);
-    },
-
-    /**
      * @memberOf DataSourceIndexed#
      */
     clearIndex: function() {

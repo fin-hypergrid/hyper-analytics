@@ -3,36 +3,24 @@
 var gulp        = require('gulp'),
     $$          = require('gulp-load-plugins')(),
     runSequence = require('run-sequence'),
-    browserSync = require('browser-sync').create(),
     exec        = require('child_process').exec,
     path        = require('path');
 
-var name     = 'hyper-analytics',
-    global   = 'hyperAnalytics',
-    srcDir   = './js/',
-    testDir  = './test/',
-    buildDir = './build/';
+var srcDir   = './js/',
+    testDir  = './test/';
 
 //  //  //  //  //  //  //  //  //  //  //  //
 
 gulp.task('lint', lint);
 gulp.task('test', test);
 gulp.task('doc', doc);
-gulp.task('beautify', beautify);
-gulp.task('browserify', function(callback) {
-    browserify();
-    browserifyMin();
-    callback();
-});
 
 gulp.task('build', function(callback) {
     clearBashScreen();
     runSequence(
         'lint',
-        // 'test',
-        // 'doc',
-        // 'beautify',
-        'browserify',
+        'test',
+        'doc',
         callback
     );
 });
@@ -56,37 +44,6 @@ function lint() {
 function test(cb) {
     return gulp.src(testDir + 'index.js')
         .pipe($$.mocha({reporter: 'spec'}));
-}
-
-function beautify() {
-    return gulp.src(srcDir + '**/*.js')
-        .pipe($$.beautify()) //apparent bug: presence of a .jsbeautifyrc file seems to force all options to their defaults (except space_after_anon_function which is forced to true) so I deleted the file. Any needed options can be included here.
-        .pipe(gulp.dest(srcDir));
-}
-
-function browserify() {
-    return gulp.src('index.js')
-        .pipe($$.replace(
-            'module.exports =',
-            'window.' + global + ' ='
-        ))
-        .pipe($$.browserify({  debug: true }))
-        .on('error', $$.util.log)
-        .pipe($$.rename(name + '.js'))
-        .pipe(gulp.dest(buildDir));
-}
-
-function browserifyMin() {
-    return gulp.src('index.js')
-        .pipe($$.replace(
-            'module.exports =',
-            'window.' + global + ' ='
-        ))
-        .pipe($$.browserify())
-        .pipe($$.uglify())
-        .on('error', $$.util.log)
-        .pipe($$.rename(name + '.min.js'))
-        .pipe(gulp.dest(buildDir));
 }
 
 function doc(cb) {

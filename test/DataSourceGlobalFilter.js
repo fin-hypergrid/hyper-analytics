@@ -130,10 +130,8 @@ module.exports = function() {
         test.method('getRowCount', 0, function() {
             describe('filtering is active so', function() {
                 it('returns number of hits (which may be none)', function() {
-                    object.set(function() {});
-                    object.index.push(3);
-                    object.index.push(4);
-                    object.getRowCount().should.equal(2);
+                    object.set({ test: function() { return false; } });
+                    object.getRowCount().should.equal(0);
                 });
             });
             describe('filtering is inactive so', function() {

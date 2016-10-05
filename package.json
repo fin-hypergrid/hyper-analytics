@@ -35,6 +35,6 @@
   },
   "dependencies": {
     "extend-me": "^2.3.0",
-    "fin-hypergrid-data-source-base": "^0.2.0"
+    "fin-hypergrid-data-source-base": "^0.3.0"
   }
 }

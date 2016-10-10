@@ -27,7 +27,7 @@
     "vinyl-source-stream": "^1.1.0"
   },
   "dependencies": {
-    "extend-me": "^2.3.0",
+    "extend-me": "^2.3",
     "fin-hypergrid-data-source-base": "0.4.1"
   }
 }

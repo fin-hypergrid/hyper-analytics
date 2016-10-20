@@ -40,83 +40,68 @@ var DataSourceTreeview = DataSourceIndexed.extend('DataSourceTreeview', {
         }
     },
 
-    /**
-     * @summary Sets id column index and name given one or the other.
-     * Sets @desc A column with the given index or name must exist. Creates a new column address object, assigns it to `this.idColumn`, and returns it.
+    /** @summary Reference to the primary key column address object.
+     * @desc The primary key column uniquely identifies a data row.
+     * Used to relate a child row to a parent row.
+     *
+     * Redefined each time tree-view is turned *ON* by a call to {@link DataSourceTreeview#setRelation|setRelation()}.
      * @param {number|string} indexOrName
-     * @returns {columnAddress}
+     * @returns {columnAddress} Getter returns column address object; setter however always returns its input.
      */
-    setIdColumn: function(indexOrName) {
-        /** @summary Reference to the primary key column.
-         * @desc The primary key column uniquely identifies a data row.
-         * Used to relate a child row to a parent row.
-         *
-         * Redefined each time tree-view is turned *ON* by a call to {@link DataSourceTreeview#setRelation|setRelation()}.
-         * @type {columnAddress}
-         * @name idColumn
-         * @memberOf DataSourceTreeview#
-         */
-        return (this.idColumn = this.getColumnInfo(indexOrName, 'ID'));
+    set idColumn(indexOrName) {
+        this._idColumn = this.getColumnInfo(indexOrName, 'ID');
+    },
+    get idColumn() {
+        return this._idColumn;
+    },
+
+    /** @summary Reference to the foreign key column address object.
+     * @desc The foreign key column defines grouping; it relates this tree node row to its parent tree node row. Top-level tree nodes have no parent. In that case the value in the column is `null`.
+     *
+     * Redefined each time tree-view is turned *ON* by a call to {@link DataSourceTreeview#setRelation|setRelation()}.
+     * @param {number|string} indexOrName
+     * @returns {columnAddress} Getter returns column address object; setter however always returns its input.
+     */
+    set parentIdColumn(indexOrName) {
+        this._parentIdColumn = this.getColumnInfo(indexOrName, 'parentID');
+    },
+    get parentIdColumn() {
+        return this._parentIdColumn;
+    },
+
+    /** @summary Reference to the drill-down column address object.
+     * @desc The drill-down column is the column that is indented and decorated with drill-down controls (triangles). A column with the given index or name must exist.
+     *
+     * Redefined each time tree-view is turned *ON* by a call to {@link DataSourceTreeview#setRelation|setRelation()}.
+     * @param {number|string} indexOrName
+     * @returns {columnAddress} Getter returns column address object; setter however always returns its input.
+     */
+    set treeColumn(indexOrName) {
+        this._treeColumn = this.getColumnInfo(indexOrName, 'name');
+    },
+    get treeColumn() {
+        return this._treeColumn;
     },
 
     /**
-     * @summary Sets parentId column index and name given one or the other.
-     * @desc A column with the given index or name must exist. Creates a new column address object, assigns it to `this.parentIdColumn`, and returns it.
+     /** @summary Reference to the group name column address object.
+     * @desc The group name column is the column whose content describes the group. A column with the given index or name must exist.
+     *
+     * The treeview sorter treats the group name column differently than other columns,
+     * apply a "group sort" to it, which means only the group rows (rows with children)
+     * are sorted and the leaves are left alone (stable sorted).
+     *
+     * Normally refers to the same column as {@link DataSourceTreeview#treeColumn|treeColumn}.
+     *
+     * Redefined each time tree-view is turned *ON* by a call to {@link DataSourceTreeview#setRelation|setRelation()}.
      * @param {number|string} indexOrName
-     * @returns {columnAddress}
+     * @returns {columnAddress} Getter returns column address object; setter however always returns its input.
      */
-    setParentIdColumn: function(indexOrName) {
-        /** @summary Reference to the foreign key column for grouping.
-         * @desc The foreign key column relates this tree node row to its parent tree node row. Top-level tree nodes have no parent. In that case the value in the column is `null`.
-         *
-         * Redefined each time tree-view is turned *ON* by a call to {@link DataSourceTreeview#setRelation|setRelation()}.
-         * @type {columnAddress}
-         * @name parentIdColumn
-         * @memberOf DataSourceTreeview#
-         */
-        return (this.parentIdColumn = this.getColumnInfo(indexOrName, 'parentID'));
+    set groupColumn(indexOrName) {
+        this._groupColumn = this.getColumnInfo(indexOrName, this._treeColumn.name);
     },
-
-    /**
-     * @summary Sets tree column index and name given one or the other.
-     * ets @desc A column with the given index or name must exist. Creates a new column address object, assigns it to `this.treeColumn`, and returns it.
-     * @param {number|string} indexOrName
-     * @returns {columnAddress}
-     */
-    setTreeColumn: function(indexOrName) {
-        /** @summary Reference to the drill-down column.
-         * @desc The drill-down column is the column that is indented and decorated with drill-down controls (triangles).
-         *
-         * Redefined each time tree-view is turned *ON* by a call to {@link DataSourceTreeview#setRelation|setRelation()}.
-         * @type {columnAddress}
-         * @name treeColumn
-         * @memberOf DataSourceTreeview#
-         */
-        return (this.treeColumn = this.getColumnInfo(indexOrName, 'name'));
-    },
-
-    /**
-     * @summary Sets group column index and name given one or the other.
-     * ts @desc A column with the given index or name must exist. Creates a new column address object, assigns it to `this.groupColumn`, and returns it.
-     * @param {number|string} indexOrName
-     * @returns {columnAddress}
-     */
-    setGroupColumn: function(indexOrName) {
-        /** @summary Reference to the group name column.
-         * @desc The group name column is the column whose content describes the group.
-         *
-         * The treeview sorter treats the group name column differently than other columns,
-         * apply a "group sort" to it, which means only the group rows (rows with children)
-         * are sorted and the leaves are left alone (stable sorted).
-         *
-         * Normally refers to the same column as {@link DataSourceTreeview#treeColumn|treeColumn}.
-         *
-         * Redefined each time tree-view is turned *ON* by a call to {@link DataSourceTreeview#setRelation|setRelation()}.
-         * @type {columnAddress}
-         * @name groupColumn
-         * @memberOf DataSourceTreeview#
-         */
-        return (this.groupColumn = this.getColumnInfo(indexOrName, this.treeColumn.name));
+    get groupColumn() {
+        return this._groupColumn;
     },
 
     /**
@@ -125,13 +110,13 @@ var DataSourceTreeview = DataSourceIndexed.extend('DataSourceTreeview', {
      *
      * If resetting previously set data, the state of expansion of all rows that still have children is retained. (All expanded rows will still be expanded when tree-view is turned back *ON*.)
      *
-     * All of the columns referenced by the properties `idColumn`, `parentColumn`, `treeColumn`, and `groupColumn` must exist. These four columns have default references (names) as listed below. The references may be overridden in `options` by supplying alternate column names or indexes.
+     * All of the columns referenced by the `options` properties `idColumn`, `parentIdColumn`, `treeColumn`, and `groupColumn` must exist. These four columns have default references (names) as listed below. The references may be overridden in `options` by supplying alternate column names or indexes.
      *
-     * @param {boolean|object} [options] - If truthy, turn tree-view **ON**. If falsy (or omitted), turn it **OFF**.
+     * @param {boolean|object} [options] - Falsy value (or omitted) turns tree-view **OFF**. Truthy value turns tree-view **ON** using following options:
      * @param {number|string} [options.idColumn='ID'] - Name or index of the primary key column.
      * @param {number|string} [options.parentIdColumn='parentID'] - Name or index of the foreign key column for grouping.
      * @param {number|string} [options.treeColumn='name'] - Name or index of the drill-down column to decorate with triangles.
-     * @param {number|string} [options.groupColumn=this.treeColumn.name] - Name or index of the column that contains the group names. This is normally the same as the drill-down column. You only need to specify a different value when you want the drill down to this column, such as when the drill-down is in a column of its own. See {@link http://openfin.github.io/fin-hypergrid/tree-view-separate-drill-down.html} for an example.
+     * @param {number|string} [options.groupColumn=this._treeColumn.name] - Name or index of the column that contains the group names. This is normally the same as the drill-down column. You only need to specify a different value when you want the drill down to this column, such as when the drill-down is in a column of its own. See {@link http://openfin.github.io/fin-hypergrid/tree-view-separate-drill-down.html} for an example.
      * @returns {boolean} Joined state.
      *
      * @memberOf DataSourceTreeview#
@@ -142,10 +127,10 @@ var DataSourceTreeview = DataSourceIndexed.extend('DataSourceTreeview', {
         // successful join requires that options object be given and that all three columns exist
         this.joined = !!(
             options && // turns tree view on or off (based on truthiness)
-            this.setIdColumn(options.idColumn) &&
-            this.setParentIdColumn(options.parentIdColumn) &&
-            this.setTreeColumn(options.treeColumn) &&
-            this.setGroupColumn(options.groupColumn)
+            (this.idColumn = options.idColumn) &&
+            (this.parentIdColumn = options.parentIdColumn) &&
+            (this.treeColumn = options.treeColumn) &&
+            (this.groupColumn = options.groupColumn)
         );
 
         this.buildIndex(); // make all rows visible to getRow()
@@ -217,7 +202,7 @@ var DataSourceTreeview = DataSourceIndexed.extend('DataSourceTreeview', {
     getValue: function(x, y) {
         var value = DataSourceIndexed.prototype.getValue.call(this, x, y);
 
-        if (this.viewMakesSense() && x === this.treeColumn.index) {
+        if (this.viewMakesSense() && x === this._treeColumn.index) {
             var row = this.getRow(y);
 
             if (!(value === '' && row.__EXPANDED === undefined)) {
@@ -298,12 +283,12 @@ var DataSourceTreeview = DataSourceIndexed.extend('DataSourceTreeview', {
         }
 
         var row, parent, changed = false;
-        while ((row = this.findRow(this.idColumn.name, ID))) {
+        while ((row = this.findRow(this._idColumn.name, ID))) {
             if (parent && row.__EXPANDED === false) {
                 row.__EXPANDED = changed = true;
             }
             parent = true;
-            ID = row[this.parentIdColumn.name];
+            ID = row[this._parentIdColumn.name];
         }
         return changed;
     }
@@ -313,9 +298,9 @@ function rowIsRevealed(r, row) {
     var parentID;
 
     // are any of the row's ancestors collapsed?
-    while ((parentID = row[this.parentIdColumn.name]) != null) {
+    while ((parentID = row[this._parentIdColumn.name]) != null) {
         // walk up through each parent...
-        row = this.findRow(this.idColumn.name, parentID);
+        row = this.findRow(this._idColumn.name, parentID);
         if (row.__EXPANDED === false) { // an ancestor is collapsed
             return false; // exclude row from build
         }

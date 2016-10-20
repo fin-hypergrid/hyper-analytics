@@ -10,29 +10,45 @@ var stableSort = require('./util/stableSort').sort;
 var DataNodeGroupSorter = Base.extend('DataNodeGroupSorter', {
 
     /**
-     * @memberOf DataSourceSorterComposite#
+     * @memberOf DataNodeGroupSorter#
      */
     initialize: function(dataSource) {
         this.dataSource = dataSource;
         this.sorts = [];
 
     },
-
     /**
-     * @memberOf DataSourceSorterComposite#
-     * @param columnIndex
-     * @param direction
+     *  @memberOf DataSourceSorterComposite#
+     *  @param columnIndex
+     *  @param direction
      */
+
     sortOn: function(columnIndex, direction) {
         this.sorts.push({ columnIndex: columnIndex, direction: direction });
     },
+    /**
+     *
+     * @memberOf DataNodeGroupSorter#
+     * @param {sorterFunction} [sorter] - If undefined, deletes sorter.
+     */
+    set: function(sorter) {
+        if (sorter) {
+            /**
+             * @implements sorterInterfacei
+             * @memberOf DataSourceSorterComposite#
+             */
+            this.sorter = sorter;
+        } else {
+            delete this.sorter;
+        }
+    },
 
-    set: function(sorts) {
-        this.sorts = sorts || [];
+    get: function() {
+        return this.sorter;
     },
 
     /**
-     * @memberOf DataSourceSorterComposite#
+     * @memberOf DataNodeGroupSorter#
      */
     apply: function() {
         this.dataSource.sortGroups(this);
@@ -50,9 +66,11 @@ var DataNodeGroupSorter = Base.extend('DataNodeGroupSorter', {
         if (!group.originalOrder) {
             group.originalOrder = group.children.slice(0);
         }
-        var sorts = this.sorts;
-        for (var i = sorts.length - 1; i >= 0; i--) {
-            this.sortGroupOnEach(group, sorts[sorts.length - i - 1]);
+
+        // get list of sorts from either API or use existing
+        this.sorts = (this.sorter && this.sorter.prop('sorts')) || this.sorts;
+        for (var i = this.sorts.length - 1; i >= 0; i--) {
+            this.sortGroupOnEach(group, this.sorts[this.sorts.length - i - 1]);
         }
     },
 

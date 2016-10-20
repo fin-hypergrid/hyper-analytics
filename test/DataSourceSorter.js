@@ -25,7 +25,7 @@ module.exports = function() {
             object.should.be.instanceof(require('../js/DataSourceIndexed'));
         });
 
-        test.method('sortOn', 2, function() {
+        test.method('sortOn', 3, function() {
             describe('when 2nd parameter (`direction`) is 0', function() {
                 it('clears the index by calling `clearIndex`', function() {
                     var spy = sinon.spy(object, 'clearIndex');

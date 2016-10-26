@@ -111,7 +111,7 @@ function getColumnValue(rowIdx) {
         dataRow = this.findRow(this.idColumnName, parentID);
     }
 
-    return DataSourceIndexed.valOrFunc(dataRow, this.columnName, this.calculator);
+    return DataSourceIndexed.valOrFunc.call(dataRow, this.columnName, this.calculator);
 }
 
 module.exports = DataSourceDepthSorter;

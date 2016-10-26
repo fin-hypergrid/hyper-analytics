@@ -107,17 +107,17 @@ var DataSourceIndexed = Base.extend('DataSourceIndexed', {
 
 /**
  * Used by the sorters (`DataSourceSorter` and `DataSourceTreeviewSorter`).
- * @param {object} dataRow
+ * @this {dataRowObject}
  * @param {string} columnName
  * @returns {*}
  */
-DataSourceIndexed.valOrFunc = function(dataRow, columnName, calculator) {
+DataSourceIndexed.valOrFunc = function(columnName, calculator) {
     var result;
-    if (dataRow) {
-        result = dataRow[columnName];
+    if (this) {
+        result = this[columnName];
         calculator = (typeof result)[0] === 'f' && result || calculator;
         if (calculator) {
-            result = calculator(dataRow, columnName);
+            result = calculator.call(this, columnName);
         }
     }
     return result;

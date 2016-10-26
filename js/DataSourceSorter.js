@@ -35,7 +35,7 @@ var DataSourceSorter = DataSourceIndexed.extend('DataSourceSorter', {
 
         function getValue(rowIdx) {
             var dataRow = dataSource.getRow(rowIdx);
-            return DataSourceIndexed.valOrFunc(dataRow, columnName, calculator);
+            return DataSourceIndexed.valOrFunc.call(dataRow, columnName, calculator);
         }
     }
 });

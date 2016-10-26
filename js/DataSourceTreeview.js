@@ -49,7 +49,7 @@ var DataSourceTreeview = DataSourceIndexed.extend('DataSourceTreeview', {
      * @returns {columnAddress} Getter returns column address object; setter however always returns its input.
      */
     set idColumn(indexOrName) {
-        this._idColumn = this.getColumnInfo(indexOrName, 'ID');
+        this._idColumn = this.getColumnInfo(indexOrName || 'ID');
     },
     get idColumn() {
         return this._idColumn;
@@ -63,7 +63,7 @@ var DataSourceTreeview = DataSourceIndexed.extend('DataSourceTreeview', {
      * @returns {columnAddress} Getter returns column address object; setter however always returns its input.
      */
     set parentIdColumn(indexOrName) {
-        this._parentIdColumn = this.getColumnInfo(indexOrName, 'parentID');
+        this._parentIdColumn = this.getColumnInfo(indexOrName || 'parentID');
     },
     get parentIdColumn() {
         return this._parentIdColumn;
@@ -77,7 +77,7 @@ var DataSourceTreeview = DataSourceIndexed.extend('DataSourceTreeview', {
      * @returns {columnAddress} Getter returns column address object; setter however always returns its input.
      */
     set treeColumn(indexOrName) {
-        this._treeColumn = this.getColumnInfo(indexOrName, 'name');
+        this._treeColumn = this.getColumnInfo(indexOrName || 'name');
     },
     get treeColumn() {
         return this._treeColumn;
@@ -98,10 +98,42 @@ var DataSourceTreeview = DataSourceIndexed.extend('DataSourceTreeview', {
      * @returns {columnAddress} Getter returns column address object; setter however always returns its input.
      */
     set groupColumn(indexOrName) {
-        this._groupColumn = this.getColumnInfo(indexOrName, this._treeColumn.name);
+        this._groupColumn = this.getColumnInfo(indexOrName || this._treeColumn.name);
     },
     get groupColumn() {
         return this._groupColumn;
+    },
+
+    /**
+     * TEMPORARY. This function included here until next version of base is published.
+     * The change was to use schema rather than getFields().
+     * (The current version in base is not in use because it's only used from here.)
+     *
+     * Get new object with name and index given the name or the index.
+     * @param {string|number} columnOrIndex - Column name or index.
+     * @returns {{name: string, index: number}}
+     */
+    getColumnInfo: function(columnOrIndex) {
+        var name, index, result;
+
+        if (typeof columnOrIndex === 'number') {
+            index = columnOrIndex;
+            name = this.schema[index].name;
+        } else {
+            name = columnOrIndex;
+            index = this.schema.findIndex(function(columnSchema) {
+                return columnSchema.name === name;
+            });
+        }
+
+        if (name && index >= 0) {
+            result = {
+                name: name,
+                index: index
+            };
+        }
+
+        return result;
     },
 
     /**
@@ -124,14 +156,14 @@ var DataSourceTreeview = DataSourceIndexed.extend('DataSourceTreeview', {
     setRelation: function(options) {
         var r, parentID, depth, leafRow, row, ID;
 
-        // successful join requires that options object be given and that all three columns exist
-        this.joined = !!(
-            options && // turns tree view on or off (based on truthiness)
-            (this.idColumn = options.idColumn) &&
-            (this.parentIdColumn = options.parentIdColumn) &&
-            (this.treeColumn = options.treeColumn) &&
-            (this.groupColumn = options.groupColumn)
-        );
+        // successful join requires that options object be given and that all columns exist
+        if (options) {
+            this.idColumn = options.idColumn;
+            this.parentIdColumn = options.parentIdColumn;
+            this.treeColumn = options.treeColumn;
+            this.groupColumn = options.groupColumn;
+            this.joined = !!(this.idColumn && this.parentIdColumn && this.treeColumn && this.groupColumn);
+        }
 
         this.buildIndex(); // make all rows visible to getRow()
 

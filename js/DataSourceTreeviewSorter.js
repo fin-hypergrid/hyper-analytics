@@ -21,6 +21,8 @@ var DataSourceTreeviewSorter = DataSourceSorterComposite.extend('DataSourceTreev
             each = this.dataSource,
             last, // last sort spec ("first" sort) when and only when joined AND it is the group column
             lastIsGroup, columnIndex, direction;
+        // get list of sorts from either API or use existing
+        this.sorts = (this.sorter && this.sorter.prop('sorts')) || this.sorts;
 
         if (this.sorts.length) {
             if (joined) {

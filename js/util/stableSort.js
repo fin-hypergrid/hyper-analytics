@@ -103,7 +103,7 @@ function descending(typeOfData) {
  * @param {function} getValue
  * @param {number} [direction=1]
  */
-function sort(index, getValue, direction) {
+function sort(index, getValue, direction, type) {
 
     var compare, i;
 
@@ -120,11 +120,11 @@ function sort(index, getValue, direction) {
             case undefined: // eslint-disable-line no-fallthrough
                 direction = 1;
             case 1:  // eslint-disable-line no-fallthrough
-                compare = ascending(typeof getValue(0));
+                compare = ascending(type || typeof getValue(0));
                 break;
 
             case -1:
-                compare = descending(typeof getValue(0));
+                compare = descending(type || typeof getValue(0));
                 break;
         }
 

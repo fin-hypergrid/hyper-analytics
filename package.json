@@ -1,6 +1,6 @@
 {
   "name": "hyper-analytics",
-  "version": "0.11.20",
+  "version": "0.11.21",
   "description": "Data transformations on arrays of congruent JavaScript objects.",
   "repository": {
     "type": "git",
@@ -28,6 +28,6 @@
   },
   "dependencies": {
     "extend-me": "^2.3",
-    "fin-hypergrid-data-source-base": "0.4.1"
+    "fin-hypergrid-data-source-base": "0.4.5"
   }
 }

@@ -40,6 +40,17 @@ var DataSource = Base.extend('DataSource', {
          * @memberOf DataSource#
          */
         this.calculators = calculators || Array(this.fields.length);
+
+        // Following code added purely to satisfy tests of other modules that have this DataSourceOrigin (form Hypergrid) in their pipeline instead of this DataSource. The former defines `schema` but the this object does not, so we define it here.
+        delete this.dataSource;
+        Object.defineProperty(this, 'schema', {
+            value: this.fields.map(function(field, index) {
+                return {
+                    name: field,
+                    calculator: this.calculators[index]
+                };
+            }, this)
+        });
     },
 
     isNullObject: false,

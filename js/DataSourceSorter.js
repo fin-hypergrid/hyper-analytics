@@ -13,12 +13,12 @@ var DataSourceSorter = DataSourceIndexed.extend('DataSourceSorter', {
      * @param {number} columnIndex
      * @param {number} [direction=1]
      */
-    sortOn: function(columnIndex, direction) {
+    sortOn: function(columnIndex, direction, type) {
         var dataSource = this.dataSource,
-             columnSchema = dataSource.schema.find(function(columnSchema, i) {
+            columnSchema = dataSource.schema.find(function(columnSchema, i) {
                 return i === columnIndex;
-             }),
-            columnName = columnSchema && columnSchema["name"],
+            }),
+            columnName = columnSchema && columnSchema.name,
             calculator = dataSource.schema[columnIndex].calculator;
 
         switch (direction) {
@@ -29,7 +29,7 @@ var DataSourceSorter = DataSourceIndexed.extend('DataSourceSorter', {
             case undefined:
             case 1:
             case -1:
-                stableSort.sort(this.buildIndex(), getValue, direction,  dataSource.schema[columnIndex].type);
+                stableSort.sort(this.buildIndex(), getValue, direction, type || dataSource.schema[columnIndex].type);
                 break;
         }
 

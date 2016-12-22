@@ -2,12 +2,6 @@
 
 var DataSourceIndexed = require('./DataSourceIndexed');
 
-var expandedMap = {
-    true: '\u25bc', // BLACK DOWN-POINTING TRIANGLE aka '▼'
-    false: '\u25b6', // BLACK RIGHT-POINTING TRIANGLE aka '▶'
-    undefined: '' // for leaf rows
-};
-
 /** @typedef columnAddress
  * @property {string} name - The name of a column listed in the fields array. See the {@link DataSourceTreeview#getFields|getFields()} method.
  * @property {number} index - The index of the column in the fields array. See the {@link DataSourceTreeview#getFields|getFields()} method.
@@ -238,7 +232,7 @@ var DataSourceTreeview = DataSourceIndexed.extend('DataSourceTreeview', {
             var row = this.getRow(y);
 
             if (!(value === '' && row.__EXPANDED === undefined)) {
-                value = Array(row.__DEPTH + 1).join('   ') + expandedMap[row.__EXPANDED] + value;
+                value = Array(row.__DEPTH + 1).join('   ') + this.drillDownCharMap[row.__EXPANDED ? 'OPEN' : 'CLOSE'] + value;
             }
         }
 

@@ -1,6 +1,6 @@
 {
   "name": "hyper-analytics",
-  "version": "0.11.21",
+  "version": "0.11.23",
   "description": "Data transformations on arrays of congruent JavaScript objects.",
   "repository": {
     "type": "git",
@@ -12,6 +12,7 @@
   "author": "SWirts, JEiten, DJones",
   "license": "MIT",
   "devDependencies": {
+    "fin-hypergrid-data-source-base": "^0.4.7",
     "gulp": "^3.9.0",
     "gulp-eslint": "^1.1.1",
     "gulp-exclude-gitignore": "^1.0.0",
@@ -27,7 +28,6 @@
     "vinyl-source-stream": "^1.1.0"
   },
   "dependencies": {
-    "extend-me": "^2.3",
-    "fin-hypergrid-data-source-base": "0.4.5"
+    "extend-me": "^2.3"
   }
 }

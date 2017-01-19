@@ -373,7 +373,7 @@ var DataSourceAggregator = Base.extend('DataSourceAggregator', {
      */
     getGrandTotals: function() {
         var view = this.tree;
-        return [view.data];
+        return view.data;
     },
 
     /**

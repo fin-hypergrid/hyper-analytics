@@ -120,12 +120,12 @@ var DataSourceAggregator = Base.extend('DataSourceAggregator', {
     setAggregates: function(aggregations) {
         this.lastAggregate = aggregations;
         this.clearAggregations();
-        this._schema = this.hasGroups() ? [{name: 'Tree'}] : [];
+        this._schema = [{name: 'Tree'}];
 
         for (var key in aggregations) {
             this.addAggregate(key, aggregations[key]);
         }
-        
+
     },
 
     getFields: function() {

@@ -69,6 +69,17 @@ module.exports = function() {
                         object.expanded.should.be.false();
                     });
                 });
+
+                test.property('drillDownCharMap', function() {
+                    it('is initialized to an object', function() {
+                        object.drillDownCharMap.should.be.an.Object();
+                    });
+                    it('has string members `OPEN`, `CLOSE`, and `undefined`', function() {
+                        object.drillDownCharMap.OPEN.should.be.a.String();
+                        object.drillDownCharMap.CLOSE.should.be.a.String();
+                        object.drillDownCharMap.undefined.should.be.a.String();
+                    });
+                });
             });
 
             test.method('getValue', 1, function() {

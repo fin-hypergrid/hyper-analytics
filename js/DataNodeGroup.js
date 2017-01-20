@@ -3,11 +3,6 @@
 var Map = require('./util/Mappy');
 var DataNodeBase = require('./DataNodeBase');
 
-var expandedMap = {
-    true: '\u25bc', // BLACK DOWN-POINTING TRIANGLE aka '▼'
-    false: '\u25b6' // BLACK RIGHT-POINTING TRIANGLE aka '▶'
-};
-
 /**
  * > See {@link DataNodeGroup#initialize|initialize()} method for constructor parameters.
  * @constructor
@@ -44,7 +39,7 @@ var DataNodeGroup = DataNodeBase.extend('DataNodeGroup', {
      */
     computeDepthString: function() {
         var string = Array(this.depth + 1).join(this.INDENT) +
-            expandedMap[this.expanded] + ' ' +
+            this.drillDownCharMap[this.expanded ? 'OPEN' : 'CLOSE'] + ' ' +
             this.label;
         return string;
     },

@@ -49,7 +49,7 @@ var DataNodeLeaf = DataNodeBase.extend('DataNodeLeaf', {
         var index = this.getIndex();
 
         if (index.length) {
-            var groupsOffset = Number(drillDown.hasGroups()),
+            var groupsOffset = drillDown.hasGroups() ? 1 : 0,
                 data = this.data,
                 dataLen = drillDown.getColumnCount() - groupsOffset,
                 i = 0,
@@ -58,7 +58,7 @@ var DataNodeLeaf = DataNodeBase.extend('DataNodeLeaf', {
             sorter.index = index;
 
             for (i; i < dataLen; i++) {
-                data[i + groupsOffset] = sorter.getValue(i, 0);
+                data[groupsOffset + i] = sorter.getValue(i, 0);
             }
         }
     },

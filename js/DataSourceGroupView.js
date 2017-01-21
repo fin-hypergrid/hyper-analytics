@@ -102,8 +102,8 @@ var DataSourceGroupView = Base.extend('DataSourceGroupView', {
         if (!this.viewMakesSense()) {
             return this.dataSource.getHeaders();
         }
-        var headers = this.schema.map(function(e) {
-            return e.name;
+        var headers = this.schema.map(function(columnSchema) {
+            return columnSchema.name;
         });
 
         return headers;

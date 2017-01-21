@@ -142,8 +142,8 @@ var DataSourceAggregator = Base.extend('DataSourceAggregator', {
         if (!this.viewMakesSense()) {
             return this.dataSource.getHeaders();
         }
-        var headers = this.schema.map(function(e) {
-            return e.name;
+        var headers = this.schema.map(function(columnSchema) {
+            return columnSchema.name;
         });
 
         return headers;
@@ -156,7 +156,10 @@ var DataSourceAggregator = Base.extend('DataSourceAggregator', {
     addAggregate: function(label, func) {
         func.header = headerify.transform(label);
         this.aggregates.push(func);
-        this.schema.push({name: func.header});
+        this.schema.push({
+            name: label,
+            header: func.header
+        });
     },
 
     /**

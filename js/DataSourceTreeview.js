@@ -151,7 +151,9 @@ var DataSourceTreeview = DataSourceIndexed.extend('DataSourceTreeview', {
         var r, parentID, depth, leafRow, row, ID;
 
         // successful join requires that options object be given and that all columns exist
-        if (options) {
+        if (!options) {
+            this.joined = false;
+        } else {
             this.idColumn = options.idColumn;
             this.parentIdColumn = options.parentIdColumn;
             this.treeColumn = options.treeColumn;

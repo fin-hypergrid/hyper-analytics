@@ -49,9 +49,9 @@ var DataNodeLeaf = DataNodeBase.extend('DataNodeLeaf', {
         var index = this.getIndex();
 
         if (index.length) {
-            var groupsOffset = Number(drillDown.hasGroups()),
+            var groupsOffset = drillDown.hasGroups() ? 1 : 0,
                 data = this.data,
-                dataLen = drillDown.getColumnCount() + groupsOffset,
+                dataLen = drillDown.getColumnCount() - groupsOffset,
                 i = 0,
                 sorter = drillDown.sorterInstance;
 

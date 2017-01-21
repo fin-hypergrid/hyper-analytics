@@ -81,11 +81,28 @@ var DataSourceAggregator = Base.extend('DataSourceAggregator', {
          */
         this.lastAggregate = {};
 
+        this._schema = [];
+
         this.setAggregates({});
+
+    },
+
+    get schema() {
+        if (this.viewMakesSense()){
+            return this._schema;
+        } else if (this.dataSource) {
+            return this.dataSource.schema;
+        }
+    },
+    set schema(schema) {
+        if (this.viewMakesSense()){
+            this._schema = schema;
+        } else if (this.dataSource) {
+            this.dataSource.schema = schema;
+        }
     },
 
     isNullObject: false,
-
 
     /**
      * @memberOf DataSourceAggregator#
@@ -103,6 +120,7 @@ var DataSourceAggregator = Base.extend('DataSourceAggregator', {
     setAggregates: function(aggregations) {
         this.lastAggregate = aggregations;
         this.clearAggregations();
+        this._schema = [{name: 'Tree'}];
 
         for (var key in aggregations) {
             this.addAggregate(key, aggregations[key]);
@@ -124,12 +142,10 @@ var DataSourceAggregator = Base.extend('DataSourceAggregator', {
         if (!this.viewMakesSense()) {
             return this.dataSource.getHeaders();
         }
-        var headers = this.aggregates.map(function(e) {
-            return e.header;
+        var headers = this.schema.map(function(columnSchema) {
+            return columnSchema.name;
         });
-        if (this.hasGroups()) {
-            headers.unshift('Tree');
-        }
+
         return headers;
     },
     /**
@@ -140,6 +156,10 @@ var DataSourceAggregator = Base.extend('DataSourceAggregator', {
     addAggregate: function(label, func) {
         func.header = headerify.transform(label);
         this.aggregates.push(func);
+        this.schema.push({
+            name: label,
+            header: func.header
+        });
     },
 
     /**
@@ -317,7 +337,7 @@ var DataSourceAggregator = Base.extend('DataSourceAggregator', {
         if (!this.viewMakesSense()) {
             return this.dataSource.getColumnCount();
         }
-        return this.getHeaders().length;
+        return this.schema.length;
     },
 
     /**

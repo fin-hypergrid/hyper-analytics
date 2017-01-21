@@ -67,6 +67,23 @@ var DataSourceGroupView = Base.extend('DataSourceGroupView', {
          */
         this.presortGroups = true;
 
+        this._schema = [];
+
+    },
+
+    get schema() {
+        if (this.viewMakesSense()){
+            return this._schema;
+        } else if (this.dataSource) {
+            return this.dataSource.schema;
+        }
+    },
+    set schema(schema) {
+        if (this.viewMakesSense()){
+            this._schema = schema;
+        } else if (this.dataSource) {
+            this.dataSource.schema = schema;
+        }
     },
 
     isNullObject: false,
@@ -85,11 +102,10 @@ var DataSourceGroupView = Base.extend('DataSourceGroupView', {
         if (!this.viewMakesSense()) {
             return this.dataSource.getHeaders();
         }
-        var headers = this.dataSource.getHeaders().slice(0);
+        var headers = this.schema.map(function(columnSchema) {
+            return columnSchema.name;
+        });
 
-        if (this.hasGroups()) {
-            headers.unshift('Tree');
-        }
         return headers;
     },
 
@@ -103,6 +119,9 @@ var DataSourceGroupView = Base.extend('DataSourceGroupView', {
         columnIndexArray.forEach(function(columnIndex) {
             groupBys.push(columnIndex);
         });
+        var parentSchema = this.dataSource.schema.slice(0);
+        parentSchema.unshift({name: 'Tree'});
+        this._schema = parentSchema;
     },
 
     /**
@@ -342,13 +361,6 @@ var DataSourceGroupView = Base.extend('DataSourceGroupView', {
     setData: function(arrayOfUniformObjects) {
         this.dataSource.setData(arrayOfUniformObjects);
         this.apply();
-    },
-
-    /**
-     * @memberOf DataSourceGroupView#
-     */
-    getGrandTotals: function (){
-
     },
 
     sortGroups: function(groupSorter) {

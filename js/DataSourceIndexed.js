@@ -111,13 +111,13 @@ var DataSourceIndexed = Base.extend('DataSourceIndexed', {
  * @param {string} columnName
  * @returns {*}
  */
-DataSourceIndexed.valOrFunc = function(columnName, calculator) {
+DataSourceIndexed.valOrFunc = function(dataRow, columnName, calculator) {
     var result;
-    if (this) {
-        result = this[columnName];
+    if (dataRow) {
+        result = dataRow[columnName];
         calculator = (typeof result)[0] === 'f' && result || calculator;
         if (calculator) {
-            result = calculator.call(this, columnName);
+            result = calculator(dataRow, columnName);
         }
     }
     return result;

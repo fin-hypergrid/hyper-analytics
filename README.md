@@ -1,6 +1,11 @@
 # hyperAnalytics
 Data transformations on arrays of uniform objects.
 
+#### 0.12.0
+
+Breaking changes:
+1. Calculator calling signature changed from `calculator(columnName)` (data row object as context) to `calculator(dataRow, columnName)` (data row object as first parameter).
+
 #### 0.11.0
 
 Breaking changes:

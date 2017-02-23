@@ -163,7 +163,6 @@ var DataSourceGroupView = Base.extend('DataSourceGroupView', {
      */
     buildGroupTree: function() {
         var reversedGroupBys = this.groupBys.slice(0).reverse(),
-            leafDepth = this.groupBys.length - 1,
             source = this.dataSource,
             rowCount = source.getRowCount(),
             tree = this.tree = new DataNodeTree('Group');
@@ -176,16 +175,19 @@ var DataSourceGroupView = Base.extend('DataSourceGroupView', {
             });
         }
 
+
         for (var r = 0; r < rowCount; r++) {
-            var path = tree;
+            var path = tree,
+                leaf, key;
 
             this.groupBys.forEach(function(g, c) { // eslint-disable-line no-loop-func
-                var key = source.getValue(g, r),
-                    factoryDataNode = (c === leafDepth) ? factoryDataNodeLeaf : factoryDataNodeGroup;
-                path = path.children.getIfUndefined(key, factoryDataNode);
+                key = source.getValue(g, r);
+                path = path.children.getIfUndefined(key, factoryDataNodeGroup);
             });
 
-            path.index.push(r);
+            leaf = factoryDataNodeLeaf(key);
+            path.children.set(r, leaf);
+            leaf.index.push(r);
         }
 
         this.sorterInstance = new DataSourceSorter(source);

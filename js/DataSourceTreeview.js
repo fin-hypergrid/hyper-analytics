@@ -257,6 +257,10 @@ var DataSourceTreeview = DataSourceIndexed.extend('DataSourceTreeview', {
         return result;
     },
 
+    isDrillDownCol: function (event) {
+        return event && event.dataCell.x === this._treeColumn.index;
+    },
+
     /**
      * @summary Handle a click event in the drill-down column.
      * @desc Operates only on the following rows:

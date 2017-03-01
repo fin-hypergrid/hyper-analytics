@@ -82,7 +82,7 @@ var DataNodeBase = Base.extend('DataNodeBase', {
      */
     toArray: function(depth) {
         this.depth = depth;
-        this.data[0] = this.computeDepthString();
+        this.data[-1] = this.computeDepthString();
     },
 
     /**

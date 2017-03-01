@@ -351,9 +351,10 @@ var DataSourceGroupView = Base.extend('DataSourceGroupView', {
             return this.dataSource.getRow(y);
         }
 
-        var groups = this.view[y];
+        var groups = this.view[y],
+            node = groups ? groups : this.tree;
 
-        return groups ? groups : this.tree;
+        return toObject(this.schema, node.data);
     },
 
     /**
@@ -378,6 +379,15 @@ function factoryDataNodeLeaf(key) {
 
 function factoryDataNodeGroup(key) {
     return new DataNodeGroup(key);
+}
+
+function toObject(names, values) {
+    var result = {};
+    for (var i = 0; i < names.length; i++) {
+        var key = names[i].field || names[i].name;
+        result[key] = values[i];
+    }
+    return result;
 }
 
 Object.defineProperty(DataSourceGroupView.prototype, 'type', { value: 'groupviewer' }); // read-only property

@@ -30,7 +30,7 @@ var DataNodeGroup = DataNodeBase.extend('DataNodeGroup', {
         this.children.forEach(function(child) {
             child.toArray(depth + 1);
         });
-        this.data[0] = this.computeDepthString();
+        this.data[-1] = this.computeDepthString();
     },
 
     /**
@@ -83,7 +83,7 @@ var DataNodeGroup = DataNodeBase.extend('DataNodeGroup', {
         }
         var changed = this.expanded ^ expand;
         this.expanded = expand;
-        this.data[0] = this.computeDepthString();
+        this.data[-1] = this.computeDepthString();
         if (this.expanded) {
             this.getRowData(drillDown);
         }

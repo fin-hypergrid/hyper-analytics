@@ -24,7 +24,7 @@ var DataSourceAggregator = Base.extend('DataSourceAggregator', {
          * @memberOf DataSourceAggregator#
          * @type {DataSource}
          */
-        this.treeColumnIndex = 0;
+        this.treeColumnIndex = -1;
 
         /**
          * @memberOf DataSourceAggregator#
@@ -120,7 +120,13 @@ var DataSourceAggregator = Base.extend('DataSourceAggregator', {
     setAggregates: function(aggregations) {
         this.lastAggregate = aggregations;
         this.clearAggregations();
-        this._schema = [{name: 'Tree'}];
+
+        this._schema = [];
+
+        //copy negative indices
+        for (var i = -1; i in this.dataSource.schema; i--){
+            this._schema[i] = this.dataSource.schema[i];
+        }
 
         for (var key in aggregations) {
             this.addAggregate(key, aggregations[key]);
@@ -285,17 +291,22 @@ var DataSourceAggregator = Base.extend('DataSourceAggregator', {
         return this.hasAggregates() && this.hasGroups();
     },
 
+
+    isLeafNode: function(y) {
+        return this.view[y] instanceof DataNodeLeaf;
+    },
+
     /**
      * @memberOf DataSourceAggregator#
      * @param {number} columnIndex
      * @returns {*|boolean}
      */
     isDrillDown: function(columnIndex) {
-        var result = this.viewMakesSense();
-        if (result && columnIndex) {
-            result = columnIndex === this.treeColumnIndex;
-        }
-        return result;
+        return this.viewMakesSense();
+    },
+
+    isDrillDownCol: function (event) {
+        return event && event.gridCell && event.gridCell.x === this.treeColumnIndex;
     },
 
     getDataIndex: function(y) {

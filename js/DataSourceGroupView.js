@@ -51,7 +51,7 @@ var DataSourceGroupView = Base.extend('DataSourceGroupView', {
          * @type {object}
          * @default {}
          */
-        this.treeColumnIndex = 0;
+        this.treeColumnIndex = -1;
 
         /**
          * @memberOf DataSourceGroupView#
@@ -120,8 +120,12 @@ var DataSourceGroupView = Base.extend('DataSourceGroupView', {
             groupBys.push(columnIndex);
         });
         var parentSchema = this.dataSource.schema.slice(0);
-        parentSchema.unshift({name: 'Tree'});
         this._schema = parentSchema;
+
+        //copy negative indices
+        for (var i = -1; i in this.dataSource.schema; i--){
+            this._schema[i] = this.dataSource.schema[i];
+        }
     },
 
     /**
@@ -156,6 +160,10 @@ var DataSourceGroupView = Base.extend('DataSourceGroupView', {
      */
     clearGroups: function() {
         this.groupBys.length = 0;
+    },
+
+    isLeafNode: function(y) {
+      return this.view[y] instanceof DataNodeLeaf;
     },
 
     /**
@@ -227,12 +235,12 @@ var DataSourceGroupView = Base.extend('DataSourceGroupView', {
      * @param {number} columnIndex
      * @returns {*|boolean}
      */
-    isDrillDown: function(columnIndex) {
-        var result = this.viewMakesSense();
-        if (result && columnIndex) {
-            result = columnIndex === this.treeColumnIndex;
-        }
-        return result;
+    isDrillDown: function() {
+        return this.viewMakesSense();
+    },
+
+    isDrillDownCol: function (event) {
+        return event && event.gridCell && event.gridCell.x === this.treeColumnIndex;
     },
 
     getDataIndex: function(y) {
@@ -351,9 +359,10 @@ var DataSourceGroupView = Base.extend('DataSourceGroupView', {
             return this.dataSource.getRow(y);
         }
 
-        var groups = this.view[y];
+        var groups = this.view[y],
+            node = groups ? groups : this.tree;
 
-        return groups ? groups : this.tree;
+        return toObject(this.schema, node.data);
     },
 
     /**
@@ -378,6 +387,15 @@ function factoryDataNodeLeaf(key) {
 
 function factoryDataNodeGroup(key) {
     return new DataNodeGroup(key);
+}
+
+function toObject(names, values) {
+    var result = {};
+    for (var i = 0; i < names.length; i++) {
+        var key = names[i].field || names[i].name;
+        result[key] = values[i];
+    }
+    return result;
 }
 
 Object.defineProperty(DataSourceGroupView.prototype, 'type', { value: 'groupviewer' }); // read-only property
